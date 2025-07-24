@@ -333,47 +333,68 @@
             return false;
         }
 
-        // --- Otomatik Başlangıç Verisi Yükleme ---
+        // --- GÜNCELLEME: Veri Yükleme Mantığı ---
+        // Uygulama her açıldığında bu fonksiyon çalışır.
+        async function initializeApp() {
+            try {
+                // Her zaman önce GitHub'dan en güncel veriyi çekmeyi dene.
+                await loadInitialSetup();
+            } catch (error) {
+                // GitHub'dan veri çekme başarısız olursa, yedek olarak yerel depolamayı kullan.
+                console.warn("GitHub'dan veri çekilemedi. Yerel depolamadan yükleme deneniyor.", error);
+                const hasSavedData = loadData();
+                if (!hasSavedData) {
+                    console.error("Hem GitHub hem de yerel depolamadan veri yüklenemedi. Başlangıç verileri kullanılıyor.");
+                    // loadData zaten localStorage boşsa initialData'yı ayarlıyor.
+                }
+            }
+            // Veri yükleme denemesinden sonra tüm arayüzü yenile.
+            refreshAllViews();
+        }
+
+        // Bu fonksiyon artık sadece GitHub'dan veri çekip işler ve kaydeder.
         async function loadInitialSetup() {
             console.log("GitHub üzerinden başlangıç şablonları yükleniyor...");
             const templatePaths = [
                 { path: 'NORM.xlsx', type: 'norm' },
                 { path: 'PERSONEL.xlsx', type: 'personnel' }
             ];
+
             const processFile = async (fileInfo) => {
-                try {
-                    const fullPath = GITHUB_REPO_BASE_URL + fileInfo.path;
-                    const response = await fetch(fullPath);
-                    if (!response.ok) throw new Error(`Dosya bulunamadı: ${response.statusText} (${fullPath})`);
-                    const arrayBuffer = await response.arrayBuffer();
-                    const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                    return { type: fileInfo.type, data: jsonData };
-                } catch (error) {
-                    console.error(`'${fileInfo.path}' şablonu yüklenirken hata oluştu:`, error);
-                    return null;
-                }
+                const fullPath = GITHUB_REPO_BASE_URL + fileInfo.path + `?v=${new Date().getTime()}`; // Cache'i atlamak için zaman damgası ekle
+                const response = await fetch(fullPath);
+                if (!response.ok) throw new Error(`Dosya bulunamadı: ${response.statusText} (${fullPath})`);
+                const arrayBuffer = await response.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                return { type: fileInfo.type, data: jsonData };
             };
+
+            // Promise.all, herhangi bir fetch başarısız olursa hata fırlatır ve bu hata initializeApp tarafından yakalanır.
             const results = await Promise.all(templatePaths.map(processFile));
+            
             const normData = results.find(r => r && r.type === 'norm')?.data;
             const personnelData = results.find(r => r && r.type === 'personnel')?.data;
             
-            if (normData) {
-                updateNormsFromData(normData);
-                console.log("Norm verileri şablondan başarıyla yüklendi.");
+            // Veriyi doldurmadan önce mevcut veri yapısını sıfırla. Bu, eski ve yeni verilerin karışmasını önler.
+            directorateData = JSON.parse(JSON.stringify(initialData));
+
+            if (!normData || !personnelData) {
+                throw new Error("Gerekli NORM veya PERSONEL dosyaları GitHub'dan yüklenemedi.");
             }
-            if (personnelData) {
-                updatePersonnelFromData(personnelData);
-                console.log("Personel listesi şablondan başarıyla yüklendi.");
-            }
-            if (normData || personnelData) {
-                saveData();
-                console.log("Tüm başlangıç verileri yerel depolamaya kaydedildi.");
-            } else {
-               console.warn("Şablon dosyaları bulunamadı veya boş. Başlangıç verileriyle devam ediliyor.");
-            }
+            
+            updateNormsFromData(normData);
+            console.log("Norm verileri şablondan başarıyla yüklendi.");
+            
+            updatePersonnelFromData(personnelData); // Bu fonksiyon aynı zamanda mevcut sayıları yeniden hesaplar.
+            console.log("Personel listesi şablondan başarıyla yüklendi.");
+            
+            // Veriler başarıyla işlendikten sonra yerel depolamaya kaydet.
+            saveData();
+            console.log("En güncel veriler yerel depolamaya kaydedildi.");
         }
+
 
         function updateNormsFromData(data) {
             let updatedCount = 0;
@@ -446,7 +467,6 @@
             console.log(`${addedCount} adet personel Excel verisinden eklendi.`);
         }
         
-        // GÜNCELLEME: Norm hesaplama mantığı düzeltildi.
         function recalculateCurrentPersonnelCounts() {
             const mersinKM = directorateData.find(d => d.id === 'mersin_km');
             if (!mersinKM) return;
@@ -490,15 +510,6 @@
                     }
                 }
             });
-        }
-
-
-        async function initializeApp() {
-            const hasSavedData = loadData();
-            if (!hasSavedData) {
-                await loadInitialSetup();
-            }
-            refreshAllViews();
         }
         
         // --- UI Fonksiyonları ---
