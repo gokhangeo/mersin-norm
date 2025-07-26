@@ -65,7 +65,8 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 md:space-x-4">
-                    <span class="hidden lg:block text-sm md:text-md font-bold text-blue-900">T.C. Çevre, Şehircilik ve İklim Değişikliği Bakanlığı</span>
+                    <!-- GÜNCELLEME: Bakanlık yazısı kaldırıldı, footer yazısı eklendi -->
+                    <span class="hidden lg:block text-sm md:text-md font-medium text-gray-600">© Gökhan ELGÜL tarafından tasarlanmıştır.</span>
                      <i class="fa-solid fa-star text-yellow-400"></i>
                      <i class="fa-solid fa-star text-blue-800"></i>
                 </div>
@@ -90,9 +91,7 @@
         </div>
     </main>
     
-    <footer class="text-center py-6">
-        <p class="text-sm text-gray-600">© Gökhan ELGÜL tarafından tasarlanmıştır.</p>
-    </footer>
+    <!-- GÜNCELLEME: Footer kaldırıldı -->
 
     <div id="detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 hidden modal-backdrop">
         <div id="modal-content" class="bg-white shadow-2xl w-full h-full sm:h-auto sm:w-full max-w-7xl flex flex-col modal-content sm:rounded-lg">
@@ -333,26 +332,19 @@
             return false;
         }
 
-        // --- GÜNCELLEME: Veri Yükleme Mantığı ---
-        // Uygulama her açıldığında bu fonksiyon çalışır.
         async function initializeApp() {
             try {
-                // Her zaman önce GitHub'dan en güncel veriyi çekmeyi dene.
                 await loadInitialSetup();
             } catch (error) {
-                // GitHub'dan veri çekme başarısız olursa, yedek olarak yerel depolamayı kullan.
                 console.warn("GitHub'dan veri çekilemedi. Yerel depolamadan yükleme deneniyor.", error);
                 const hasSavedData = loadData();
                 if (!hasSavedData) {
                     console.error("Hem GitHub hem de yerel depolamadan veri yüklenemedi. Başlangıç verileri kullanılıyor.");
-                    // loadData zaten localStorage boşsa initialData'yı ayarlıyor.
                 }
             }
-            // Veri yükleme denemesinden sonra tüm arayüzü yenile.
             refreshAllViews();
         }
 
-        // Bu fonksiyon artık sadece GitHub'dan veri çekip işler ve kaydeder.
         async function loadInitialSetup() {
             console.log("GitHub üzerinden başlangıç şablonları yükleniyor...");
             const templatePaths = [
@@ -361,7 +353,7 @@
             ];
 
             const processFile = async (fileInfo) => {
-                const fullPath = GITHUB_REPO_BASE_URL + fileInfo.path + `?v=${new Date().getTime()}`; // Cache'i atlamak için zaman damgası ekle
+                const fullPath = GITHUB_REPO_BASE_URL + fileInfo.path + `?v=${new Date().getTime()}`;
                 const response = await fetch(fullPath);
                 if (!response.ok) throw new Error(`Dosya bulunamadı: ${response.statusText} (${fullPath})`);
                 const arrayBuffer = await response.arrayBuffer();
@@ -371,13 +363,11 @@
                 return { type: fileInfo.type, data: jsonData };
             };
 
-            // Promise.all, herhangi bir fetch başarısız olursa hata fırlatır ve bu hata initializeApp tarafından yakalanır.
             const results = await Promise.all(templatePaths.map(processFile));
             
             const normData = results.find(r => r && r.type === 'norm')?.data;
             const personnelData = results.find(r => r && r.type === 'personnel')?.data;
             
-            // Veriyi doldurmadan önce mevcut veri yapısını sıfırla. Bu, eski ve yeni verilerin karışmasını önler.
             directorateData = JSON.parse(JSON.stringify(initialData));
 
             if (!normData || !personnelData) {
@@ -387,10 +377,9 @@
             updateNormsFromData(normData);
             console.log("Norm verileri şablondan başarıyla yüklendi.");
             
-            updatePersonnelFromData(personnelData); // Bu fonksiyon aynı zamanda mevcut sayıları yeniden hesaplar.
+            updatePersonnelFromData(personnelData);
             console.log("Personel listesi şablondan başarıyla yüklendi.");
             
-            // Veriler başarıyla işlendikten sonra yerel depolamaya kaydet.
             saveData();
             console.log("En güncel veriler yerel depolamaya kaydedildi.");
         }
@@ -401,7 +390,7 @@
             const mersinKM = directorateData.find(d => d.id === 'mersin_km');
             if (!mersinKM) return;
             
-            mersinKM.personnel = []; // Reset norms before loading
+            mersinKM.personnel = [];
 
             data.forEach(row => {
                 const unvanRaw = getValueFromRow(row, ['Unvan', 'Unvanı']);
@@ -412,7 +401,7 @@
                 mersinKM.personnel.push({
                     title: String(unvanRaw).trim(),
                     norm: normSayisi,
-                    current: 0 // Mevcut sayısı personel listesinden hesaplanacak
+                    current: 0
                 });
                 updatedCount++;
             });
@@ -420,7 +409,6 @@
         }
 
         function updatePersonnelFromData(data) {
-            // Clear all existing personnel lists
             directorateData.forEach(dir => dir.personnelList = []);
 
             let addedCount = 0;
@@ -452,7 +440,6 @@
                     targetDir = directorateData.find(d => d.id === subUnitId);
                 }
 
-                // If no sub-unit found, assign to Mersin KM
                 if (!targetDir) {
                     targetDir = directorateData.find(d => d.id === 'mersin_km');
                 }
@@ -471,12 +458,10 @@
             const mersinKM = directorateData.find(d => d.id === 'mersin_km');
             if (!mersinKM) return;
 
-            // 1. Reset all 'current' counts to 0
             mersinKM.personnel.forEach(p => p.current = 0);
 
             const allPersonnel = getAggregatedPersonnel();
 
-            // 2. Helper function to find a norm entry and increment its 'current' count
             const incrementNormCurrent = (normTitle) => {
                 const normEntry = mersinKM.personnel.find(p => normalizeString(p.title) === normalizeString(normTitle));
                 if (normEntry) {
@@ -486,7 +471,6 @@
                 }
             };
 
-            // 3. Iterate over every person and apply the grouping logic
             allPersonnel.forEach(person => {
                 const personTitle = normalizeString(person.title);
 
@@ -501,7 +485,6 @@
                 } else if (personTitle.includes('işçi')) {
                     incrementNormCurrent('Destek Personeli');
                 } else {
-                    // For titles that don't fit in a group, find a direct match
                     const directMatch = mersinKM.personnel.find(p => normalizeString(p.title) === personTitle);
                     if (directMatch) {
                         directMatch.current++;
