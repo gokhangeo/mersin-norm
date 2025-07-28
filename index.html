@@ -65,7 +65,6 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 md:space-x-4">
-                    <!-- GÜNCELLEME: Bakanlık yazısı kaldırıldı, footer yazısı eklendi -->
                     <span class="hidden lg:block text-sm md:text-md font-medium text-gray-600">© Gökhan ELGÜL tarafından tasarlanmıştır.</span>
                      <i class="fa-solid fa-star text-yellow-400"></i>
                      <i class="fa-solid fa-star text-blue-800"></i>
@@ -91,8 +90,6 @@
         </div>
     </main>
     
-    <!-- GÜNCELLEME: Footer kaldırıldı -->
-
     <div id="detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 hidden modal-backdrop">
         <div id="modal-content" class="bg-white shadow-2xl w-full h-full sm:h-auto sm:w-full max-w-7xl flex flex-col modal-content sm:rounded-lg">
             <div class="flex items-center justify-between p-4 md:p-5 border-b border-gray-200 bg-gray-50 rounded-t-lg">
@@ -480,7 +477,7 @@
                     incrementNormCurrent('Mühendis');
                 } else if (personTitle.includes('tekniker') || personTitle.includes('teknisyen') || personTitle.includes('kontrol memuru')) {
                     incrementNormCurrent('Teknisyen/Tekniker');
-                } else if (personTitle.includes('bilgisayar işletmeni')) {
+                } else if (personTitle.includes('bilgisayar işletmeni') || personTitle.includes('memur')) { // GÜNCELLEME: 'memur' eklendi
                     incrementNormCurrent('İşlem Yapan Personel');
                 } else if (personTitle.includes('işçi')) {
                     incrementNormCurrent('Destek Personeli');
