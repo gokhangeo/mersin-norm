@@ -247,7 +247,12 @@
         let directorateData = [];
         let currentDirectorateId = null;
         let currentZoom = 1, isPanning = false, startX, startY, translateX, translateY;
-        const GITHUB_REPO_BASE_URL = 'https://gokhangeo.github.io/mersin-norm/';
+        const GITHUB_API_CONFIG = {
+            owner: 'gokhangeo',
+            repo: 'mersin-norm',
+            branch: 'main' // Varsayılan dal adı, gerekirse değiştirilebilir
+        };
+        const GITHUB_REPO_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_API_CONFIG.owner}/${GITHUB_API_CONFIG.repo}/${GITHUB_API_CONFIG.branch}/`;
         const SUB_UNITS = ['ANAMUR', 'ERDEMLİ', 'MUT', 'SİLİFKE', 'TARSUS'];
 
         // Başlangıç veri yapısı
@@ -735,3 +740,4 @@
     </script>
 </body>
 </html>
+
