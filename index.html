@@ -83,7 +83,7 @@
         </div>
         <div id="kadastro-section" class="mb-10">
             <h2 class="text-xl md:text-2xl font-bold group-header">Mersin Kadastro Müdürlüğü</h2>
-            <div id="kadastro-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6"></div>
+            <div id="kadastro-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-6"></div>
         </div>
         <div id="ilce-section" class="mb-10">
             <h2 class="text-xl md:text-2xl font-bold group-header">Bağlı Birimler</h2>
@@ -199,6 +199,7 @@
                                     <tr>
                                         <th scope="col" class="px-2 py-3 sm:px-4"><input type="checkbox" id="select-all-personnel-checkbox"></th>
                                         <th scope="col" class="px-2 py-3 sm:px-6 text-left text-xs font-medium uppercase tracking-wider">Adı Soyadı</th>
+                                        <th scope="col" class="px-2 py-3 sm:px-6 text-left text-xs font-medium uppercase tracking-wider">Cinsiyet</th>
                                         <th scope="col" class="px-2 py-3 sm:px-6 text-left text-xs font-medium uppercase tracking-wider">Unvanı</th>
                                         <th scope="col" class="px-2 py-3 sm:px-6 text-left text-xs font-medium uppercase tracking-wider">Sicil</th>
                                         <th scope="col" class="px-2 py-3 sm:px-6 text-left text-xs font-medium uppercase tracking-wider">Birim</th>
@@ -253,7 +254,7 @@
             branch: 'main' // Varsayılan dal adı, gerekirse değiştirilebilir
         };
         const GITHUB_REPO_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_API_CONFIG.owner}/${GITHUB_API_CONFIG.repo}/${GITHUB_API_CONFIG.branch}/`;
-        const SUB_UNITS = ['ANAMUR', 'ERDEMLİ', 'MUT', 'SİLİFKE', 'TARSUS'];
+        const SUB_UNITS = ['MERKEZ', 'ANAMUR', 'ERDEMLİ', 'MUT', 'SİLİFKE', 'TARSUS'];
 
         // Başlangıç veri yapısı
         const initialData = [
@@ -421,6 +422,7 @@
                 const sicil = getValueFromRow(row, ['Sicil', 'Sicil No']);
                 const görevliBirimRaw = getValueFromRow(row, ['Görevli Olduğu Birim', 'Gorevli Oldugu Birim']);
                 const ipTelefon = getValueFromRow(row, ['İp Telefon', 'Ip Telefon', 'Telefon']);
+                const cinsiyet = getValueFromRow(row, ['Cinsiyet', 'Cinsiyeti']);
 
                 if (!sicil || !name || !title) return;
 
@@ -429,7 +431,8 @@
                     title: String(title).trim(), 
                     sicil: String(sicil).trim(),
                     görevliBirim: görevliBirimRaw ? String(görevliBirimRaw).trim() : 'Mersin',
-                    ipTelefon: ipTelefon ? String(ipTelefon).trim() : ''
+                    ipTelefon: ipTelefon ? String(ipTelefon).trim() : '',
+                    cinsiyet: cinsiyet ? String(cinsiyet).trim().charAt(0).toUpperCase() : 'B' // B = Belirtilmemiş, E, K
                 };
                 
                 let targetDir = null;
@@ -438,12 +441,15 @@
                 if (normalizeString(newPersonData.görevliBirim) === 'geçici görevli') {
                     targetDir = directorateData.find(d => d.id === 'mersin_km');
                     newPersonData.name += ' (Geçici Görevli)';
+                } else if (normalizedGörevliBirim === 'mersin' || normalizedGörevliBirim === '') {
+                     targetDir = directorateData.find(d => d.id === 'merkez_kb');
                 } else {
                     const subUnitId = `${normalizedGörevliBirim}_kb`;
                     targetDir = directorateData.find(d => d.id === subUnitId);
                 }
 
                 if (!targetDir) {
+                    // Eğer 'merkez_kb' veya ilçe_kb bulunamazsa (veri hatası), geçici olarak ana KM'ye ata
                     targetDir = directorateData.find(d => d.id === 'mersin_km');
                 }
 
@@ -508,8 +514,44 @@
         function renderSummaryDashboard() { if (!directorateData || directorateData.length === 0) return; const summaryContainer = document.getElementById('summary-dashboard'); summaryContainer.innerHTML = ''; const mersinKM = directorateData.find(d => d.id === 'mersin_km'); if (!mersinKM) return; const grandTotalNorm = mersinKM.personnel.reduce((s, p) => s + (p.norm || 0), 0); const grandTotalCurrent = getAggregatedPersonnel().length; summaryContainer.appendChild(createGrandTotalCard({ norm: grandTotalNorm, current: grandTotalCurrent, unitCount: directorateData.length })); const totalInLists = getAggregatedPersonnel().length; summaryContainer.appendChild(createPersonnelManagementCard({ totalInLists })); }
         
         function renderAllCards(){if(!directorateData||directorateData.length===0)return;document.querySelectorAll('[id$="-grid"]').forEach(grid=>grid.innerHTML='');directorateData.forEach(dir=>{const grid=document.getElementById(`${dir.group}-grid`);if(!grid)return;let card;if(dir.group==='kadastro'){const totalNorm=dir.personnel.reduce((sum,p)=>sum+(p.norm||0),0);const totalCurrent=dir.personnel.reduce((sum,p)=>sum+(p.current||0),0); const difference=totalCurrent-totalNorm;const occupancyRate=totalNorm>0?Math.round((totalCurrent/totalNorm)*100):(totalCurrent>0?100:0);let progressBarColor='bg-red-500';if(occupancyRate>=90)progressBarColor='bg-green-500';else if(occupancyRate>=70)progressBarColor='bg-yellow-400';let diffClass='fark-sifir';let diffIcon='fa-minus';if(difference>0){diffClass='bg-green-200 text-green-800';diffIcon='fa-arrow-up'}else if(difference<0){diffClass='bg-red-200 text-red-800';diffIcon='fa-arrow-down'}
-        card=document.createElement('div');card.className='bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer overflow-hidden transform hover:-translate-y-1';card.dataset.id=dir.id;card.innerHTML=`<div class="p-5"><div class="flex justify-between items-start"><h3 class="text-lg font-bold text-gray-900 truncate pr-2">${dir.name}</h3><span class="text-xs font-bold px-2 py-1 rounded-full ${diffClass}"><i class="fas ${diffIcon} mr-1"></i> ${difference>=0?'+':''}${difference}</span></div><div class="mt-4"><div class="flex justify-between items-center mb-1"><span class="text-xs font-semibold text-gray-500">Doluluk Oranı</span><span class="text-sm font-bold ${progressBarColor.replace('bg','text')}">${occupancyRate}%</span></div><div class="progress-bar-container"><div class="progress-bar ${progressBarColor}" style="width: ${occupancyRate}%;"></div></div></div></div><div class="px-5 pb-5 flex justify-between items-center text-sm text-gray-600"><span>Norm: <b class="text-gray-900">${totalNorm}</b></span><span>Mevcut: <b class="text-gray-900">${totalCurrent}</b></span></div><div class="bg-gray-50 px-5 py-3 text-right"><span class="text-sm font-medium text-blue-600 hover:text-blue-800">Detayları Gör <i class="fas fa-arrow-right ml-1"></i></span></div>`;}else if(dir.group==='ilce'){const totalCurrent=dir.personnelList.length;card=document.createElement('div');card.className='bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer overflow-hidden transform hover:-translate-y-1';card.dataset.id=dir.id;card.innerHTML=`<div class="p-5"><h3 class="text-lg font-bold text-gray-900 truncate pr-2">${dir.name}</h3><div class="mt-4 flex items-center justify-center gap-4"><i class="fas fa-users text-3xl text-blue-500"></i><div><p class="text-3xl font-bold text-gray-800">${totalCurrent}</p><p class="text-sm text-gray-500">Personel</p></div></div></div><div class="bg-gray-50 px-5 py-3 text-right"><span class="text-sm font-medium text-blue-600 hover:text-blue-800">Personel Listesi <i class="fas fa-arrow-right ml-1"></i></span></div>`;}
-        if(card){card.addEventListener('click',()=>showModal(dir.id));grid.appendChild(card)}})}
+        card=document.createElement('div');card.className='xl:col-span-2 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer overflow-hidden transform hover:-translate-y-1';card.dataset.id=dir.id;card.innerHTML=`<div class="p-5"><div class="flex justify-between items-start"><h3 class="text-lg font-bold text-gray-900 truncate pr-2">${dir.name}</h3><span class="text-xs font-bold px-2 py-1 rounded-full ${diffClass}"><i class="fas ${diffIcon} mr-1"></i> ${difference>=0?'+':''}${difference}</span></div><div class="mt-4"><div class="flex justify-between items-center mb-1"><span class="text-xs font-semibold text-gray-500">Doluluk Oranı</span><span class="text-sm font-bold ${progressBarColor.replace('bg','text')}">${occupancyRate}%</span></div><div class="progress-bar-container"><div class="progress-bar ${progressBarColor}" style="width: ${occupancyRate}%;"></div></div></div></div><div class="px-5 pb-5 flex justify-between items-center text-sm text-gray-600"><span>Norm: <b class="text-gray-900">${totalNorm}</b></span><span>Mevcut: <b class="text-gray-900">${totalCurrent}</b></span></div><div class="bg-gray-50 px-5 py-3 text-right"><span class="text-sm font-medium text-blue-600 hover:text-blue-800">Detayları Gör <i class="fas fa-arrow-right ml-1"></i></span></div>`;
+        
+        if(card){grid.appendChild(card)}
+        
+        // İstatistik Kartlarını Oluştur
+        const allPersonnel = getAggregatedPersonnel();
+        const totalPerson = allPersonnel.length;
+        const totalMale = allPersonnel.filter(p => p.cinsiyet === 'E').length;
+        const totalFemale = allPersonnel.filter(p => p.cinsiyet === 'K').length;
+
+        const stats = [
+            { title: 'Toplam Personel', value: totalPerson, icon: 'fa-users', color: 'text-blue-500' },
+            { title: 'Erkek Personel', value: totalMale, icon: 'fa-male', color: 'text-sky-500' },
+            { title: 'Kadın Personel', value: totalFemale, icon: 'fa-female', color: 'text-pink-500' }
+        ];
+
+        stats.forEach(stat => {
+            const statCard = document.createElement('div');
+            statCard.className = 'bg-white rounded-lg shadow-lg p-4 flex items-center justify-center';
+            statCard.innerHTML = `
+                <div class="flex items-center justify-center gap-4">
+                    <i class="fas ${stat.icon} ${stat.color} text-3xl"></i>
+                    <div>
+                        <p class="text-3xl font-bold text-gray-800">${stat.value}</p>
+                        <p class="text-sm text-gray-500">${stat.title}</p>
+                    </div>
+                </div>`;
+            grid.appendChild(statCard);
+        });
+        
+        // Boş kart (layoutu tamamlamak için)
+        const emptyCard = document.createElement('div');
+        emptyCard.className = 'bg-gray-50 rounded-lg p-4 flex items-center justify-center border-2 border-dashed border-gray-200';
+        emptyCard.innerHTML = `<span class="text-sm text-gray-400 font-medium">Yeni istatistikler eklenecek...</span>`;
+        grid.appendChild(emptyCard);
+        
+        }else if(dir.group==='ilce'){const totalCurrent=dir.personnelList.length;card=document.createElement('div');card.className='bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer overflow-hidden transform hover:-translate-y-1';card.dataset.id=dir.id;card.innerHTML=`<div class="p-5"><h3 class="text-lg font-bold text-gray-900 truncate pr-2">${dir.name}</h3><div class="mt-4 flex items-center justify-center gap-4"><i class="fas fa-users text-3xl text-blue-500"></i><div><p class="text-3xl font-bold text-gray-800">${totalCurrent}</p><p class="text-sm text-gray-500">Personel</p></div></div></div><div class="bg-gray-50 px-5 py-3 text-right"><span class="text-sm font-medium text-blue-600 hover:text-blue-800">Personel Listesi <i class="fas fa-arrow-right ml-1"></i></span></div>`;
+        if(card){grid.appendChild(card)}}})}
         
         function showModal(id){currentDirectorateId=id;const dir=directorateData.find(d=>d.id===id);if(!dir)return;modalTitle.textContent=dir.name;if(dir.group==='kadastro'){const mersinKM=directorateData.find(d=>d.id==='mersin_km');populatePersonnelTable(mersinKM);document.querySelector('[data-tab="personnel"]').style.display='inline-flex';populatePersonnelList(getAggregatedPersonnel(),'mersin_km');}else{document.querySelector('[data-tab="personnel"]').style.display='none';populatePersonnelList(dir.personnelList||[],dir.id);}
         personnelSearchInput.value='';populateGallery(projectsGallery,dir.projects,'projects');populateGallery(photosGallery,dir.photos,'photos');switchTab(dir.group==='kadastro'?'personnel':'personnel-list');modal.classList.remove('hidden');document.body.style.overflow='hidden'}
@@ -519,7 +561,7 @@
         function populatePersonnelList(list,dirId){personnelListTableBody.innerHTML='';if(!list||list.length===0){personnelListTableBody.innerHTML=`<tr><td colspan="5" class="text-center py-10 text-gray-500">Bu birim için personel bilgisi bulunamadı.<br>Merkezi Yönetim Panelinden personel ekleyebilirsiniz.</td></tr>`;return}
         list.forEach((p,index)=>{const row=document.createElement('tr');row.dataset.index=index;row.dataset.dirId=dirId;row.innerHTML=createPersonnelRowView(p);personnelListTableBody.appendChild(row)})}
         
-        function createPersonnelRowView(p){return` <td class="px-2 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm font-semibold text-gray-900">${p.name||''}</td> <td class="px-2 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm text-gray-600">${p.title||''}</td> <td class="px-2 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm text-gray-600">${p.sicil||''}</td><td class="px-2 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm text-gray-600">${p.görevliBirim||''}</td><td class="px-2 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm text-gray-600">${p.ipTelefon||''}</td>`}
+        function createPersonnelRowView(p){ const görevliBirimDisplay = normalizeString(p.görevliBirim) === 'mersin' ? 'Merkez' : (p.görevliBirim || ''); return` <td class="px-2 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm font-semibold text-gray-900">${p.name||''}</td> <td class="px-2 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm text-gray-600">${p.title||''}</td> <td class="px-2 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm text-gray-600">${p.sicil||''}</td><td class="px-2 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm text-gray-600">${görevliBirimDisplay}</td><td class="px-2 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm text-gray-600">${p.ipTelefon||''}</td>`}
         
         function populateGallery(galleryElement,items,galleryType){galleryElement.innerHTML='';const uploadCard=document.createElement('div');uploadCard.className='upload-card';const acceptTypes=galleryType==='projects'?'image/*,application/pdf':'image/*';uploadCard.innerHTML=`<label for="${galleryType}-upload" class="text-center text-gray-500 cursor-pointer"><i class="fas fa-plus-circle fa-3x"></i><p class="mt-2 font-semibold">${galleryType==='projects'?'Dosya Yükle':'Resim Yükle'}</p></label><input type="file" id="${galleryType}-upload" class="hidden" multiple accept="${acceptTypes}">`;galleryElement.appendChild(uploadCard);document.getElementById(`${galleryType}-upload`).addEventListener('change',handleFileUpload);if(items&&items.length>0){items.forEach((item,index)=>{const galleryItem=document.createElement('div');galleryItem.className='gallery-item';if(item.type&&item.type.startsWith('image/')){galleryItem.innerHTML=`<img src="${item.url}" alt="${item.title}" class="w-full h-48 object-cover rounded-lg border-2 border-gray-200"><div class="delete-btn" data-index="${index}" data-type="${galleryType}"><i class="fas fa-trash-alt"></i></div>`}else if(item.type==='application/pdf'){galleryItem.innerHTML=`<div class="pdf-thumbnail"><i class="fas fa-file-pdf"></i><span>${item.title}</span></div><div class="delete-btn" data-index="${index}" data-type="${galleryType}"><i class="fas fa-trash-alt"></i></div>`}
         galleryItem.addEventListener('click',(e)=>{if(!e.target.closest('.delete-btn')){openLightbox(item)}});galleryElement.appendChild(galleryItem)})}}
@@ -551,7 +593,7 @@
             const filteredList = allPersonnel.filter(p => normalizeString(p.name).includes(searchTerm) || normalizeString(p.title).includes(searchTerm) || normalizeString(p.sicil?.toString()).includes(searchTerm) || normalizeString(p.directorateName).includes(searchTerm));
             allPersonnelTableBody.innerHTML = '';
             if (filteredList.length === 0) {
-                allPersonnelTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-10 text-gray-500">Arama kriterlerine uygun personel bulunamadı.</td></tr>`;
+                allPersonnelTableBody.innerHTML = `<tr><td colspan="9" class="text-center py-10 text-gray-500">Arama kriterlerine uygun personel bulunamadı.</td></tr>`;
                 return;
             }
             filteredList.forEach(p => {
@@ -565,20 +607,22 @@
             updateBulkDeleteButton();
         }
         function createAllPersonnelRowView(p) {
+            const görevliBirimDisplay = normalizeString(p.görevliBirim) === 'mersin' ? 'Merkez' : (p.görevliBirim || '');
             return `
                 <td class="px-2 py-3 sm:px-4"><input type="checkbox" class="personnel-checkbox" data-sicil="${p.sicil || ''}"></td>
                 <td class="px-2 py-3 sm:px-6 whitespace-nowrap text-sm font-semibold text-gray-900">${p.name || ''}</td>
+                <td class="px-2 py-3 sm:px-6 whitespace-nowrap text-sm text-gray-600">${p.cinsiyet === 'E' ? 'Erkek' : (p.cinsiyet === 'K' ? 'Kadın' : 'N/A')}</td>
                 <td class="px-2 py-3 sm:px-6 whitespace-nowrap text-sm text-gray-600">${p.title || ''}</td>
                 <td class="px-2 py-3 sm:px-6 whitespace-nowrap text-sm text-gray-600">${p.sicil || ''}</td>
                 <td class="px-2 py-3 sm:px-6 whitespace-nowrap text-sm text-gray-600 font-medium">${p.directorateName || ''}</td>
-                <td class="px-2 py-3 sm:px-6 whitespace-nowrap text-sm text-gray-600">${p.görevliBirim || ''}</td>
+                <td class="px-2 py-3 sm:px-6 whitespace-nowrap text-sm text-gray-600">${görevliBirimDisplay}</td>
                 <td class="px-2 py-3 sm:px-6 whitespace-nowrap text-sm text-gray-600">${p.ipTelefon || ''}</td>
                 <td class="px-2 py-3 sm:px-6 whitespace-nowrap text-center text-sm font-medium">
                     <button class="action-btn edit-btn" data-action="edit" title="Düzenle"><i class="fas fa-pencil-alt"></i></button>
                     <button class="action-btn delete-btn-action" data-action="delete" title="Sil"><i class="fas fa-trash-alt"></i></button>
                 </td>`;
         }
-        function createAllPersonnelRowEdit(p,isNew=false){const directorateOptions=directorateData.map(dir=>`<option value="${dir.id}" ${p.directorateId===dir.id?'selected':''}>${dir.name}</option>`).join('');return`<td class="px-4 py-4"></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="name" value="${p.name||''}" placeholder="Adı Soyadı"></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="title" value="${p.title||''}" placeholder="Unvanı"></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="sicil" value="${p.sicil||''}" placeholder="Sicil No"></td><td class="px-2 py-2"><select class="personnel-list-input" data-field="directorateId">${directorateOptions}</select></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="görevliBirim" value="${p.görevliBirim||''}" placeholder="Görev Birimi"></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="ipTelefon" value="${p.ipTelefon||''}" placeholder="IP Telefon"></td><td class="px-2 py-2 whitespace-nowrap text-center text-sm font-medium"><button class="action-btn save-btn" data-action="save" title="Kaydet"><i class="fas fa-check"></i></button><button class="action-btn cancel-btn" data-action="cancel" title="İptal"><i class="fas fa-times"></i></button></td>`}
+        function createAllPersonnelRowEdit(p,isNew=false){const directorateOptions=directorateData.map(dir=>`<option value="${dir.id}" ${p.directorateId===dir.id?'selected':''}>${dir.name}</option>`).join('');return`<td class="px-4 py-4"></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="name" value="${p.name||''}" placeholder="Adı Soyadı"></td><td class="px-2 py-2 w-20"><select class="personnel-list-input" data-field="cinsiyet"><option value="B" ${!p.cinsiyet || p.cinsiyet === 'B' ? 'selected' : ''}>Seçiniz</option><option value="E" ${p.cinsiyet === 'E' ? 'selected' : ''}>Erkek</option><option value="K" ${p.cinsiyet === 'K' ? 'selected' : ''}>Kadın</option></select></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="title" value="${p.title||''}" placeholder="Unvanı"></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="sicil" value="${p.sicil||''}" placeholder="Sicil No"></td><td class="px-2 py-2"><select class="personnel-list-input" data-field="directorateId">${directorateOptions}</select></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="görevliBirim" value="${p.görevliBirim||''}" placeholder="Görev Birimi"></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="ipTelefon" value="${p.ipTelefon||''}" placeholder="IP Telefon"></td><td class="px-2 py-2 whitespace-nowrap text-center text-sm font-medium"><button class="action-btn save-btn" data-action="save" title="Kaydet"><i class="fas fa-check"></i></button><button class="action-btn cancel-btn" data-action="cancel" title="İptal"><i class="fas fa-times"></i></button></td>`}
         
         function handleAllPersonnelListAction(e){const button=e.target.closest('button.action-btn');if(!button)return;const action=button.dataset.action;const row=button.closest('tr');const dirId=row.dataset.dirId;const sicil=row.dataset.sicil;const isNew=!row.hasAttribute('data-sicil');if(action==='edit'){const allPersonnel=getAggregatedPersonnel();const person=allPersonnel.find(p=>p.sicil===sicil);if(person){row.innerHTML=createAllPersonnelRowEdit(person)}}else if(action==='save'){const inputs=row.querySelectorAll('.personnel-list-input');const newPersonData={};let newDirId=dirId;inputs.forEach(input=>{const field=input.dataset.field;if(field==='directorateId'){newDirId=input.value}else{newPersonData[field]=input.value}});if(!newPersonData.sicil){alert("Sicil numarası boş bırakılamaz.");return}
         let originalDir=directorateData.find(d=>d.id===dirId);let personIndex=originalDir?originalDir.personnelList.findIndex(p=>p.sicil===sicil):-1;if(isNew){personIndex=-1}
@@ -616,7 +660,7 @@
         }
 
         function exportAllPersonnelToExcel(){const allPersonnel=getAggregatedPersonnel();if(allPersonnel.length===0){alert("Dışa aktarılacak personel bulunmamaktadır.");return}
-        const dataToExport=allPersonnel.map(p=>({"Adı Soyadı":p.name,"Unvanı":p.title,"Sicil":p.sicil,"Birim Adı":p.directorateName,"Görevli Olduğu Birim":p.görevliBirim,"IP Telefon":p.ipTelefon}));const ws=XLSX.utils.json_to_sheet(dataToExport);ws['!cols']=[{wch:30},{wch:40},{wch:15},{wch:30},{wch:30},{wch:20}];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Tüm Personel Listesi");XLSX.writeFile(wb,`Mersin_KM_Tum_Personel_Listesi.xlsx`)}
+        const dataToExport=allPersonnel.map(p=>({"Adı Soyadı":p.name, "Cinsiyet": p.cinsiyet === 'E' ? 'Erkek' : (p.cinsiyet === 'K' ? 'Kadın' : 'Belirtilmemiş'), "Unvanı":p.title,"Sicil":p.sicil,"Birim Adı":p.directorateName,"Görevli Olduğu Birim":p.görevliBirim,"IP Telefon":p.ipTelefon}));const ws=XLSX.utils.json_to_sheet(dataToExport);ws['!cols']=[{wch:30},{wch:15},{wch:40},{wch:15},{wch:30},{wch:30},{wch:20}];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Tüm Personel Listesi");XLSX.writeFile(wb,`Mersin_KM_Tum_Personel_Listesi.xlsx`)}
         
         function downloadNormTemplateForGroup(groupType){
             const mersinKM = directorateData.find(dir => dir.id === 'mersin_km');
@@ -740,4 +784,3 @@
     </script>
 </body>
 </html>
-
