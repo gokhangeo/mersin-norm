@@ -516,7 +516,10 @@
         function renderAllCards(){if(!directorateData||directorateData.length===0)return;document.querySelectorAll('[id$="-grid"]').forEach(grid=>grid.innerHTML='');directorateData.forEach(dir=>{const grid=document.getElementById(`${dir.group}-grid`);if(!grid)return;let card;if(dir.group==='kadastro'){const totalNorm=dir.personnel.reduce((sum,p)=>sum+(p.norm||0),0);const totalCurrent=dir.personnel.reduce((sum,p)=>sum+(p.current||0),0); const difference=totalCurrent-totalNorm;const occupancyRate=totalNorm>0?Math.round((totalCurrent/totalNorm)*100):(totalCurrent>0?100:0);let progressBarColor='bg-red-500';if(occupancyRate>=90)progressBarColor='bg-green-500';else if(occupancyRate>=70)progressBarColor='bg-yellow-400';let diffClass='fark-sifir';let diffIcon='fa-minus';if(difference>0){diffClass='bg-green-200 text-green-800';diffIcon='fa-arrow-up'}else if(difference<0){diffClass='bg-red-200 text-red-800';diffIcon='fa-arrow-down'}
         card=document.createElement('div');card.className='xl:col-span-2 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer overflow-hidden transform hover:-translate-y-1';card.dataset.id=dir.id;card.innerHTML=`<div class="p-5"><div class="flex justify-between items-start"><h3 class="text-lg font-bold text-gray-900 truncate pr-2">${dir.name}</h3><span class="text-xs font-bold px-2 py-1 rounded-full ${diffClass}"><i class="fas ${diffIcon} mr-1"></i> ${difference>=0?'+':''}${difference}</span></div><div class="mt-4"><div class="flex justify-between items-center mb-1"><span class="text-xs font-semibold text-gray-500">Doluluk Oranı</span><span class="text-sm font-bold ${progressBarColor.replace('bg','text')}">${occupancyRate}%</span></div><div class="progress-bar-container"><div class="progress-bar ${progressBarColor}" style="width: ${occupancyRate}%;"></div></div></div></div><div class="px-5 pb-5 flex justify-between items-center text-sm text-gray-600"><span>Norm: <b class="text-gray-900">${totalNorm}</b></span><span>Mevcut: <b class="text-gray-900">${totalCurrent}</b></span></div><div class="bg-gray-50 px-5 py-3 text-right"><span class="text-sm font-medium text-blue-600 hover:text-blue-800">Detayları Gör <i class="fas fa-arrow-right ml-1"></i></span></div>`;
         
-        if(card){grid.appendChild(card)}
+        if(card){
+            card.addEventListener('click',()=>showModal(dir.id));
+            grid.appendChild(card)
+        }
         
         // İstatistik Kartlarını Oluştur
         const allPersonnel = getAggregatedPersonnel();
@@ -551,7 +554,11 @@
         grid.appendChild(emptyCard);
         
         }else if(dir.group==='ilce'){const totalCurrent=dir.personnelList.length;card=document.createElement('div');card.className='bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer overflow-hidden transform hover:-translate-y-1';card.dataset.id=dir.id;card.innerHTML=`<div class="p-5"><h3 class="text-lg font-bold text-gray-900 truncate pr-2">${dir.name}</h3><div class="mt-4 flex items-center justify-center gap-4"><i class="fas fa-users text-3xl text-blue-500"></i><div><p class="text-3xl font-bold text-gray-800">${totalCurrent}</p><p class="text-sm text-gray-500">Personel</p></div></div></div><div class="bg-gray-50 px-5 py-3 text-right"><span class="text-sm font-medium text-blue-600 hover:text-blue-800">Personel Listesi <i class="fas fa-arrow-right ml-1"></i></span></div>`;
-        if(card){grid.appendChild(card)}}})}
+        if(card){
+            card.addEventListener('click',()=>showModal(dir.id));
+            grid.appendChild(card)
+        }
+    }})}
         
         function showModal(id){currentDirectorateId=id;const dir=directorateData.find(d=>d.id===id);if(!dir)return;modalTitle.textContent=dir.name;if(dir.group==='kadastro'){const mersinKM=directorateData.find(d=>d.id==='mersin_km');populatePersonnelTable(mersinKM);document.querySelector('[data-tab="personnel"]').style.display='inline-flex';populatePersonnelList(getAggregatedPersonnel(),'mersin_km');}else{document.querySelector('[data-tab="personnel"]').style.display='none';populatePersonnelList(dir.personnelList||[],dir.id);}
         personnelSearchInput.value='';populateGallery(projectsGallery,dir.projects,'projects');populateGallery(photosGallery,dir.photos,'photos');switchTab(dir.group==='kadastro'?'personnel':'personnel-list');modal.classList.remove('hidden');document.body.style.overflow='hidden'}
