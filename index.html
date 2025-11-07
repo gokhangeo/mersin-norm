@@ -414,17 +414,26 @@
 
         function updatePersonnelFromData(data) {
             directorateData.forEach(dir => dir.personnelList = []);
-
+            
             let addedCount = 0;
+            
             data.forEach(row => {
                 const name = getValueFromRow(row, ['Adı Soyadı', 'Adi Soyadi', 'Ad Soyad']);
                 const title = getValueFromRow(row, ['Unvanı', 'Unvani', 'Unvan']);
                 const sicil = getValueFromRow(row, ['Sicil', 'Sicil No']);
                 const görevliBirimRaw = getValueFromRow(row, ['Görevli Olduğu Birim', 'Gorevli Oldugu Birim']);
                 const ipTelefon = getValueFromRow(row, ['İp Telefon', 'Ip Telefon', 'Telefon']);
-                const cinsiyet = getValueFromRow(row, ['Cinsiyet', 'Cinsiyeti']);
+                const cinsiyetRaw = getValueFromRow(row, ['Cinsiyet', 'Cinsiyeti']);
+                const cinsiyet = cinsiyetRaw ? String(cinsiyetRaw).trim().charAt(0).toUpperCase() : 'B'; // B = Belirtilmemiş, E, K
 
                 if (!sicil || !name || !title) return;
+                
+                let processedCinsiyet = 'B'; // Belirtilmemiş
+                if (cinsiyet === 'E') {
+                    processedCinsiyet = 'E';
+                } else if (cinsiyet === 'K' || cinsiyet === 'B') { // Hem K (Kadın) hem de B (Bayan) kabul edilsin
+                    processedCinsiyet = 'K';
+                }
 
                 const newPersonData = { 
                     name: String(name).trim(), 
@@ -432,7 +441,7 @@
                     sicil: String(sicil).trim(),
                     görevliBirim: görevliBirimRaw ? String(görevliBirimRaw).trim() : 'Mersin',
                     ipTelefon: ipTelefon ? String(ipTelefon).trim() : '',
-                    cinsiyet: cinsiyet ? String(cinsiyet).trim().charAt(0).toUpperCase() : 'B' // B = Belirtilmemiş, E, K
+                    cinsiyet: processedCinsiyet // İşlenmiş cinsiyet kodu (E, K, B)
                 };
                 
                 let targetDir = null;
@@ -629,7 +638,7 @@
                     <button class="action-btn delete-btn-action" data-action="delete" title="Sil"><i class="fas fa-trash-alt"></i></button>
                 </td>`;
         }
-        function createAllPersonnelRowEdit(p,isNew=false){const directorateOptions=directorateData.map(dir=>`<option value="${dir.id}" ${p.directorateId===dir.id?'selected':''}>${dir.name}</option>`).join('');return`<td class="px-4 py-4"></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="name" value="${p.name||''}" placeholder="Adı Soyadı"></td><td class="px-2 py-2 w-20"><select class="personnel-list-input" data-field="cinsiyet"><option value="B" ${!p.cinsiyet || p.cinsiyet === 'B' ? 'selected' : ''}>Seçiniz</option><option value="E" ${p.cinsiyet === 'E' ? 'selected' : ''}>Erkek</option><option value="K" ${p.cinsiyet === 'K' ? 'selected' : ''}>Kadın</option></select></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="title" value="${p.title||''}" placeholder="Unvanı"></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="sicil" value="${p.sicil||''}" placeholder="Sicil No"></td><td class="px-2 py-2"><select class="personnel-list-input" data-field="directorateId">${directorateOptions}</select></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="görevliBirim" value="${p.görevliBirim||''}" placeholder="Görev Birimi"></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="ipTelefon" value="${p.ipTelefon||''}" placeholder="IP Telefon"></td><td class="px-2 py-2 whitespace-nowrap text-center text-sm font-medium"><button class="action-btn save-btn" data-action="save" title="Kaydet"><i class="fas fa-check"></i></button><button class="action-btn cancel-btn" data-action="cancel" title="İptal"><i class="fas fa-times"></i></button></td>`}
+        function createAllPersonnelRowEdit(p,isNew=false){const directorateOptions=directorateData.map(dir=>`<option value="${dir.id}" ${p.directorateId===dir.id?'selected':''}>${dir.name}</option>`).join('');return`<td class="px-4 py-4"></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="name" value="${p.name||''}" placeholder="Adı Soyadı"></td><td class="px-2 py-2 w-20"><select class="personnel-list-input" data-field="cinsiyet"><option value="B" ${!p.cinsiyet || p.cinsiyet === 'B' ? 'selected' : ''}>Seçiniz</option><option value="E" ${p.cinsiyet === 'E' ? 'selected' : ''}>Erkek</option><option value="K" ${p.cinsiyet === 'K' ? 'selected' : ''}>Kadın</option></select></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="title" value="${p.title||''}" placeholder="Unvanı"></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="sicil" value="${p.sicil||''}" placeholder="Sicil No"></td><td class_name="px-2 py-2"><select class="personnel-list-input" data-field="directorateId">${directorateOptions}</select></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="görevliBirim" value="${p.görevliBirim||''}" placeholder="Görev Birimi"></td><td class="px-2 py-2"><input type="text" class="personnel-list-input" data-field="ipTelefon" value="${p.ipTelefon||''}" placeholder="IP Telefon"></td><td class="px-2 py-2 whitespace-nowrap text-center text-sm font-medium"><button class="action-btn save-btn" data-action="save" title="Kaydet"><i class="fas fa-check"></i></button><button class="action-btn cancel-btn" data-action="cancel" title="İptal"><i class="fas fa-times"></i></button></td>`}
         
         function handleAllPersonnelListAction(e){const button=e.target.closest('button.action-btn');if(!button)return;const action=button.dataset.action;const row=button.closest('tr');const dirId=row.dataset.dirId;const sicil=row.dataset.sicil;const isNew=!row.hasAttribute('data-sicil');if(action==='edit'){const allPersonnel=getAggregatedPersonnel();const person=allPersonnel.find(p=>p.sicil===sicil);if(person){row.innerHTML=createAllPersonnelRowEdit(person)}}else if(action==='save'){const inputs=row.querySelectorAll('.personnel-list-input');const newPersonData={};let newDirId=dirId;inputs.forEach(input=>{const field=input.dataset.field;if(field==='directorateId'){newDirId=input.value}else{newPersonData[field]=input.value}});if(!newPersonData.sicil){alert("Sicil numarası boş bırakılamaz.");return}
         let originalDir=directorateData.find(d=>d.id===dirId);let personIndex=originalDir?originalDir.personnelList.findIndex(p=>p.sicil===sicil):-1;if(isNew){personIndex=-1}
