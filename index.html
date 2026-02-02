@@ -285,6 +285,20 @@
                 photos: []
             }))
         ];
+
+        // Talimat üzerine belirlenen hiyerarşik sıralama
+        const TITLE_SORT_ORDER = [
+            "Kadastro Müdürü",
+            "Kadastro Müdür Yrd.",
+            "Kadastro Üyesi",
+            "Mühendis",
+            "Teknisyen/Tekniker",
+            "İşlem Yapan Personel",
+            "Arşiv Görevlisi",
+            "Destek Personeli",
+            "Şoför",
+            "Güvenlik Personeli"
+        ];
         
         // --- DOM Elements ---
         const modal = document.getElementById('detail-modal');
@@ -329,7 +343,7 @@
         // --- Veri Yönetimi ---
         function normalizeString(str) { if (typeof str !== 'string') return ''; return str.trim().replace(/\s+/g, ' ').toLocaleLowerCase('tr-TR'); }
         function getValueFromRow(row, possibleKeys) { const normalizedRowKeys = Object.keys(row).map(key => ({ original: key, normalized: normalizeString(key) })); for (const possibleKey of possibleKeys) { const normalizedPossibleKey = normalizeString(possibleKey); const foundKey = normalizedRowKeys.find(rk => rk.normalized === normalizedPossibleKey); if (foundKey) { return row[foundKey.original]; } } return undefined; }
-        function saveData() { try { localStorage.setItem('mersinPortalData', JSON.stringify(directorateData)); } catch (e) { console.error("Veri kaydedilirken hata oluştu:", e); alert("Veriler kaydedilemedi. Tarayıcı depolama alanı dolu olabilir."); } }
+        function saveData() { try { localStorage.setItem('mersinPortalData', JSON.stringify(directorateData)); } catch (e) { console.error("Veri kaydedilirken hata oluştu:", e); } }
         
         function loadData() {
             const savedData = localStorage.getItem('mersinPortalData');
@@ -341,7 +355,6 @@
                         return true;
                     } else { throw new Error("Invalid data structure"); }
                 } catch (e) {
-                    console.error("Kaydedilmiş veri okunurken hata, başlangıç verileri kullanılıyor:", e);
                     directorateData = JSON.parse(JSON.stringify(initialData));
                 }
             } else {
@@ -361,9 +374,6 @@
             } catch (error) {
                 console.warn("GitHub'dan veri çekilemedi. Yerel depolamadan yükleme deneniyor.", error);
                 const hasSavedData = loadData();
-                if (!hasSavedData) {
-                    console.error("Hem GitHub hem de yerel depolamadan veri yüklenemedi. Başlangıç verileri kullanılıyor.");
-                }
             }
             refreshAllViews();
         }
@@ -625,7 +635,17 @@
 
         function populateTitleDistribution() {
             const allPersonnel = getAggregatedPersonnel();
-            const titles = [...new Set(allPersonnel.map(p => p.title))].sort();
+            
+            // Ünvanları talimat verilen özel sıraya göre diz
+            const titles = [...new Set(allPersonnel.map(p => p.title))].sort((a, b) => {
+                let indexA = TITLE_SORT_ORDER.indexOf(a);
+                let indexB = TITLE_SORT_ORDER.indexOf(b);
+                // Eğer listede yoksa en sona at
+                if (indexA === -1) indexA = 999;
+                if (indexB === -1) indexB = 999;
+                return indexA - indexB;
+            });
+            
             const units = directorateData.filter(d => d.id !== 'mersin_km');
 
             titleDistributionThead.innerHTML = '';
@@ -738,7 +758,6 @@
                     normUploadReport.classList.remove('hidden');
                     normUploadReport.innerHTML=`<p class="font-bold text-green-700">Norm kadro başarıyla güncellendi.</p>`;
                    }catch(err){
-                       console.error("Excel hatası:",err);
                        alert("Excel dosyası işlenirken hata oluştu.");
                    }finally{ normExcelInput.value='' }
             };
@@ -773,7 +792,13 @@
 
         function exportTitleDistributionExcel() {
             const allPersonnel = getAggregatedPersonnel();
-            const titles = [...new Set(allPersonnel.map(p => p.title))].sort();
+            const titles = [...new Set(allPersonnel.map(p => p.title))].sort((a, b) => {
+                let indexA = TITLE_SORT_ORDER.indexOf(a);
+                let indexB = TITLE_SORT_ORDER.indexOf(b);
+                if (indexA === -1) indexA = 999;
+                if (indexB === -1) indexB = 999;
+                return indexA - indexB;
+            });
             const units = directorateData.filter(d => d.id !== 'mersin_km');
             const exportData = units.map(unit => {
                 const unitPersonnel = allPersonnel.filter(p => p.directorateId === unit.id);
