@@ -12,7 +12,7 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: #0f172a; }
         .modal-backdrop { background-color: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); }
-        .modal-content { max-height: 90vh; border-radius: 1.5rem; border: 1px solid rgba(255,255,255,0.2); }
+        .modal-content { max-height: 90vh; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.2); }
         
         .modern-card { 
             background: white; 
@@ -47,6 +47,10 @@
         .gender-box { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
         .gender-male { background-color: #e0f2fe; color: #0369a1; }
         .gender-female { background-color: #fce7f3; color: #be185d; }
+
+        .distribution-table th { background-color: #1e3a8a; color: white; font-size: 0.7rem; padding: 10px; }
+        .distribution-table td { font-size: 0.8rem; padding: 8px; border: 1px solid #e2e8f0; text-align: center; }
+        .distribution-table .unit-name { text-align: left; font-weight: bold; background-color: #f8fafc; }
     </style>
 </head>
 <body class="antialiased">
@@ -57,14 +61,14 @@
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 bg-blue-950 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-900/20">TK</div>
                     <div>
-                        <h1 class="text-xl font-black tracking-tighter text-slate-900 leading-none uppercase">Birim Yönetim Portalı</h1>
+                        <h1 class="text-xl font-black tracking-tighter text-slate-900 leading-none">BİRİM YÖNETİM PORTALI</h1>
                         <p class="text-[9px] font-extrabold text-blue-600 uppercase tracking-[0.25em] mt-1">Mersin Kadastro Müdürlüğü</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-6">
                     <div class="hidden md:flex flex-col items-end text-right">
                         <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Kurumsal Sistem</span>
-                        <span class="text-xs font-black text-slate-700 decoration-blue-500 decoration-2 decoration-skip-ink-none">Gökhan ELGÜL</span>
+                        <span class="text-xs font-black text-slate-700 decoration-blue-500 decoration-2 decoration-skip-ink-none">Müdürüm Gökhan ELGÜL</span>
                     </div>
                     <input type="file" id="manual-file-upload" class="hidden" accept=".xlsx, .xls" multiple>
                     <button onclick="document.getElementById('manual-file-upload').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all transform active:scale-95 flex items-center gap-2 shadow-xl shadow-blue-600/20">
@@ -76,6 +80,7 @@
     </header>
 
     <main class="container mx-auto px-6 lg:px-12 py-8 space-y-12">
+        <!-- Özet Dashboard -->
         <section>
             <div class="group-header">
                 <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight text-blue-900 italic">Genel Müdürlük Analizi</h2>
@@ -83,6 +88,7 @@
             <div id="summary-dashboard" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6"></div>
         </section>
         
+        <!-- Müdürlük -->
         <section>
             <div class="group-header">
                 <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight text-blue-900 italic">Müdürlük Verileri</h2>
@@ -90,6 +96,7 @@
             <div id="kadastro-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6"></div>
         </section>
         
+        <!-- İlçeler -->
         <section>
             <div class="group-header">
                 <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight text-blue-900 italic">Bağlı Kadastro Birimleri</h2>
@@ -171,8 +178,13 @@
                             </table>
                         </div>
                     </div>
-                    <div id="central-title-distribution-content" class="central-tab-pane hidden overflow-x-auto text-xs">
-                        <div id="title-distribution-table-container"></div>
+                    <div id="central-title-distribution-content" class="central-tab-pane hidden">
+                        <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-xl bg-white">
+                            <table class="w-full distribution-table border-collapse">
+                                <thead id="title-distribution-thead"></thead>
+                                <tbody id="title-distribution-tbody"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -332,15 +344,15 @@
             const rate = nTotal > 0 ? Math.round((cTotal/nTotal)*100) : 0;
 
             els.summary.innerHTML = `
-                <div class="xl:col-span-3 modern-card p-6 border-l-[12px] border-blue-900 flex flex-col justify-between">
+                <div class="xl:col-span-3 modern-card p-6 border-l-[12px] border-blue-900 flex flex-col justify-between bg-gradient-to-r from-blue-50/50 to-white">
                     <div>
                         <p class="text-[9px] font-black text-blue-600 uppercase mb-1 tracking-widest leading-none">ANALİZ ÖZETİ</p>
-                        <h3 class="text-xl font-black text-slate-900 uppercase italic">MERSİN KADASTRO MÜDÜRLÜĞÜ</h3>
+                        <h3 class="text-xl font-black text-slate-900 uppercase italic leading-none">MERSİN KADASTRO MÜDÜRLÜĞÜ</h3>
                         <div class="mt-4"><div class="flex justify-between text-[9px] font-black uppercase text-slate-400 mb-1"><span>DOLULUK</span><b>${rate}%</b></div><div class="progress-bar-container"><div class="progress-bar bg-blue-600" style="width:${rate}%"></div></div></div>
                     </div>
                     <div class="grid grid-cols-3 gap-4 mt-6 pt-4 border-t border-slate-100 text-center">
-                        <div><p class="text-[9px] font-bold text-slate-400 uppercase">NORM</p><p class="text-2xl font-black text-slate-900">${nTotal}</p></div>
-                        <div><p class="text-[9px] font-bold text-slate-400 uppercase">FİİLİ</p><p class="text-2xl font-black text-slate-900">${cTotal}</p></div>
+                        <div><p class="text-[9px] font-bold text-slate-400 uppercase">NORM</p><p class="text-2xl font-black text-slate-900 leading-none">${nTotal}</p></div>
+                        <div><p class="text-[9px] font-bold text-slate-400 uppercase">FİİLİ</p><p class="text-2xl font-black text-slate-900 leading-none">${cTotal}</p></div>
                         <div class="bg-blue-600 rounded-2xl py-2 shadow-lg"><p class="text-[9px] font-bold text-white uppercase opacity-70 leading-none mb-1">FARK</p><p class="text-2xl font-black text-white leading-none">${cTotal-nTotal>=0?'+':''}${cTotal-nTotal}</p></div>
                     </div>
                 </div>
@@ -359,14 +371,13 @@
                     const dn = d.personnel.reduce((s,p)=>s+p.norm, 0), dc = d.personnel.reduce((s,p)=>s+p.current, 0), dr = dn>0?Math.round((dc/dn)*100):0;
                     card.innerHTML = `<h4 class="font-black text-slate-800 uppercase text-xs mb-5">${d.name}</h4><div class="w-full px-2"><div class="progress-bar-container"><div class="progress-bar ${dr>=100?'bg-emerald-500':'bg-amber-500'}" style="width:${dr}%"></div></div></div><div class="flex justify-between w-full px-4 mt-3 text-[9px] font-black text-slate-400 uppercase tracking-widest"><span>N: ${dn}</span><span>M: ${dc}</span></div>`;
                 } else {
-                    card.innerHTML = `<h4 class="font-black text-slate-700 text-[10px] mb-5 uppercase tracking-tighter text-center leading-tight h-10 flex items-center">${d.name}</h4><div class="flex items-center gap-4"><div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-blue-400 shadow-inner group-hover:bg-blue-600 group-hover:text-white transition-all"><i class="fas fa-users-rectangle text-lg"></i></div><span class="text-3xl font-black text-slate-900 tracking-tighter">${d.personnelList.length}</span></div>`;
+                    card.innerHTML = `<h4 class="font-black text-slate-700 text-[10px] mb-5 uppercase tracking-tighter text-center leading-tight h-10 flex items-center group-hover:text-blue-600 transition-colors">${d.name}</h4><div class="flex items-center gap-4"><div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-blue-500 shadow-inner group-hover:bg-blue-600 group-hover:text-white transition-all"><i class="fas fa-users-rectangle text-lg"></i></div><span class="text-3xl font-black text-slate-900 tracking-tighter">${d.personnelList.length}</span></div>`;
                 }
                 card.onclick = () => showModal(d.id);
                 grid.appendChild(card);
             });
         }
 
-        // --- SIRALAMA VE GÖSTERİM (MÜDÜRÜM, BURASI KRİTİK) ---
         function getHierarchicalSort(list) {
             return list.sort((a, b) => {
                 let idxA = CONFIG.titles.indexOf(a.title || a.t);
@@ -377,13 +388,57 @@
             });
         }
 
+        // --- DAĞILIM TABLOSU (Müdürüm, Eksik olan kısım burası) ---
+        function populateTitleDistribution() {
+            const thead = document.getElementById('title-distribution-thead');
+            const tbody = document.getElementById('title-distribution-tbody');
+            const titles = CONFIG.titles;
+            const units = directorateData.filter(d => d.id !== 'mersin_km');
+
+            thead.innerHTML = `<tr><th class="unit-name">Birim Adı</th>${titles.map(t => `<th>${t}</th>`).join('')}<th>TOPLAM</th></tr>`;
+            tbody.innerHTML = '';
+
+            units.forEach(u => {
+                const unitMatch = normalizeKey(u.name.split(' ')[0]);
+                const unitPersonnel = allPersonnelMaster.filter(r => {
+                    const personGY = normalizeKey(r.gy || 'Mersin');
+                    if (unitMatch === 'merkez') return personGY === '' || personGY === 'merkez' || personGY === 'mersin' || personGY === 'mersinkm';
+                    return personGY.includes(unitMatch);
+                });
+
+                let rowHtml = `<td class="unit-name">${u.name}</td>`;
+                let totalCount = 0;
+
+                titles.forEach(title => {
+                    const count = unitPersonnel.filter(p => {
+                        const pt = normalizeKey(p.t);
+                        // Grup bazlı sayım (Tekniker, Mühendis vb.)
+                        if (title === "Teknisyen/Tekniker") return pt.includes('teknik') || pt.includes('kontrol');
+                        if (title === "Mühendis") return pt.includes('muhendis');
+                        if (title === "İşlem Yapan Personel") return pt.includes('bilgisayar') || pt.includes('memur');
+                        if (title === "Destek Personeli") return pt.includes('isci') || pt.includes('işçi');
+                        return normalizeKey(title) === pt;
+                    }).length;
+                    
+                    totalCount += count;
+                    rowHtml += `<td class="${count > 0 ? 'font-bold text-blue-600' : 'text-slate-300'}">${count}</td>`;
+                });
+
+                rowHtml += `<td class="font-black bg-blue-50">${totalCount}</td>`;
+                tbody.innerHTML += `<tr>${rowHtml}</tr>`;
+            });
+        }
+
         function showModal(id) {
             const d = directorateData.find(x => x.id === id);
             els.modalTitle.innerText = d.name;
             const isKM = d.group === 'kadastro';
-            document.querySelector('[data-tab="personnel"]').style.display = isKM ? 'block' : 'none';
-            els.persTable.innerHTML = '';
             
+            const normBtn = document.querySelector('[data-tab="personnel"]');
+            if (isKM) normBtn.style.display = 'inline-block';
+            else normBtn.style.display = 'none';
+
+            els.persTable.innerHTML = '';
             if (isKM) {
                 const sortedNorms = getHierarchicalSort([...d.personnel]);
                 sortedNorms.forEach(p => {
@@ -392,16 +447,15 @@
                 });
             }
             
-            // Müdürüm, isimleri MASTER HAVUZ'dan Görev Yeri'ne (gy) göre eşleştiriyoruz
             let list = [];
             if(isKM) {
                 list = allPersonnelMaster.map(r => ({ name: r.n, title: r.t, sicil: r.s, gy: r.gy || 'Mersin', c: r.c }));
             } else {
-                const unitShort = normalizeKey(d.name.split(' ')[0]);
+                const unitMatch = normalizeKey(d.name.split(' ')[0]);
                 list = allPersonnelMaster.filter(r => {
                     const personGY = normalizeKey(r.gy || 'Mersin');
-                    if (unitShort === 'merkez') return personGY === '' || personGY === 'merkez' || personGY === 'mersin' || personGY === 'mersinkm';
-                    return personGY.includes(unitShort);
+                    if (unitMatch === 'merkez') return personGY === '' || personGY === 'merkez' || personGY === 'mersin' || personGY === 'mersinkm';
+                    return personGY.includes(unitMatch);
                 }).map(r => ({ name: r.n, title: r.t, sicil: r.s, gy: r.gy || 'Mersin', c: r.c }));
             }
 
@@ -409,8 +463,10 @@
             els.persList.innerHTML = sortedList.length ? '' : '<tr><td colspan="4" class="p-10 text-center text-slate-300 font-black uppercase italic tracking-widest">Birimde Personel Bulunamadı</td></tr>';
             sortedList.forEach(p => {
                 const icon = GENDER_ICONS[p.c] || '';
-                els.persList.innerHTML += `<tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0"><td class="p-4 font-black text-slate-900 flex items-center text-sm">${icon}<span class="ml-1">${p.name}</span></td><td class="p-4 text-slate-500 font-bold uppercase text-[10px] tracking-tight">${p.title}</td><td class="p-4 text-center font-mono text-slate-400 text-[10px] tracking-widest">${p.sicil}</td><td class="p-4 text-slate-700 font-black text-[9px] uppercase bg-slate-50/50">${p.gy}</td></tr>`;
+                els.persList.innerHTML += `<tr class="hover:bg-slate-50 border-b border-slate-100 last:border-0"><td class="p-4 font-black text-slate-900 flex items-center text-sm">${icon}<span class="ml-1">${p.name}</span></td><td class="p-4 text-slate-500 font-bold uppercase text-[10px] tracking-tight">${p.title}</td><td class="p-4 text-center font-mono text-slate-400 text-[10px] tracking-widest">${p.sicil}</td><td class="p-4 text-slate-700 font-black text-[9px] uppercase bg-slate-50/50">${p.gy}</td></tr>`;
             });
+
+            switchTab(isKM ? 'personnel' : 'personnel-list');
             els.detailModal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
@@ -431,6 +487,12 @@
             document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('hidden', p.id !== `${tid}-content`));
         }
 
+        function switchCentralTab(tid) {
+            document.querySelectorAll('#central-modal-tabs button').forEach(b => b.classList.toggle('nav-active', b.dataset.tab === tid));
+            document.querySelectorAll('.central-tab-pane').forEach(p => p.classList.toggle('hidden', p.id !== `${tid}-content`));
+            if(tid === 'central-title-distribution') populateTitleDistribution();
+        }
+
         function updateStatus(isOk, msg) {
             if(!els.status) return;
             els.status.className = isOk ? 'status-ok' : 'status-error';
@@ -442,10 +504,11 @@
             els.closeModalBtn.onclick = () => { els.detailModal.classList.add('hidden'); document.body.style.overflow = 'auto'; };
             document.getElementById('close-all-personnel-modal-btn').onclick = () => { document.getElementById('all-personnel-modal').classList.add('hidden'); document.body.style.overflow = 'auto'; };
             els.modalTabs.onclick = e => { const tid = e.target.dataset.tab; if(tid) switchTab(tid); };
+            document.getElementById('central-modal-tabs').onclick = e => { const tid = e.target.dataset.tab; if(tid) switchCentralTab(tid); };
             
             els.manualUpload.onchange = async (e) => {
                 const files = e.target.files; if(!files.length) return;
-                updateStatus(false, "SİSTEM GÜNCELLENİYOR...");
+                updateStatus(false, "YÜKLENİYOR...");
                 for (let file of files) {
                     const reader = new FileReader();
                     const promise = new Promise(resolve => {
