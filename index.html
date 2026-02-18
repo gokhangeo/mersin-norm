@@ -62,12 +62,12 @@
                     <div class="w-12 h-12 bg-blue-950 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-900/20">TK</div>
                     <div>
                         <h1 class="text-xl font-black tracking-tighter text-slate-900 leading-none uppercase">Birim Yönetim Portalı</h1>
-                        <p class="text-[9px] font-extrabold text-blue-600 uppercase tracking-[0.25em] mt-1 italic">Mersin Kadastro Müdürlüğü</p>
+                        <p class="text-[9px] font-extrabold text-blue-600 uppercase tracking-[0.25em] mt-1">Mersin Kadastro Müdürlüğü</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-6">
                     <div class="hidden md:flex flex-col items-end text-right">
-                        <span class="text-xs font-black text-slate-600">© Gökhan ELGÜL tarafından tasarlanmıştır.</span>
+                        <span class="text-xs font-black text-slate-600 italic">© Gökhan ELGÜL tarafından tasarlanmıştır.</span>
                     </div>
                     <input type="file" id="manual-file-upload" class="hidden" accept=".xlsx, .xls" multiple>
                     <button onclick="document.getElementById('manual-file-upload').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all transform active:scale-95 flex items-center gap-2 shadow-xl shadow-blue-600/20">
@@ -97,7 +97,7 @@
             <div class="group-header">
                 <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight text-blue-900 italic">Bağlı Kadastro Birimleri</h2>
             </div>
-            <div id="ilce-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 text-center"></div>
+            <div id="ilce-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 text-center text-center"></div>
         </section>
     </main>
 
@@ -122,7 +122,7 @@
                 </nav>
                 <div id="tab-content">
                     <div id="personnel-content" class="tab-pane">
-                        <div class="overflow-hidden rounded-2xl border border-slate-200 shadow-xl bg-white text-xs text-xs">
+                        <div class="overflow-hidden rounded-2xl border border-slate-200 shadow-xl bg-white text-xs">
                             <table class="w-full text-left">
                                 <thead class="bg-slate-900 text-white font-black uppercase text-[9px] tracking-widest">
                                     <tr><th class="p-5">Kadro Unvanı</th><th class="p-5 text-center">Norm</th><th class="p-5 text-center">Mevcut</th><th class="p-5 text-center">Fark</th></tr>
@@ -136,7 +136,7 @@
                         <div class="rounded-2xl border border-slate-200 overflow-hidden shadow-xl bg-white text-xs">
                             <table class="w-full text-left">
                                 <thead class="bg-slate-100 text-slate-600 font-black uppercase text-[9px]">
-                                    <tr><th class="p-5 text-left">Adı Soyadı</th><th class="p-5">Unvan</th><th class="p-5 text-center">Sicil</th><th class="p-5">Görev Yeri</th><th class="p-5">IP Telefon</th></tr>
+                                    <tr><th class="p-5 text-left">Adı Soyadı</th><th class="p-5">Unvan</th><th class="p-5 text-center">Sicil</th><th class="p-5">Görev Yeri</th><th class="p-5 text-center">IP Telefon</th></tr>
                                 </thead>
                                 <tbody id="personnel-list-table-body" class="divide-y divide-slate-50 font-medium"></tbody>
                             </table>
@@ -168,14 +168,14 @@
                         <div class="rounded-2xl border border-slate-100 overflow-hidden shadow-xl bg-white">
                             <table class="w-full text-xs">
                                 <thead class="bg-slate-900 text-white sticky top-0 font-black uppercase text-[8px] z-10 border-b-4 border-blue-600">
-                                    <tr><th class="p-4 text-left">Adı Soyadı</th><th class="p-4 text-center">Figür</th><th class="p-4 text-left">Unvan</th><th class="p-4 text-left">Sicil</th><th class="p-4 text-left">Birim</th><th class="p-4 text-left">Görev Yeri</th><th class="p-4 text-left">IP Telefon</th></tr>
+                                    <tr><th class="p-4 text-left">Adı Soyadı</th><th class="p-4 text-center">Figür</th><th class="p-4 text-left">Unvan</th><th class="p-4 text-left">Sicil</th><th class="p-4 text-left">Birim</th><th class="p-4 text-left">Görev Yeri</th><th class="p-4 text-center">IP Telefon</th></tr>
                                 </thead>
                                 <tbody id="all-personnel-table-body" class="divide-y divide-slate-100"></tbody>
                             </table>
                         </div>
                     </div>
                     <div id="central-title-distribution-content" class="central-tab-pane hidden">
-                        <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-xl bg-white">
+                        <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-xl bg-white text-xs">
                             <table class="w-full distribution-table border-collapse">
                                 <thead id="title-distribution-thead"></thead>
                                 <tbody id="title-distribution-tbody"></tbody>
@@ -215,6 +215,7 @@
             K: `<span class="gender-box gender-female shadow-sm"><i class="fas fa-user-graduate"></i></span>`
         };
 
+        // --- Veri Motoru ---
         function normalizeKey(s) {
             if (!s) return '';
             return s.toString().trim().toLocaleLowerCase('tr-TR')
@@ -295,7 +296,7 @@
             }
             
             refreshUI();
-            updateStatus(!!(personnel && norms), (personnel && norms) ? "GÜNCEL VERİLER AKTİF" : "LÜTFEN VERİ YÜKLEYİN");
+            updateStatus(!!(personnel && norms), (personnel && norms) ? "GÜNCEL BULUT VERİLERİ AKTİF" : "LÜTFEN VERİ YÜKLEYİN");
         }
 
         function processPersonnelToUnits() {
@@ -373,13 +374,19 @@
             });
         }
 
+        // --- SIRALAMA VE GÖSTERİM (MÜDÜRÜM, BURASI KRİTİK) ---
         function getHierarchicalSort(list) {
             return list.sort((a, b) => {
-                let idxA = CONFIG.titles.indexOf(a.title || a.t);
-                let idxB = CONFIG.titles.indexOf(b.title || b.t);
+                const titleA = a.title || a.t || '';
+                const titleB = b.title || b.t || '';
+                let idxA = CONFIG.titles.indexOf(titleA);
+                let idxB = CONFIG.titles.indexOf(titleB);
                 if (idxA === -1) idxA = 99;
                 if (idxB === -1) idxB = 99;
-                return idxA - idxB;
+                if (idxA !== idxB) return idxA - idxB;
+                const nameA = a.name || a.n || '';
+                const nameB = b.name || b.n || '';
+                return nameA.localeCompare(nameB, 'tr');
             });
         }
 
@@ -427,6 +434,7 @@
             els.modalTitle.innerText = d.name;
             const isKM = d.group === 'kadastro';
             
+            // Müdürüm, ilçelerde norm sekmesini kapatıyoruz
             const normBtn = document.querySelector('[data-tab="personnel"]');
             if (isKM) normBtn.style.display = 'inline-block';
             else normBtn.style.display = 'none';
@@ -440,6 +448,7 @@
                 });
             }
             
+            // İsimleri süzüyoruz
             let list = [];
             if(isKM) {
                 list = allPersonnelMaster.map(r => ({ name: r.n, title: r.t, sicil: r.s, gy: r.gy || 'Mersin', c: r.c, tel: r.tel || '' }));
@@ -456,7 +465,7 @@
             els.persList.innerHTML = sortedList.length ? '' : '<tr><td colspan="5" class="p-10 text-center text-slate-300 font-black uppercase italic tracking-widest">Birimde Personel Bulunamadı</td></tr>';
             sortedList.forEach(p => {
                 const icon = GENDER_ICONS[p.c] || '';
-                els.persList.innerHTML += `<tr class="hover:bg-slate-50 border-b border-slate-100 last:border-0"><td class="p-4 font-black text-slate-900 flex items-center text-sm">${icon}<span class="ml-1">${p.name}</span></td><td class="p-4 text-slate-500 font-bold uppercase text-[10px] tracking-tight">${p.title}</td><td class="p-4 text-center font-mono text-slate-400 text-[10px] tracking-widest">${p.sicil}</td><td class="p-4 text-slate-700 font-black text-[9px] uppercase bg-slate-50/50">${p.gy}</td><td class="p-4 text-blue-600 font-bold font-mono text-[10px]">${p.tel}</td></tr>`;
+                els.persList.innerHTML += `<tr class="hover:bg-slate-50 border-b border-slate-100 last:border-0"><td class="p-4 font-black text-slate-900 flex items-center text-sm">${icon}<span class="ml-1">${p.name}</span></td><td class="p-4 text-slate-500 font-bold uppercase text-[10px] tracking-tight">${p.title}</td><td class="p-4 text-center font-mono text-slate-400 text-[10px] tracking-widest">${p.sicil}</td><td class="p-4 text-slate-700 font-black text-[9px] uppercase bg-slate-50/50">${p.gy}</td><td class="p-4 text-center text-blue-700 font-bold font-mono text-[10px]">${p.tel || ''}</td></tr>`;
             });
 
             switchTab(isKM ? 'personnel' : 'personnel-list');
@@ -469,7 +478,7 @@
             const sorted = getHierarchicalSort([...allPersonnelMaster]);
             sorted.forEach(p => {
                 const icon = GENDER_ICONS[p.c];
-                els.allPersTable.innerHTML += `<tr class="hover:bg-blue-50 transition-colors text-xs border-b border-slate-50"><td class="p-4 font-black flex items-center text-slate-900">${icon}<span class="ml-1">${p.n}</span></td><td class="p-4 text-center">${icon}</td><td class="p-4 text-[10px] font-black uppercase text-slate-600">${p.t}</td><td class="p-4 font-mono text-slate-400 tracking-widest">${p.s}</td><td class="p-4 text-[9px] font-black text-blue-600 uppercase italic">MERSİN KM</td><td class="p-4 text-[10px] uppercase font-bold text-slate-500">${p.gy || 'Mersin'}</td><td class="p-4 text-blue-700 font-bold font-mono">${p.tel || ''}</td></tr>`;
+                els.allPersTable.innerHTML += `<tr class="hover:bg-blue-50 transition-colors text-xs border-b border-slate-50"><td class="p-4 font-black flex items-center text-slate-900 text-sm">${icon}<span class="ml-1">${p.n}</span></td><td class="p-4 text-center">${icon}</td><td class="p-4 text-[10px] font-black uppercase text-slate-600">${p.t}</td><td class="p-4 font-mono text-slate-400 tracking-widest">${p.s}</td><td class="p-4 text-[9px] font-black text-blue-600 uppercase italic">MERSİN KM</td><td class="p-4 text-[10px] uppercase font-bold text-slate-500">${p.gy || 'Mersin'}</td><td class="p-4 text-center text-blue-700 font-bold font-mono">${p.tel || ''}</td></tr>`;
             });
             document.getElementById('all-personnel-modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -518,7 +527,7 @@
                                     t: gv(r, ['Unvani', 'Unvanı', 'Unvan']), 
                                     s: gv(r, ['Sicil', 'ID', 'No']), 
                                     gy: gv(r, ['Gorevli Oldugu Birim', 'Görev Yeri', 'Birim Adı', 'Birim']), 
-                                    tel: gv(r, ['Ip Telefon', 'Telefon', 'Tel']) || '',
+                                    tel: gv(r, ['İp Telefon', 'Ip Telefon', 'Telefon', 'Tel']), // Müdürüm, burayı daha hassas yaptım
                                     c: String(gv(r, ['Cinsiyet', 'Gender']) || '').toUpperCase().startsWith('E') ? 'E' : 'K' 
                                 }));
                                 await saveToGithub(GITHUB_CONFIG.files.personnel, persData);
