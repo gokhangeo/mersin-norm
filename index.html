@@ -11,7 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: #0f172a; }
-        .modal-backdrop { background-color: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); }
+        .modal-backdrop { background-color: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); }
         .modal-content { max-height: 90vh; border-radius: 1.5rem; border: 1px solid rgba(255,255,255,0.2); }
         
         .modern-card { 
@@ -19,11 +19,11 @@
             border: 1px solid #e2e8f0; 
             border-radius: 1.5rem; 
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
         }
         .modern-card:hover { 
             transform: translateY(-8px); 
-            box-shadow: 0 25px 35px -5px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 25px 35px -5px rgba(0, 0, 0, 0.1);
             border-color: #3b82f6;
         }
 
@@ -31,16 +31,16 @@
         .group-header { border-left: 8px solid #1e3a8a; padding-left: 1.5rem; margin-bottom: 2.5rem; }
 
         .progress-bar-container { height: 14px; background-color: #f1f5f9; border-radius: 20px; overflow: hidden; border: 1px solid #e2e8f0; }
-        .progress-bar { height: 100%; transition: width 1.2s ease-in-out; border-radius: 20px; }
+        .progress-bar { height: 100%; transition: width 1.5s ease-in-out; border-radius: 20px; }
         
         #connection-status { 
             position: fixed; bottom: 2rem; left: 2rem; z-index: 100; 
-            font-size: 0.85rem; font-weight: 800; padding: 0.75rem 1.5rem; 
+            font-size: 0.8rem; font-weight: 900; padding: 0.8rem 1.5rem; 
             border-radius: 3rem; text-transform: uppercase; letter-spacing: 0.05em;
-            box-shadow: 0 15px 25px -5px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
             transition: all 0.5s ease;
         }
-        .status-ok { background: #dcfce7; color: #166534; }
+        .status-ok { background: #dcfce7; color: #166534; border: 1px solid #166534; }
         .status-loading { background: #fef9c3; color: #854d0e; }
         .status-error { background: #fee2e2; color: #991b1b; }
         .status-hidden { opacity: 0; transform: translateY(30px); pointer-events: none; }
@@ -56,19 +56,19 @@
         <div class="container mx-auto px-6 lg:px-12">
             <div class="flex items-center justify-between h-24">
                 <div class="flex items-center gap-5">
-                    <div class="w-16 h-16 bg-blue-900 rounded-2xl flex items-center justify-center text-white font-black text-3xl shadow-xl shadow-blue-900/30">TK</div>
+                    <div class="w-16 h-16 bg-blue-950 rounded-2xl flex items-center justify-center text-white font-black text-3xl shadow-xl shadow-blue-900/20">TK</div>
                     <div>
                         <h1 class="text-2xl font-black tracking-tighter text-slate-900 leading-none">BİRİM YÖNETİM PORTALI</h1>
-                        <p class="text-xs font-black text-blue-600 uppercase tracking-[0.3em] mt-2 italic">Mersin Kadastro Müdürlüğü</p>
+                        <p class="text-[11px] font-black text-blue-600 uppercase tracking-[0.3em] mt-2 italic">Mersin Kadastro Müdürlüğü</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-8">
                     <div class="hidden lg:flex flex-col items-end text-right">
                         <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Kurumsal İzleme Paneli</span>
-                        <span class="text-sm font-black text-slate-700 underline decoration-blue-500 decoration-4 underline-offset-4">Müdürüm Gökhan ELGÜL</span>
+                        <span class="text-sm font-black text-slate-700 underline decoration-blue-500 decoration-4 underline-offset-4 decoration-skip-ink-none">Gökhan ELGÜL</span>
                     </div>
                     <input type="file" id="manual-file-upload" class="hidden" accept=".xlsx, .xls" multiple>
-                    <button onclick="document.getElementById('manual-file-upload').click()" class="bg-slate-900 hover:bg-blue-600 text-white px-8 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all transform active:scale-95 flex items-center gap-3 shadow-2xl">
+                    <button onclick="document.getElementById('manual-file-upload').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all transform active:scale-95 flex items-center gap-3 shadow-2xl shadow-blue-600/20">
                         <i class="fas fa-cloud-upload-alt text-lg"></i> Veri Güncelle
                     </button>
                 </div>
@@ -77,7 +77,7 @@
     </header>
 
     <main class="container mx-auto px-6 lg:px-12 py-12 space-y-24">
-        <!-- Dashboard Rapor -->
+        <!-- Özet Dashboard -->
         <section>
             <div class="group-header">
                 <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tight italic">KURUMSAL PERFORMANS ÖZETİ</h2>
@@ -103,27 +103,27 @@
     </main>
 
     <div id="connection-status" class="status-loading">
-        <i class="fas fa-sync-alt fa-spin mr-3"></i> <span>Veriler Senkronize Ediliyor...</span>
+        <i class="fas fa-sync-alt fa-spin mr-3"></i> <span>Bulut Verileri Alınıyor...</span>
     </div>
 
     <!-- Detay Penceresi -->
     <div id="detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden modal-backdrop">
         <div class="bg-white shadow-2xl w-full max-w-6xl flex flex-col modal-content overflow-hidden border-4 border-blue-900">
-            <div class="flex items-center justify-between p-8 bg-blue-900 text-white">
+            <div class="flex items-center justify-between p-8 bg-blue-900 text-white shadow-lg">
                 <div class="flex items-center gap-5">
-                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-white font-black italic">TK</div>
+                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-white font-black italic shadow-inner">TK</div>
                     <h3 id="modal-title" class="text-2xl font-black uppercase tracking-tight">Birim Bilgileri</h3>
                 </div>
                 <button id="close-modal-btn" class="w-14 h-14 rounded-full hover:bg-white/20 text-white transition flex items-center justify-center"><i class="fas fa-times fa-2x"></i></button>
             </div>
             <div class="flex-grow p-10 overflow-y-auto bg-slate-50">
                 <nav id="modal-tabs" class="flex space-x-16 border-b-4 border-slate-200 mb-12 text-slate-400 font-black uppercase text-xs tracking-[0.2em]">
-                    <button data-tab="personnel" class="pb-5 border-b-8 border-transparent transition-all hover:text-blue-600">Personel Normu</button>
-                    <button data-tab="personnel-list" class="pb-5 border-b-8 border-transparent transition-all hover:text-blue-600">Personel Listesi</button>
+                    <button data-tab="personnel" class="pb-5 border-b-8 border-transparent transition-all">Personel Normu</button>
+                    <button data-tab="personnel-list" class="pb-5 border-b-8 border-transparent transition-all">İsim Listesi</button>
                 </nav>
                 <div id="tab-content">
                     <div id="personnel-content" class="tab-pane">
-                        <div class="overflow-hidden rounded-[2rem] border-2 border-slate-200 shadow-2xl bg-white">
+                        <div class="overflow-hidden rounded-[2.5rem] border-2 border-slate-200 shadow-2xl bg-white">
                             <table class="w-full text-left">
                                 <thead class="bg-slate-900 text-white font-black uppercase text-xs tracking-widest">
                                     <tr><th class="p-8">Kadro Unvanı</th><th class="p-8 text-center">Norm</th><th class="p-8 text-center">Mevcut</th><th class="p-8 text-center">Fark</th></tr>
@@ -133,13 +133,13 @@
                         </div>
                     </div>
                     <div id="personnel-list-content" class="tab-pane hidden space-y-8">
-                        <input type="text" id="personnel-search-input" placeholder="İsim veya unvan ile süzme yapın..." class="w-full p-6 bg-white border-4 border-slate-100 rounded-3xl outline-none focus:border-blue-500 font-black text-xl shadow-inner">
-                        <div class="rounded-[2rem] border-2 border-slate-200 overflow-hidden shadow-2xl bg-white">
+                        <input type="text" id="personnel-search-input" placeholder="Listede hızlı ara..." class="w-full p-6 bg-white border-4 border-slate-100 rounded-[2rem] outline-none focus:border-blue-500 font-black text-xl shadow-inner transition-all">
+                        <div class="rounded-[2.5rem] border-2 border-slate-200 overflow-hidden shadow-2xl bg-white">
                             <table class="w-full text-left">
-                                <thead class="bg-slate-50 text-slate-600 font-black uppercase text-xs tracking-widest border-b-2">
+                                <thead class="bg-slate-50 text-slate-600 font-black uppercase text-xs tracking-widest border-b-4 border-slate-100">
                                     <tr><th class="p-8">Adı Soyadı</th><th class="p-8">Unvan</th><th class="p-8 text-center">Sicil</th><th class="p-8">Görev Yeri</th></tr>
                                 </thead>
-                                <tbody id="personnel-list-table-body" class="divide-y divide-slate-50 text-base"></tbody>
+                                <tbody id="personnel-list-table-body" class="divide-y divide-slate-50"></tbody>
                             </table>
                         </div>
                     </div>
@@ -148,24 +148,24 @@
         </div>
     </div>
 
-    <!-- Merkezi Havuz -->
+    <!-- Merkezi Yönetim Modalı -->
     <div id="all-personnel-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden modal-backdrop">
-        <div class="bg-white shadow-2xl w-full max-w-7xl flex flex-col modal-content overflow-hidden border-4 border-blue-900">
-            <div class="p-10 bg-slate-950 text-white flex justify-between items-center">
+        <div class="bg-white shadow-2xl w-full max-w-7xl flex flex-col modal-content overflow-hidden border-2 border-slate-900 rounded-[2rem]">
+            <div class="p-10 bg-slate-950 text-white flex justify-between items-center shadow-2xl">
                 <div>
-                    <h3 class="text-3xl font-black uppercase tracking-tight italic">MERKEZİ VERİ YÖNETİMİ</h3>
-                    <p class="text-sm text-slate-400 font-bold uppercase tracking-[0.3em] mt-2">Mersin Kadastro Müdürlüğü Personel Havuzu</p>
+                    <h3 class="text-3xl font-black uppercase tracking-tight italic leading-none">MERKEZİ VERİ YÖNETİMİ</h3>
+                    <p class="text-sm text-slate-400 font-bold uppercase tracking-[0.4em] mt-3">Tüm Birimlerin Konsolide Personel Havuzu</p>
                 </div>
                 <button id="close-all-personnel-modal-btn" class="w-16 h-16 rounded-full hover:bg-white/10 text-white transition flex items-center justify-center"><i class="fas fa-times fa-3x"></i></button>
             </div>
             <div class="p-10 flex-grow flex flex-col overflow-hidden bg-slate-50">
                 <div id="central-modal-tabs" class="flex gap-16 border-b-4 border-slate-200 mb-10 font-black uppercase text-xs tracking-widest text-slate-400">
-                    <button data-tab="central-personnel-list" class="pb-4 border-b-8 border-transparent transition-all hover:text-blue-600">Tüm Kayıtlar</button>
+                    <button data-tab="central-personnel-list" class="pb-4 border-b-8 border-transparent transition-all hover:text-blue-600">Personel Listesi</button>
                     <button data-tab="central-title-distribution" class="pb-4 border-b-8 border-transparent transition-all hover:text-blue-600">Unvan Dağılımı</button>
                 </div>
                 <div id="central-tab-content" class="flex-grow overflow-y-auto">
                     <div id="central-personnel-list-content" class="central-tab-pane">
-                        <input type="text" id="all-personnel-search-input" placeholder="Hızlı personel arama..." class="w-full p-6 bg-white border-4 border-slate-100 rounded-3xl mb-8 outline-none focus:border-blue-500 font-black text-xl shadow-lg">
+                        <input type="text" id="all-personnel-search-input" placeholder="Tüm personelde hızlı arama..." class="w-full p-6 bg-white border-4 border-slate-100 rounded-3xl mb-8 outline-none focus:border-blue-500 font-black text-xl shadow-xl">
                         <div class="rounded-[2.5rem] border-2 border-slate-200 overflow-hidden shadow-2xl bg-white">
                             <table class="w-full text-base">
                                 <thead class="bg-slate-900 text-white sticky top-0 font-black uppercase text-[10px] z-10 border-b-4 border-blue-600">
@@ -210,7 +210,7 @@
             K: `<span class="gender-box gender-female shadow-sm"><i class="fas fa-female"></i></span>`
         };
 
-        // --- GitHub İşlemleri ---
+        // --- GitHub API Entegrasyonu ---
         async function fetchFromGithub(fileName) {
             const url = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/${fileName}?v=${Date.now()}`;
             try {
@@ -229,7 +229,7 @@
             } catch(e) {}
 
             const body = {
-                message: `Update ${fileName}`,
+                message: `Data Update: ${fileName}`,
                 content: btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2)))),
                 branch: GITHUB_CONFIG.branch,
                 sha: sha || undefined
@@ -242,7 +242,7 @@
             });
         }
 
-        // --- Mantıksal Fonksiyonlar ---
+        // --- Veri Eşleştirme ve İşleme ---
         function normKey(s) {
             if (!s) return '';
             return s.toString().trim().replace(/İ/g, 'i').replace(/I/g, 'i').replace(/ı/g, 'i').replace(/Ğ/g, 'g').replace(/ğ/g, 'g').replace(/Ü/g, 'u').replace(/ü/g, 'u').replace(/Ş/g, 's').replace(/ş/g, 's').replace(/Ö/g, 'o').replace(/ö/g, 'o').replace(/Ç/g, 'c').replace(/ç/g, 'c').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
@@ -287,12 +287,13 @@
             if (norms) processNorms(norms);
             if (personnel) processPersonnel(personnel);
             refreshUI();
-            updateStatus(!!(personnel && norms), (personnel && norms) ? "GÜNCEL VERİLER BAĞLANDI" : "VERİ YÜKLEMENİZ BEKLENİYOR...");
+            updateStatus(!!(personnel && norms), (personnel && norms) ? "GÜNCEL BULUT VERİLERİ AKTİF" : "VERİ YÜKLEMENİZ BEKLENİYOR...");
         }
 
         function processNorms(data) {
             const km = directorateData.find(d => d.id === 'mersin_km');
-            km.personnel = data.map(r => ({ title: r.t, norm: parseInt(r.n) || 0, current: 0 }));
+            // Müdürüm, mevcut sayısını da doğrudan Excel'den (v) okuyacak şekilde ayarladım
+            km.personnel = data.map(r => ({ title: r.t, norm: parseInt(r.n) || 0, fixedCurrent: parseInt(r.v) || 0, current: 0 }));
         }
 
         function processPersonnel(data) {
@@ -314,12 +315,31 @@
             if(!km.personnel.length) return;
             km.personnel.forEach(p => p.current = 0);
             let all = []; directorateData.forEach(d => all = all.concat(d.personnelList));
+            
             all.forEach(p => {
                 const pt = normKey(p.title);
-                const map = [{m:'muhendis',t:'Mühendis'},{m:'teknik',t:'Teknisyen/Tekniker'},{m:'kontrol',t:'Teknisyen/Tekniker'},{m:'bilgisayar',t:'İşlem Yapan Personel'},{m:'memur',t:'İşlem Yapan Personel'},{m:'işçi',t:'Destek Personeli'},{m:'isci',t:'Destek Personeli'},{m:'guvenlik',t:'Güvenlik Personeli'}];
+                const mapping = [
+                    {m:'muhendis',t:'Mühendis'},{m:'teknik',t:'Teknisyen/Tekniker'},
+                    {m:'kontrol',t:'Teknisyen/Tekniker'},{m:'bilgisayar',t:'İşlem Yapan Personel'},
+                    {m:'memur',t:'İşlem Yapan Personel'},{m:'işçi',t:'Destek Personeli'},
+                    {m:'isci',t:'Destek Personeli'},{m:'guvenlik',t:'Güvenlik Personeli'}
+                ];
                 let mapped = false;
-                for (const g of map) { if (pt.includes(g.m)) { const e = km.personnel.find(x => x.title === g.t); if(e) { e.current++; mapped = true; break; } } }
-                if (!mapped) { const d = km.personnel.find(x => normKey(x.title) === pt); if (d) d.current++; }
+                for (const g of mapping) {
+                    if (pt.includes(g.m)) {
+                        const entry = km.personnel.find(x => x.title === g.t);
+                        if(entry) { entry.current++; mapped = true; break; }
+                    }
+                }
+                if (!mapped) {
+                    const d = km.personnel.find(x => normKey(x.title) === pt);
+                    if (d) d.current++;
+                }
+            });
+
+            // Müdürüm, Excel'de "Mevcut_Sayisi" elle girilmişse onu öncelikli tutuyoruz (Tekniker 49 gibi)
+            km.personnel.forEach(p => {
+                if(p.fixedCurrent > 0) p.current = p.fixedCurrent;
             });
         }
 
@@ -327,29 +347,29 @@
             const km = directorateData.find(d => d.id === 'mersin_km');
             let all = []; directorateData.forEach(d => all = all.concat(d.personnelList));
             const nTotal = km.personnel.reduce((s,p)=>s+p.norm, 0);
-            const cTotal = all.length;
+            const cTotal = km.personnel.reduce((s,p)=>s+p.current, 0) || all.length;
             const rate = nTotal > 0 ? Math.round((cTotal/nTotal)*100) : 0;
 
             els.summary.innerHTML = `
-                <div class="xl:col-span-3 modern-card p-10 border-l-[20px] border-blue-900 flex flex-col justify-between bg-gradient-to-r from-blue-50/50 to-white">
+                <div class="xl:col-span-3 modern-card p-12 border-l-[25px] border-blue-950 flex flex-col justify-between bg-gradient-to-r from-blue-50/40 via-white to-white">
                     <div>
-                        <p class="text-[12px] font-black text-blue-600 uppercase mb-3 tracking-[0.4em] leading-none">MÜDÜRLÜK ANALİZİ</p>
-                        <h3 class="text-4xl font-black text-slate-900 uppercase italic leading-tight">Mersin Kadastro Müdürlüğü</h3>
-                        <div class="mt-8"><div class="flex justify-between text-xs font-black uppercase text-slate-500 mb-3"><span>TOPLAM DOLULUK</span><b>${rate}%</b></div><div class="progress-bar-container"><div class="progress-bar bg-blue-600" style="width:${rate}%"></div></div></div>
+                        <p class="text-[14px] font-black text-blue-600 uppercase mb-4 tracking-[0.5em] leading-none">KURUMSAL PERFORMANS ANALİZİ</p>
+                        <h3 class="text-5xl font-black text-slate-900 uppercase italic leading-tight">Mersin Kadastro Müdürlüğü</h3>
+                        <div class="mt-10"><div class="flex justify-between text-sm font-black uppercase text-slate-500 mb-4"><span>TOPLAM DOLULUK ORANI</span><b>${rate}%</b></div><div class="progress-bar-container"><div class="progress-bar bg-blue-600 shadow-lg shadow-blue-600/30" style="width:${rate}%"></div></div></div>
                     </div>
-                    <div class="grid grid-cols-3 gap-8 mt-10 pt-8 border-t border-slate-200 text-center">
-                        <div><p class="text-xs font-bold text-slate-400 uppercase">KADRO NORM</p><p class="text-5xl font-black text-slate-900">${nTotal}</p></div>
-                        <div><p class="text-xs font-bold text-slate-400 uppercase">FİİLİ MEVCUT</p><p class="text-5xl font-black text-slate-900">${cTotal}</p></div>
-                        <div class="bg-blue-600 rounded-[2rem] py-4 shadow-xl"><p class="text-xs font-bold text-white uppercase opacity-70">FARK</p><p class="text-5xl font-black text-white">${cTotal-nTotal>=0?'+':''}${cTotal-nTotal}</p></div>
+                    <div class="grid grid-cols-3 gap-10 mt-12 pt-10 border-t-2 border-slate-100 text-center">
+                        <div><p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">KADRO NORM</p><p class="text-6xl font-black text-slate-900 leading-none">${nTotal}</p></div>
+                        <div><p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">FİİLİ MEVCUT</p><p class="text-6xl font-black text-slate-900 leading-none">${cTotal}</p></div>
+                        <div class="bg-blue-600 rounded-[2.5rem] py-5 shadow-2xl shadow-blue-600/40"><p class="text-xs font-bold text-white uppercase opacity-70 mb-2">FARKI</p><p class="text-6xl font-black text-white leading-none">${cTotal-nTotal>=0?'+':''}${cTotal-nTotal}</p></div>
                     </div>
                 </div>
-                <div onclick="openCentral()" class="xl:col-span-2 modern-card p-10 cursor-pointer group flex flex-col justify-between hover:bg-slate-950 hover:text-white transition-all duration-500">
-                    <div class="flex justify-between items-center"><p class="text-xs font-black uppercase tracking-widest text-slate-400">YÖNETİM SİSTEMİ</p><i class="fas fa-users-cog text-4xl text-blue-200 group-hover:rotate-180 transition-transform duration-1000"></i></div>
-                    <div class="text-center py-8">
-                        <p class="text-8xl font-black tracking-tighter group-hover:scale-110 transition-transform">${cTotal}</p>
-                        <p class="text-sm font-black uppercase text-slate-400 tracking-[0.3em] mt-3">Kayıtlı Personel</p>
+                <div onclick="openCentral()" class="xl:col-span-2 modern-card p-12 cursor-pointer group flex flex-col justify-between hover:bg-slate-900 hover:text-white transition-all duration-700">
+                    <div class="flex justify-between items-center"><p class="text-xs font-black uppercase tracking-[0.3em] text-slate-400">HAVUZ YÖNETİMİ</p><i class="fas fa-users-cog text-5xl text-blue-200 group-hover:rotate-180 transition-transform duration-1000 group-hover:text-blue-500"></i></div>
+                    <div class="text-center py-10">
+                        <p class="text-9xl font-black tracking-tighter group-hover:scale-110 transition-transform duration-500">${cTotal}</p>
+                        <p class="text-sm font-black uppercase text-slate-400 tracking-[0.4em] mt-5">TOPLAM PERSONEL</p>
                     </div>
-                    <div class="text-center text-blue-600 group-hover:text-blue-400 text-xs font-black uppercase tracking-widest pt-5 border-t border-slate-100/10">PANELİ GÖRÜNTÜLE →</div>
+                    <div class="text-center text-blue-600 group-hover:text-blue-400 text-xs font-black uppercase tracking-widest pt-6 border-t border-slate-100/10 transition-colors">TÜM KAYITLARI GÖRÜNTÜLE <i class="fas fa-arrow-right ml-2"></i></div>
                 </div>`;
 
             [els.kadastroGrid, els.ilceGrid].forEach(g => g.innerHTML = '');
@@ -359,9 +379,9 @@
                 card.className = (d.group==='kadastro'?'xl:col-span-2':'') + ' modern-card p-10 cursor-pointer group flex flex-col items-center justify-center';
                 if (d.group === 'kadastro') {
                     const dn = d.personnel.reduce((s,p)=>s+p.norm, 0), dc = d.personnel.reduce((s,p)=>s+p.current, 0), dr = dn>0?Math.round((dc/dn)*100):0;
-                    card.innerHTML = `<h4 class="font-black text-slate-800 uppercase text-base mb-8 tracking-tight">${d.name}</h4><div class="w-full px-4"><div class="progress-bar-container"><div class="progress-bar ${dr>=100?'bg-emerald-500':'bg-amber-500'}" style="width:${dr}%"></div></div></div><div class="flex justify-between w-full px-8 mt-6 text-xs font-black text-slate-400 uppercase tracking-widest"><span>NORM: ${dn}</span><span>MEVCUT: ${dc}</span></div>`;
+                    card.innerHTML = `<h4 class="font-black text-slate-800 uppercase text-lg mb-10 tracking-tight group-hover:text-blue-600 transition-colors">${d.name}</h4><div class="w-full px-4"><div class="progress-bar-container"><div class="progress-bar ${dr>=100?'bg-emerald-500':'bg-amber-500'}" style="width:${dr}%"></div></div></div><div class="flex justify-between w-full px-10 mt-8 text-xs font-black text-slate-400 uppercase tracking-widest"><span>NORM: ${dn}</span><span>MEVCUT: ${dc}</span></div>`;
                 } else {
-                    card.innerHTML = `<h4 class="font-black text-slate-700 text-[11px] mb-8 uppercase tracking-[0.2em] text-center leading-relaxed h-10 flex items-center">${d.name}</h4><div class="flex items-center gap-6"><div class="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center text-blue-600 shadow-inner group-hover:bg-blue-600 group-hover:text-white transition-all duration-700"><i class="fas fa-users-rectangle text-3xl"></i></div><span class="text-6xl font-black text-slate-900 tracking-tighter">${d.personnelList.length}</span></div>`;
+                    card.innerHTML = `<h4 class="font-black text-slate-700 text-[12px] mb-10 uppercase tracking-[0.2em] text-center leading-relaxed h-12 flex items-center group-hover:text-blue-600 transition-colors">${d.name}</h4><div class="flex items-center gap-8"><div class="w-24 h-24 bg-slate-50 rounded-[2.5rem] flex items-center justify-center text-blue-500 shadow-inner group-hover:bg-blue-600 group-hover:text-white transition-all duration-700"><i class="fas fa-users-rectangle text-4xl"></i></div><span class="text-7xl font-black text-slate-900 tracking-tighter group-hover:scale-105 transition-transform">${d.personnelList.length}</span></div>`;
                 }
                 card.onclick = () => showModal(d.id);
                 grid.appendChild(card);
@@ -379,7 +399,7 @@
                 const sorted = [...d.personnel].sort((a,b) => CONFIG.titles.indexOf(a.title) - CONFIG.titles.indexOf(b.title));
                 sorted.forEach(p => {
                     const dif = p.current - p.norm;
-                    els.persTable.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="p-6 font-black text-slate-800 text-lg">${p.title}</td><td class="p-6 text-center font-bold text-slate-400 italic">${p.norm}</td><td class="p-6 text-center font-black text-slate-900 text-xl">${p.current}</td><td class="p-6 text-center font-black text-xl ${dif<0?'text-red-500':'text-emerald-500'}">${dif>=0?'+':''}${dif}</td></tr>`;
+                    els.persTable.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="p-6 font-black text-slate-800 text-xl">${p.title}</td><td class="p-6 text-center font-bold text-slate-400 italic">${p.norm}</td><td class="p-6 text-center font-black text-slate-900 text-2xl">${p.current}</td><td class="p-6 text-center font-black text-2xl ${dif<0?'text-red-500':'text-emerald-500'}">${dif>=0?'+':''}${dif}</td></tr>`;
                 });
             }
             let list = isKM ? [] : d.personnelList;
@@ -388,7 +408,7 @@
             els.persList.innerHTML = list.length ? '' : '<tr><td colspan="4" class="p-10 text-center text-slate-300 font-black uppercase italic tracking-widest">Kayıt Bulunamadı</td></tr>';
             list.forEach(p => {
                 const icon = GENDER_ICONS[p.cinsiyet] || '';
-                els.persList.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="p-6 font-black text-slate-900 flex items-center text-lg">${icon}<span class="ml-2">${p.name}</span></td><td class="p-6 text-slate-500 font-bold uppercase text-xs tracking-tight">${p.title}</td><td class="p-6 text-center font-mono text-slate-400 tracking-widest">${p.sicil}</td><td class="p-6 text-slate-800 font-black text-[11px] uppercase bg-slate-100/30">${p.görevliBirim}</td></tr>`;
+                els.persList.innerHTML += `<tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0"><td class="p-8 font-black text-slate-900 flex items-center text-xl">${icon}<span class="ml-2">${p.name}</span></td><td class="p-8 text-slate-500 font-bold uppercase text-xs tracking-widest">${p.title}</td><td class="p-8 text-center font-mono text-slate-400 tracking-widest">${p.sicil}</td><td class="p-8 text-slate-700 font-black text-[11px] uppercase bg-slate-100/40">${p.görevliBirim}</td></tr>`;
             });
             els.detailModal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -400,7 +420,7 @@
             all.sort((a,b) => CONFIG.titles.indexOf(a.title) - CONFIG.titles.indexOf(b.title));
             all.forEach(p => {
                 const icon = GENDER_ICONS[p.cinsiyet] || '';
-                els.allPersTable.innerHTML += `<tr class="hover:bg-blue-50 transition-colors"><td class="p-6 font-black flex items-center text-slate-900 text-lg">${icon}<span class="ml-2">${p.name}</span></td><td class="p-6 text-center">${icon}</td><td class="p-6 text-xs font-black uppercase text-slate-600">${p.title}</td><td class="p-6 font-mono text-slate-400 tracking-widest">${p.sicil}</td><td class="p-4 text-[11px] font-black text-blue-600 uppercase italic">${p.directorateName}</td><td class="p-6 text-xs uppercase font-bold text-slate-500">${p.görevliBirim}</td></tr>`;
+                els.allPersTable.innerHTML += `<tr class="hover:bg-blue-50 transition-colors"><td class="p-8 font-black flex items-center text-slate-900 text-xl">${icon}<span class="ml-2">${p.name}</span></td><td class="p-8 text-center">${icon}</td><td class="p-8 text-[11px] font-black uppercase text-slate-600 tracking-tight">${p.title}</td><td class="p-8 font-mono text-slate-400 tracking-widest">${p.sicil}</td><td class="p-4 text-[10px] font-black text-blue-600 uppercase italic">${p.directorateName}</td><td class="p-8 text-[11px] uppercase font-bold text-slate-500">${p.görevliBirim}</td></tr>`;
             });
             document.getElementById('all-personnel-modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -417,7 +437,7 @@
             
             els.manualUpload.onchange = async (e) => {
                 const files = e.target.files; if(!files.length) return;
-                updateStatus(false, "YÜKLENİYOR...");
+                updateStatus(false, "SİSTEM GÜNCELLENİYOR...");
                 for (let file of files) {
                     const reader = new FileReader();
                     const promise = new Promise(resolve => {
@@ -425,7 +445,11 @@
                             const wb = XLSX.read(new Uint8Array(evt.target.result), {type: 'array'});
                             const sheetData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
                             if (normKey(file.name).includes('norm')) {
-                                const normData = sheetData.map(r => ({ t: getVal(r, ['Unvan', 'Ünvan', 'Kadro Unvanı']), n: parseInt(getVal(r, ['Norm Sayisi', 'Norm_Sayisi', 'Norm', 'Sayisi']) || 0) }));
+                                const normData = sheetData.map(r => ({ 
+                                    t: getVal(r, ['Unvan', 'Ünvan', 'Kadro Unvanı']), 
+                                    n: parseInt(getVal(r, ['Norm Sayisi', 'Norm_Sayisi', 'Norm']) || 0),
+                                    v: parseInt(getVal(r, ['Mevcut Sayisi', 'Mevcut_Sayisi', 'Fiili']) || 0) 
+                                }));
                                 await saveToGithub(GITHUB_CONFIG.files.norm, normData);
                             } else {
                                 const persData = sheetData.map(r => ({
@@ -433,7 +457,7 @@
                                     t: getVal(r, ['Unvani', 'Unvanı', 'Unvan', 'Kadro Unvanı']),
                                     s: getVal(r, ['Sicil', 'ID', 'No', 'Sicil No']),
                                     gy: getVal(r, ['Gorevli Oldugu Birim', 'Birim', 'Görev Yeri', 'Birim Adı']),
-                                    c: String(getVal(r, ['Cinsiyet', 'Gender', 'Cinsiyeti']) || '').toUpperCase().startsWith('E') ? 'E' : (String(getVal(r, ['Cinsiyet', 'Gender', 'Cinsiyeti']) || '').toUpperCase().startsWith('B') ? 'K' : 'K')
+                                    c: String(getVal(r, ['Cinsiyet', 'Gender', 'Cinsiyeti']) || '').toUpperCase().startsWith('E') ? 'E' : 'K'
                                 }));
                                 await saveToGithub(GITHUB_CONFIG.files.personnel, persData);
                             }
@@ -442,7 +466,7 @@
                     });
                     reader.readAsArrayBuffer(file); await promise;
                 }
-                updateStatus(true, "BULUT VERİLERİ GÜNCELLENDİ");
+                updateStatus(true, "BULUT BAŞARIYLA GÜNCELLENDİ");
                 setTimeout(() => location.reload(), 1500);
             };
         }
