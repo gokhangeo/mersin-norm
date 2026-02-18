@@ -3,18 +3,21 @@
     "n": "GÖKHAN ELGÜL",
     "t": "Kadastro Müdürü",
     "s": 44142,
+    "gy": "Mersin",
     "c": "E"
   },
   {
     "n": "ALİ ŞENYURT",
     "t": "Kadastro Müdür Yrd.",
     "s": 41452,
+    "gy": "Mersin",
     "c": "E"
   },
   {
     "n": "İSMAİL PEHLİVAN",
     "t": "Kadastro Müdür Yrd.",
     "s": 30627,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -35,6 +38,7 @@
     "n": "HAVVA NİLGÜN KIYMAÇ",
     "t": "K.Mühendisi",
     "s": 35027,
+    "gy": "Mersin",
     "c": "K"
   },
   {
@@ -55,24 +59,28 @@
     "n": "HÜSEYİN KURT",
     "t": "K.Mühendisi",
     "s": 44582,
+    "gy": "Mersin",
     "c": "E"
   },
   {
     "n": "KEMAL KORKMAZ",
     "t": "K.Mühendisi",
     "s": 37472,
+    "gy": "Mersin",
     "c": "E"
   },
   {
     "n": "LOKMAN ALKAN",
     "t": "K.Mühendisi",
     "s": 29517,
+    "gy": "Mersin",
     "c": "E"
   },
   {
     "n": "MEHMET NEJAT AY",
     "t": "K.Mühendisi",
     "s": 46005,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -93,6 +101,7 @@
     "n": "SERVET ATA",
     "t": "K.Mühendisi",
     "s": 30948,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -106,6 +115,7 @@
     "n": "CİHAN KARA",
     "t": "Mühendis",
     "s": 39307,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -133,6 +143,7 @@
     "n": "TEVFİK YILDIZ",
     "t": "Mühendis",
     "s": 41007,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -153,6 +164,7 @@
     "n": "GÜLİZAR YILDIZ",
     "t": "S. Mühendis",
     "s": 454516,
+    "gy": "Mersin",
     "c": "K"
   },
   {
@@ -166,6 +178,7 @@
     "n": "MUSTAFA DIKI",
     "t": "S. Mühendis",
     "s": 454710,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -186,6 +199,7 @@
     "n": "İSMAİL AKLAN",
     "t": "Kontrol Memuru(Fen)",
     "s": 27048,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -262,6 +276,7 @@
     "n": "HÜSEYİN POYRAZ",
     "t": "K.Teknisyeni",
     "s": 41033,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -275,6 +290,7 @@
     "n": "KENAN BAYDEMİR",
     "t": "K.Teknisyeni",
     "s": 28330,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -288,6 +304,7 @@
     "n": "MUSTAFA GÜRBÜZ",
     "t": "K.Teknisyeni",
     "s": 41717,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -301,6 +318,7 @@
     "n": "ŞEHMUS ÖZTÜRK",
     "t": "K.Teknisyeni",
     "s": 41520,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -314,18 +332,21 @@
     "n": "ENGİN UĞURLU",
     "t": "Tekniker",
     "s": 31344,
+    "gy": "Mersin",
     "c": "E"
   },
   {
     "n": "AHMET ÇELİK",
     "t": "Tekniker",
     "s": 41755,
+    "gy": "Mersin",
     "c": "E"
   },
   {
     "n": "AYŞE ÇAKICI PEKÇETİN",
     "t": "Tekniker",
     "s": 46300,
+    "gy": "Mersin",
     "c": "K"
   },
   {
@@ -339,6 +360,7 @@
     "n": "DUDU POYRAZ",
     "t": "Tekniker",
     "s": 35445,
+    "gy": "Mersin",
     "c": "K"
   },
   {
@@ -352,6 +374,7 @@
     "n": "HASAN İN",
     "t": "Tekniker",
     "s": 44950,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -372,6 +395,7 @@
     "n": "MEHMET CEYLAN",
     "t": "Tekniker",
     "s": 41037,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -385,12 +409,14 @@
     "n": "MUSTAFA BAYSAL",
     "t": "Tekniker",
     "s": 31043,
+    "gy": "Mersin",
     "c": "E"
   },
   {
     "n": "MÜJDE TÜRKMEN",
     "t": "Tekniker",
     "s": 42777,
+    "gy": "Mersin",
     "c": "K"
   },
   {
@@ -411,6 +437,7 @@
     "n": "NURHAN ARSLAN",
     "t": "Tekniker",
     "s": 41090,
+    "gy": "Mersin",
     "c": "K"
   },
   {
@@ -424,6 +451,7 @@
     "n": "ÖZLEM AYDINLI",
     "t": "Tekniker",
     "s": 32281,
+    "gy": "Mersin",
     "c": "K"
   },
   {
@@ -465,6 +493,7 @@
     "n": "SEVAL ÇELİK",
     "t": "Tekniker",
     "s": 41821,
+    "gy": "Mersin",
     "c": "K"
   },
   {
@@ -492,6 +521,7 @@
     "n": "ŞEKİP KORKMAZ",
     "t": "Tekniker",
     "s": 33457,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -505,6 +535,7 @@
     "n": "NURETTİN KELEŞ",
     "t": "Memur",
     "s": 48643,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -532,6 +563,7 @@
     "n": "FATİH KOÇAK",
     "t": "Sürekli İşçi",
     "s": 601163,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -559,6 +591,7 @@
     "n": "MEHMET EMİNOĞLU",
     "t": "Daimi İşçi",
     "s": 807702,
+    "gy": "Mersin",
     "c": "E"
   },
   {
@@ -592,42 +625,49 @@
     "n": "ALİ ÜNEL",
     "t": "SÜREKLİ İŞÇİ (GÜVENLİK GÖREVLİSİ)",
     "s": 600840,
+    "gy": "Mersin",
     "c": "E"
   },
   {
     "n": "ARZU ÜLKÜ",
     "t": "SÜREKLİ İŞÇİ (GÜVENLİK GÖREVLİSİ)",
     "s": 600841,
+    "gy": "Mersin",
     "c": "K"
   },
   {
     "n": "HASAN AKŞEKER",
     "t": "SÜREKLİ İŞÇİ (GÜVENLİK GÖREVLİSİ)",
     "s": 600850,
+    "gy": "Mersin",
     "c": "E"
   },
   {
     "n": "MEHMET SARI",
     "t": "SÜREKLİ İŞÇİ (GÜVENLİK GÖREVLİSİ)",
     "s": 600857,
+    "gy": "Mersin",
     "c": "E"
   },
   {
     "n": "MEHMET ZÜLFÜ DEMİRAĞ",
     "t": "SÜREKLİ İŞÇİ (GÜVENLİK GÖREVLİSİ)",
     "s": 600859,
+    "gy": "Mersin",
     "c": "E"
   },
   {
     "n": "MUSTAFA ŞAHİN",
     "t": "SÜREKLİ İŞÇİ (GÜVENLİK GÖREVLİSİ)",
     "s": 600862,
+    "gy": "Mersin",
     "c": "E"
   },
   {
     "n": "SİDAR SEYFİOĞLU",
     "t": "SÜREKLİ İŞÇİ (GÜVENLİK GÖREVLİSİ)",
     "s": 600868,
+    "gy": "Mersin",
     "c": "E"
   }
 ]
