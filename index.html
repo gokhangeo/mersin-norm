@@ -61,14 +61,13 @@
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 bg-blue-950 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-900/20">TK</div>
                     <div>
-                        <h1 class="text-xl font-black tracking-tighter text-slate-900 leading-none">BİRİM YÖNETİM PORTALI</h1>
+                        <h1 class="text-xl font-black tracking-tighter text-slate-900 leading-none uppercase">Birim Yönetim Portalı</h1>
                         <p class="text-[9px] font-extrabold text-blue-600 uppercase tracking-[0.25em] mt-1">Mersin Kadastro Müdürlüğü</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-6">
                     <div class="hidden md:flex flex-col items-end text-right">
-                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Kurumsal Sistem</span>
-                        <span class="text-xs font-black text-slate-700 decoration-blue-500 decoration-2 decoration-skip-ink-none">Müdürüm Gökhan ELGÜL</span>
+                        <span class="text-xs font-black text-slate-600">© Gökhan ELGÜL tarafından tasarlanmıştır.</span>
                     </div>
                     <input type="file" id="manual-file-upload" class="hidden" accept=".xlsx, .xls" multiple>
                     <button onclick="document.getElementById('manual-file-upload').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all transform active:scale-95 flex items-center gap-2 shadow-xl shadow-blue-600/20">
@@ -80,7 +79,6 @@
     </header>
 
     <main class="container mx-auto px-6 lg:px-12 py-8 space-y-12">
-        <!-- Özet Dashboard -->
         <section>
             <div class="group-header">
                 <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight text-blue-900 italic">Genel Müdürlük Analizi</h2>
@@ -88,7 +86,6 @@
             <div id="summary-dashboard" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6"></div>
         </section>
         
-        <!-- Müdürlük -->
         <section>
             <div class="group-header">
                 <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight text-blue-900 italic">Müdürlük Verileri</h2>
@@ -96,7 +93,6 @@
             <div id="kadastro-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6"></div>
         </section>
         
-        <!-- İlçeler -->
         <section>
             <div class="group-header">
                 <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight text-blue-900 italic">Bağlı Kadastro Birimleri</h2>
@@ -219,7 +215,6 @@
             K: `<span class="gender-box gender-female shadow-sm"><i class="fas fa-user-graduate"></i></span>`
         };
 
-        // --- Veri Motoru ---
         function normalizeKey(s) {
             if (!s) return '';
             return s.toString().trim().toLocaleLowerCase('tr-TR')
@@ -371,7 +366,7 @@
                     const dn = d.personnel.reduce((s,p)=>s+p.norm, 0), dc = d.personnel.reduce((s,p)=>s+p.current, 0), dr = dn>0?Math.round((dc/dn)*100):0;
                     card.innerHTML = `<h4 class="font-black text-slate-800 uppercase text-xs mb-5">${d.name}</h4><div class="w-full px-2"><div class="progress-bar-container"><div class="progress-bar ${dr>=100?'bg-emerald-500':'bg-amber-500'}" style="width:${dr}%"></div></div></div><div class="flex justify-between w-full px-4 mt-3 text-[9px] font-black text-slate-400 uppercase tracking-widest"><span>N: ${dn}</span><span>M: ${dc}</span></div>`;
                 } else {
-                    card.innerHTML = `<h4 class="font-black text-slate-700 text-[10px] mb-5 uppercase tracking-tighter text-center leading-tight h-10 flex items-center group-hover:text-blue-600 transition-colors">${d.name}</h4><div class="flex items-center gap-4"><div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-blue-500 shadow-inner group-hover:bg-blue-600 group-hover:text-white transition-all"><i class="fas fa-users-rectangle text-lg"></i></div><span class="text-3xl font-black text-slate-900 tracking-tighter">${d.personnelList.length}</span></div>`;
+                    card.innerHTML = `<h4 class="font-black text-slate-700 text-[10px] mb-5 uppercase tracking-tighter text-center leading-tight h-10 flex items-center group-hover:text-blue-600 transition-colors">${d.name}</h4><div class="flex items-center gap-4"><div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-blue-400 shadow-inner group-hover:bg-blue-600 group-hover:text-white transition-all"><i class="fas fa-users-rectangle text-lg"></i></div><span class="text-3xl font-black text-slate-900 tracking-tighter">${d.personnelList.length}</span></div>`;
                 }
                 card.onclick = () => showModal(d.id);
                 grid.appendChild(card);
@@ -388,7 +383,6 @@
             });
         }
 
-        // --- DAĞILIM TABLOSU (Müdürüm, Eksik olan kısım burası) ---
         function populateTitleDistribution() {
             const thead = document.getElementById('title-distribution-thead');
             const tbody = document.getElementById('title-distribution-tbody');
@@ -412,7 +406,6 @@
                 titles.forEach(title => {
                     const count = unitPersonnel.filter(p => {
                         const pt = normalizeKey(p.t);
-                        // Grup bazlı sayım (Tekniker, Mühendis vb.)
                         if (title === "Teknisyen/Tekniker") return pt.includes('teknik') || pt.includes('kontrol');
                         if (title === "Mühendis") return pt.includes('muhendis');
                         if (title === "İşlem Yapan Personel") return pt.includes('bilgisayar') || pt.includes('memur');
