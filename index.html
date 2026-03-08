@@ -82,7 +82,6 @@
     </header>
 
     <main class="container mx-auto px-4 lg:px-12 py-6 space-y-10">
-        <!-- Özet Dashboard -->
         <section>
             <div class="group-header">
                 <h2 class="text-base font-black text-slate-800 uppercase tracking-tight text-blue-900 italic">Genel Müdürlük Analizi</h2>
@@ -90,7 +89,6 @@
             <div id="summary-dashboard" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4"></div>
         </section>
         
-        <!-- Müdürlük -->
         <section>
             <div class="group-header">
                 <h2 class="text-base font-black text-slate-800 uppercase tracking-tight text-blue-900 italic">Müdürlük Verileri</h2>
@@ -98,7 +96,6 @@
             <div id="kadastro-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-4 text-center"></div>
         </section>
         
-        <!-- Bağlı Birimler -->
         <section>
             <div class="group-header">
                 <h2 class="text-base font-black text-slate-800 uppercase tracking-tight text-blue-900 italic">Bağlı Kadastro Birimleri</h2>
@@ -179,7 +176,7 @@
         <div class="bg-white rounded-xl shadow-2xl w-full h-full sm:h-auto max-w-7xl flex flex-col modal-content">
             <div class="p-4 md:p-6 bg-slate-950 text-white flex justify-between items-center shadow-xl">
                 <div>
-                    <h3 class="text-base md:text-xl font-black uppercase tracking-tight italic leading-none">MERKEZİ VERİ YÖNETİMİ</h3>
+                    <h3 id="central-modal-title" class="text-base md:text-xl font-black uppercase tracking-tight italic leading-none">MERKEZİ VERİ YÖNETİMİ</h3>
                     <p class="text-[8px] md:text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-2">Personel Konsolidasyon Paneli</p>
                 </div>
                 <button id="close-all-personnel-modal-btn" class="w-10 h-10 rounded-full hover:bg-white/10 text-white transition flex items-center justify-center"><i class="fas fa-times fa-lg"></i></button>
@@ -189,22 +186,22 @@
                     <button data-tab="central-personnel-list" class="pb-2 border-b-4 border-transparent transition-all">Tüm Kayıtlar</button>
                     <button data-tab="central-title-distribution" class="pb-2 border-b-4 border-transparent transition-all">Dağılım Matrisi</button>
                 </div>
-                <div id="central-tab-content" class="flex-grow overflow-hidden">
-                    <div id="central-personnel-list-content" class="central-tab-pane h-full overflow-y-auto">
+                <div id="central-tab-content">
+                    <div id="central-personnel-list-content" class="central-tab-pane">
                         <input type="text" id="all-personnel-search-input" placeholder="Tüm personelde ara..." class="w-full p-3 bg-white border-2 border-slate-200 rounded-xl mb-4 outline-none focus:border-blue-500 font-black text-sm shadow-sm">
                         <div class="table-container rounded-xl border border-slate-100 shadow-sm bg-white">
                             <table class="w-full text-[11px]" style="min-width: 800px;">
                                 <thead class="bg-slate-900 text-white sticky top-0 font-black uppercase text-[8px] z-10 border-b-2 border-blue-600">
-                                    <tr><th class="p-4 text-left">Adı Soyadı</th><th class="p-4 text-center">F</th><th class="p-4 text-left">Unvan</th><th class="p-4 text-left">Sicil</th><th class="p-4 text-left">Birim</th><th class="p-4 text-left">Görev Yeri</th><th class="p-4 text-center">IP Telefon</th></tr>
+                                    <tr><th class="p-4 text-left">Adı Soyadı</th><th class="p-4 text-center">Cinsiyet</th><th class="p-4 text-left">Unvan</th><th class="p-4 text-left">Sicil</th><th class="p-4 text-left">Birim</th><th class="p-4 text-left">Görev Yeri</th><th class="p-4 text-center">IP Telefon</th></tr>
                                 </thead>
                                 <tbody id="all-personnel-table-body" class="divide-y divide-slate-100"></tbody>
                             </table>
                         </div>
                     </div>
-                    <div id="central-title-distribution-content" class="central-tab-pane hidden h-full overflow-y-auto">
+                    <div id="central-title-distribution-content" class="central-tab-pane hidden">
                         <div class="table-container rounded-xl border border-slate-200 shadow-xl bg-white text-xs">
-                            <table class="w-full distribution-table border-collapse" style="min-width: 1000px;">
-                                <thead id="title-distribution-thead"></thead>
+                            <table class="w-full border-collapse" style="min-width: 1000px;">
+                                <thead id="title-distribution-thead" class="bg-slate-900 text-white"></thead>
                                 <tbody id="title-distribution-tbody"></tbody>
                             </table>
                         </div>
@@ -299,7 +296,8 @@
                 modalTabs: document.getElementById('modal-tabs'),
                 basvuruModal: document.getElementById('basvuru-modal'),
                 basvuruTableBody: document.getElementById('basvuru-table-body'),
-                basvuruTotalCell: document.getElementById('basvuru-total-cell')
+                basvuruTotalCell: document.getElementById('basvuru-total-cell'),
+                centralModalTitle: document.getElementById('central-modal-title')
             };
 
             directorateData = [
@@ -343,7 +341,7 @@
             }
             
             refreshUI();
-            updateStatus(!!(personnel && norms), (personnel && norms) ? "GÜNCEL VERİLER AKTİF" : "LÜTFEN VERİ YÜKLEYİN");
+            updateStatus(!!(personnel && norms), (personnel && norms) ? "GÜNCEL BULUT VERİLERİ AKTİF" : "LÜTFEN VERİ YÜKLEYİN");
         }
 
         function processPersonnelToUnits() {
@@ -381,12 +379,27 @@
             km.personnel.forEach(p => { if(p.fixedCurrent !== null && !isNaN(p.fixedCurrent)) p.current = p.fixedCurrent; });
         }
 
-        function openCentral() {
+        function openCentral(preFilter = null, customTitle = null) {
             if (!els.allPersTable) return;
             els.allPersTable.innerHTML = '';
-            getHierarchicalSort([...allPersonnelMaster]).forEach(p => {
+            els.centralModalTitle.innerText = customTitle || "MERKEZİ VERİ YÖNETİMİ";
+            
+            let list = [...allPersonnelMaster];
+            if (preFilter) {
+                list = list.filter(preFilter);
+            }
+
+            getHierarchicalSort(list.map(r => ({ ...r, name: r.n, title: r.t }))).forEach(p => {
                 const icon = GENDER_ICONS[p.c] || '';
-                els.allPersTable.innerHTML += `<tr class="hover:bg-blue-50 transition-colors text-xs border-b border-slate-50"><td class="p-3 font-black flex items-center text-slate-900 text-sm">${icon}<span class="ml-1">${p.n}</span></td><td class="p-3 text-center">${icon}</td><td class="p-3 text-[9px] font-black uppercase text-slate-600">${p.t}</td><td class="p-3 font-mono text-slate-400 text-[10px]">${p.s}</td><td class="p-3 text-[9px] font-black text-blue-600 uppercase italic">MERSİN KM</td><td class="p-3 text-[9px] uppercase font-bold text-slate-500">${p.gy || 'Mersin'}</td><td class="p-3 text-center text-blue-700 font-bold font-mono text-[10px]">${p.tel || ''}</td></tr>`;
+                els.allPersTable.innerHTML += `<tr class="hover:bg-blue-50 transition-colors text-xs border-b border-slate-50">
+                    <td class="p-3 font-black flex items-center text-slate-900 text-sm">${icon}<span class="ml-1">${p.n}</span></td>
+                    <td class="p-3 text-center">${icon}</td>
+                    <td class="p-3 text-[9px] font-black uppercase text-slate-600">${p.t}</td>
+                    <td class="p-3 font-mono text-slate-400 text-[10px]">${p.s}</td>
+                    <td class="p-3 text-[9px] font-black text-blue-600 uppercase italic">MERSİN KM</td>
+                    <td class="p-3 text-[9px] uppercase font-bold text-slate-500">${p.gy || 'Mersin'}</td>
+                    <td class="p-3 text-center text-blue-700 font-bold font-mono text-[10px]">${p.tel || ''}</td>
+                </tr>`;
             });
             document.getElementById('all-personnel-modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -433,7 +446,7 @@
                     <div class="text-center text-blue-600 text-[10px] font-black uppercase pt-3 border-t">Havuza Git →</div>
                 </div>`;
             
-            document.getElementById('btn-central-open-summary').onclick = openCentral;
+            document.getElementById('btn-central-open-summary').onclick = () => openCentral();
 
             renderAllCards();
         }
@@ -452,8 +465,8 @@
                     card.onclick = () => showModal(d.id);
 
                     const stats = [
-                        { t: 'Erkek Personel', v: allPersonnelMaster.filter(p=>p.c==='E').length, i: 'fa-user-tie', c: 'text-blue-500', action: null },
-                        { t: 'Kadın Personel', v: allPersonnelMaster.filter(p=>p.c==='K').length, i: 'fa-user-graduate', c: 'text-pink-500', action: null },
+                        { t: 'Erkek Personel', v: allPersonnelMaster.filter(p=>p.c==='E').length, i: 'fa-user-tie', c: 'text-blue-500', action: () => openCentral(p => p.c === 'E', "Erkek Personel Listesi") },
+                        { t: 'Kadın Personel', v: allPersonnelMaster.filter(p=>p.c==='K').length, i: 'fa-user-graduate', c: 'text-pink-500', action: () => openCentral(p => p.c === 'K', "Kadın Personel Listesi") },
                         { t: 'Başvuru Sayıları', v: basvuruData.reduce((s,i)=>s+i.sayi,0).toLocaleString('tr-TR'), i: 'fa-file-invoice', c: 'text-emerald-500', action: openBasvuruModal }
                     ];
                     stats.forEach(s => {
