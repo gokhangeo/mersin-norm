@@ -138,7 +138,7 @@
                     <div id="personnel-list-content" class="tab-pane hidden space-y-4">
                         <input type="text" id="personnel-search-input" placeholder="Listede ara..." class="w-full p-3 bg-white border-2 border-slate-200 rounded-xl outline-none focus:border-blue-500 font-black text-sm shadow-sm">
                         <div class="table-container rounded-xl border border-slate-200 shadow-sm bg-white">
-                            <table class="w-full text-left text-[11px]" style="min-width: 650px;">
+                            <table class="w-full text-left text-[11px]" style="min-width: 600px;">
                                 <thead class="bg-slate-100 text-slate-600 font-black uppercase text-[9px]">
                                     <tr><th class="p-4">Adı Soyadı</th><th class="p-4">Unvan</th><th class="p-4 text-center">Sicil</th><th class="p-4">Görev Yeri</th><th class="p-4 text-center">IP Telefon</th></tr>
                                 </thead>
@@ -146,6 +146,29 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Başvuru Sayıları Modalı -->
+    <div id="basvuru-modal" class="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4 hidden modal-backdrop">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg flex flex-col modal-content border-2 border-blue-900">
+            <div class="p-4 bg-blue-900 text-white flex justify-between items-center shadow-xl">
+                <h3 class="text-lg font-black uppercase tracking-tight italic">2025 Başvuru Sayıları</h3>
+                <button id="close-basvuru-modal-btn" class="w-8 h-8 rounded-full hover:bg-white/20 text-white transition flex items-center justify-center"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-4 overflow-y-auto bg-slate-50">
+                <div class="table-container rounded-xl border border-slate-200 shadow-sm bg-white">
+                    <table class="w-full text-sm">
+                        <thead class="bg-slate-100 text-slate-600 font-black uppercase text-[10px]">
+                            <tr><th class="p-3 text-left">İlçe Adı</th><th class="p-3 text-center">Başvuru Sayısı</th></tr>
+                        </thead>
+                        <tbody id="basvuru-table-body" class="divide-y divide-slate-100 font-bold text-slate-700"></tbody>
+                        <tfoot class="bg-blue-50">
+                            <tr><td class="p-3 font-black">TOPLAM</td><td id="basvuru-total-cell" class="p-3 text-center font-black text-blue-900"></td></tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>
@@ -172,7 +195,7 @@
                         <div class="table-container rounded-xl border border-slate-100 shadow-sm bg-white">
                             <table class="w-full text-[11px]" style="min-width: 800px;">
                                 <thead class="bg-slate-900 text-white sticky top-0 font-black uppercase text-[8px] z-10 border-b-2 border-blue-600">
-                                    <tr><th class="p-4 text-left">Adı Soyadı</th><th class="p-4 text-center">F</th><th class="p-4 text-left">Unvan</th><th class="p-4 text-left">Sicil</th><th class="p-4 text-left">Birim</th><th class="p-4 text-left">Görev Yeri</th><th class="p-4 text-center">IP Telefon</th></tr>
+                                    <tr><th class="p-4 text-left">Adı Soyadı</th><th class="p-4 text-center">Cinsiyet</th><th class="p-4 text-left">Unvan</th><th class="p-4 text-left">Sicil</th><th class="p-4 text-left">Birim</th><th class="p-4 text-left">Görev Yeri</th><th class="p-4 text-center">IP Telefon</th></tr>
                                 </thead>
                                 <tbody id="all-personnel-table-body" class="divide-y divide-slate-100"></tbody>
                             </table>
@@ -202,7 +225,7 @@
             repo: 'mersin-norm',
             branch: 'main',
             token: _p1 + _p2 + _p3 + _p4,
-            files: { personnel: 'personnel.json', norm: 'norm.json' }
+            files: { personnel: 'personnel.json', norm: 'norm.json', basvuru: 'basvuru.json' }
         };
 
         const CONFIG = {
@@ -213,6 +236,7 @@
         let directorateData = [];
         let allPersonnelMaster = []; 
         let globalNorms = [];
+        let basvuruData = [];
         let els = {};
         const GENDER_ICONS = {
             E: `<span class="gender-box gender-male shadow-sm"><i class="fas fa-user-tie"></i></span>`,
@@ -272,7 +296,10 @@
                 status: document.getElementById('connection-status'),
                 closeModalBtn: document.getElementById('close-modal-btn'),
                 closeAllModalBtn: document.getElementById('close-all-personnel-modal-btn'),
-                modalTabs: document.getElementById('modal-tabs')
+                modalTabs: document.getElementById('modal-tabs'),
+                basvuruModal: document.getElementById('basvuru-modal'),
+                basvuruTableBody: document.getElementById('basvuru-table-body'),
+                basvuruTotalCell: document.getElementById('basvuru-total-cell')
             };
 
             directorateData = [
@@ -287,6 +314,7 @@
         async function loadAll() {
             const personnel = await fetchFromGithub(GITHUB_CONFIG.files.personnel);
             const norms = await fetchFromGithub(GITHUB_CONFIG.files.norm);
+            const basvurular = await fetchFromGithub(GITHUB_CONFIG.files.basvuru);
             
             if (norms && Array.isArray(norms)) {
                 globalNorms = norms;
@@ -302,6 +330,19 @@
                 allPersonnelMaster = personnel; 
                 processPersonnelToUnits();
             }
+            if (basvurular && Array.isArray(basvurular)) {
+                basvuruData = basvurular;
+            } else {
+                // Fallback veriler
+                basvuruData = [
+                    {ilce: "AKDENİZ", sayi: 1700}, {ilce: "ANAMUR", sayi: 1700}, {ilce: "AYDINCIK", sayi: 400},
+                    {ilce: "BOZYAZI", sayi: 600}, {ilce: "ÇAMLIYAYLA", sayi: 550}, {ilce: "ERDEMLİ", sayi: 4700},
+                    {ilce: "GÜLNAR", sayi: 1350}, {ilce: "MEZİTLİ", sayi: 2600}, {ilce: "MUT", sayi: 2000},
+                    {ilce: "SİLİFKE", sayi: 5000}, {ilce: "TARSUS", sayi: 3500}, {ilce: "TOROSLAR", sayi: 3700},
+                    {ilce: "YENİŞEHİR", sayi: 3000}
+                ];
+            }
+            
             refreshUI();
             updateStatus(!!(personnel && norms), (personnel && norms) ? "GÜNCEL BULUT VERİLERİ AKTİF" : "LÜTFEN VERİ YÜKLEYİN");
         }
@@ -369,6 +410,22 @@
             renderAllCards();
         }
 
+        function openBasvuruModal() {
+            els.basvuruTableBody.innerHTML = '';
+            let total = 0;
+            basvuruData.forEach(item => {
+                total += item.sayi;
+                els.basvuruTableBody.innerHTML += `
+                    <tr>
+                        <td class="p-3 text-left font-bold uppercase text-xs">${item.ilce}</td>
+                        <td class="p-3 text-center font-mono">${item.sayi.toLocaleString('tr-TR')}</td>
+                    </tr>`;
+            });
+            els.basvuruTotalCell.innerText = total.toLocaleString('tr-TR');
+            els.basvuruModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
         function renderAllCards() {
             [els.kadastroGrid, els.ilceGrid].forEach(g => g.innerHTML = '');
             directorateData.forEach(d => {
@@ -381,15 +438,17 @@
                     card.innerHTML = `<h4 class="font-black text-slate-800 uppercase text-xs mb-4">${d.name}</h4><div class="w-full px-2"><div class="progress-bar-container"><div class="progress-bar ${dr>=100?'bg-emerald-500':'bg-amber-500'}" style="width:${dr}%"></div></div></div><div class="flex justify-between w-full px-4 mt-3 text-[9px] font-black text-slate-400 uppercase tracking-widest"><span>N: ${dn}</span><span>M: ${dc}</span></div>`;
                     grid.appendChild(card);
 
-                    // Müdürüm, Erkek/Kadın İstatistik Kartları Burada
+                    // Erkek/Kadın İstatistik Kartları
                     const stats = [
-                        { t: 'Erkek Personel', v: allPersonnelMaster.filter(p=>p.c==='E').length, i: 'fa-user-tie', c: 'text-blue-500' },
-                        { t: 'Kadın Personel', v: allPersonnelMaster.filter(p=>p.c==='K').length, i: 'fa-user-graduate', c: 'text-pink-500' }
+                        { t: 'Erkek Personel', v: allPersonnelMaster.filter(p=>p.c==='E').length, i: 'fa-user-tie', c: 'text-blue-500', action: null },
+                        { t: 'Kadın Personel', v: allPersonnelMaster.filter(p=>p.c==='K').length, i: 'fa-user-graduate', c: 'text-pink-500', action: null },
+                        { t: 'Başvuru Sayıları', v: basvuruData.reduce((s,i)=>s+i.sayi,0).toLocaleString('tr-TR'), i: 'fa-file-invoice', c: 'text-emerald-500', action: openBasvuruModal }
                     ];
                     stats.forEach(s => {
                         const sc = document.createElement('div');
-                        sc.className = 'modern-card p-4 flex items-center justify-center gap-4 bg-white/50';
+                        sc.className = 'modern-card p-4 flex items-center justify-center gap-4 bg-white/50 cursor-pointer';
                         sc.innerHTML = `<i class="fas ${s.i} ${s.c} text-2xl"></i><div><b class="text-xl">${s.v}</b><br><small class="text-gray-500 uppercase text-[8px] font-black">${s.t}</small></div>`;
+                        if(s.action) sc.onclick = (e) => { e.stopPropagation(); s.action(); };
                         grid.appendChild(sc);
                     });
                 } else {
@@ -414,8 +473,8 @@
                             </div>
                         </div>`;
                     grid.appendChild(card);
+                    card.onclick = () => showModal(d.id);
                 }
-                card.onclick = () => showModal(d.id);
             });
         }
 
@@ -500,7 +559,9 @@
             XLSX.utils.book_append_sheet(wb, wsPers, "PERSONEL");
             const wsNorm = XLSX.utils.json_to_sheet(globalNorms.map(n => ({ "Unvan": n.t, "Norm Sayisi": n.n, "Mevcut Sayisi": n.v })));
             XLSX.utils.book_append_sheet(wb, wsNorm, "NORM");
-            XLSX.writeFile(wb, `Mersin_Kadastro_Veri.xlsx`);
+            const wsBasvuru = XLSX.utils.json_to_sheet(basvuruData.map(i => ({ "İlçe": i.ilce, "2025 Başvuru Sayısı": i.sayi })));
+            XLSX.utils.book_append_sheet(wb, wsBasvuru, "BASVURU");
+            XLSX.writeFile(wb, `Mersin_Kadastro_Veri_2025.xlsx`);
             updateStatus(true, "Excel indirildi.");
         };
 
@@ -511,6 +572,7 @@
         function setupEventListeners() {
             els.closeModalBtn.onclick = () => { els.detailModal.classList.add('hidden'); document.body.style.overflow = 'auto'; };
             document.getElementById('close-all-personnel-modal-btn').onclick = () => { allPersonnelModal.classList.add('hidden'); document.body.style.overflow = 'auto'; };
+            document.getElementById('close-basvuru-modal-btn').onclick = () => { els.basvuruModal.classList.add('hidden'); document.body.style.overflow = 'auto'; };
             els.modalTabs.onclick = e => { if (e.target.dataset.tab) switchTab(e.target.dataset.tab); };
             document.getElementById('central-modal-tabs').onclick = e => { if (e.target.dataset.tab) switchCentralTab(e.target.dataset.tab); };
             
@@ -533,6 +595,10 @@
                                 if (nSn === 'personnel' || nSn === 'personel' || (wb.SheetNames.length === 1 && !normalizeKey(file.name).includes('norm'))) {
                                     const persData = data.map(r => ({ n: gv(r, ['Adi Soyadi', 'Adı Soyadı', 'Name', 'Ad Soyad']), t: gv(r, ['Unvani', 'Unvanı', 'Unvan']), s: gv(r, ['Sicil', 'ID', 'No']), gy: gv(r, ['Gorevli Oldugu Birim', 'Görev Yeri', 'Birim Adı', 'Birim']), tel: gv(r, ['İp Telefon', 'Ip Telefon', 'Telefon', 'Tel']), c: String(gv(r, ['Cinsiyet', 'Gender']) || '').toUpperCase().startsWith('E') ? 'E' : 'K' }));
                                     await saveToGithub(GITHUB_CONFIG.files.personnel, persData);
+                                }
+                                if (nSn === 'basvuru') {
+                                    const bData = data.map(r => ({ ilce: gv(r, ['İlçe', 'Ilce', 'Birim']), sayi: parseInt(gv(r, ['Sayi', 'Başvuru Sayısı', 'Basvuru Sayisi'])) || 0 }));
+                                    await saveToGithub(GITHUB_CONFIG.files.basvuru, bData);
                                 }
                             }
                             resolve();
