@@ -189,22 +189,22 @@
                     <button data-tab="central-personnel-list" class="pb-2 border-b-4 border-transparent transition-all">Tüm Kayıtlar</button>
                     <button data-tab="central-title-distribution" class="pb-2 border-b-4 border-transparent transition-all">Dağılım Matrisi</button>
                 </div>
-                <div id="central-tab-content">
-                    <div id="central-personnel-list-content" class="central-tab-pane">
+                <div id="central-tab-content" class="flex-grow overflow-hidden">
+                    <div id="central-personnel-list-content" class="central-tab-pane h-full overflow-y-auto">
                         <input type="text" id="all-personnel-search-input" placeholder="Tüm personelde ara..." class="w-full p-3 bg-white border-2 border-slate-200 rounded-xl mb-4 outline-none focus:border-blue-500 font-black text-sm shadow-sm">
                         <div class="table-container rounded-xl border border-slate-100 shadow-sm bg-white">
                             <table class="w-full text-[11px]" style="min-width: 800px;">
                                 <thead class="bg-slate-900 text-white sticky top-0 font-black uppercase text-[8px] z-10 border-b-2 border-blue-600">
-                                    <tr><th class="p-4 text-left">Adı Soyadı</th><th class="p-4 text-center">Cinsiyet</th><th class="p-4 text-left">Unvan</th><th class="p-4 text-left">Sicil</th><th class="p-4 text-left">Birim</th><th class="p-4 text-left">Görev Yeri</th><th class="p-4 text-center">IP Telefon</th></tr>
+                                    <tr><th class="p-4 text-left">Adı Soyadı</th><th class="p-4 text-center">F</th><th class="p-4 text-left">Unvan</th><th class="p-4 text-left">Sicil</th><th class="p-4 text-left">Birim</th><th class="p-4 text-left">Görev Yeri</th><th class="p-4 text-center">IP Telefon</th></tr>
                                 </thead>
                                 <tbody id="all-personnel-table-body" class="divide-y divide-slate-100"></tbody>
                             </table>
                         </div>
                     </div>
-                    <div id="central-title-distribution-content" class="central-tab-pane hidden">
+                    <div id="central-title-distribution-content" class="central-tab-pane hidden h-full overflow-y-auto">
                         <div class="table-container rounded-xl border border-slate-200 shadow-xl bg-white text-xs">
-                            <table class="w-full border-collapse" style="min-width: 1000px;">
-                                <thead id="title-distribution-thead" class="bg-slate-900 text-white"></thead>
+                            <table class="w-full distribution-table border-collapse" style="min-width: 1000px;">
+                                <thead id="title-distribution-thead"></thead>
                                 <tbody id="title-distribution-tbody"></tbody>
                             </table>
                         </div>
@@ -333,7 +333,6 @@
             if (basvurular && Array.isArray(basvurular)) {
                 basvuruData = basvurular;
             } else {
-                // Fallback veriler
                 basvuruData = [
                     {ilce: "AKDENİZ", sayi: 1700}, {ilce: "ANAMUR", sayi: 1700}, {ilce: "AYDINCIK", sayi: 400},
                     {ilce: "BOZYAZI", sayi: 600}, {ilce: "ÇAMLIYAYLA", sayi: 550}, {ilce: "ERDEMLİ", sayi: 4700},
@@ -344,7 +343,7 @@
             }
             
             refreshUI();
-            updateStatus(!!(personnel && norms), (personnel && norms) ? "GÜNCEL BULUT VERİLERİ AKTİF" : "LÜTFEN VERİ YÜKLEYİN");
+            updateStatus(!!(personnel && norms), (personnel && norms) ? "GÜNCEL VERİLER AKTİF" : "LÜTFEN VERİ YÜKLEYİN");
         }
 
         function processPersonnelToUnits() {
@@ -382,6 +381,33 @@
             km.personnel.forEach(p => { if(p.fixedCurrent !== null && !isNaN(p.fixedCurrent)) p.current = p.fixedCurrent; });
         }
 
+        function openCentral() {
+            if (!els.allPersTable) return;
+            els.allPersTable.innerHTML = '';
+            getHierarchicalSort([...allPersonnelMaster]).forEach(p => {
+                const icon = GENDER_ICONS[p.c] || '';
+                els.allPersTable.innerHTML += `<tr class="hover:bg-blue-50 transition-colors text-xs border-b border-slate-50"><td class="p-3 font-black flex items-center text-slate-900 text-sm">${icon}<span class="ml-1">${p.n}</span></td><td class="p-3 text-center">${icon}</td><td class="p-3 text-[9px] font-black uppercase text-slate-600">${p.t}</td><td class="p-3 font-mono text-slate-400 text-[10px]">${p.s}</td><td class="p-3 text-[9px] font-black text-blue-600 uppercase italic">MERSİN KM</td><td class="p-3 text-[9px] uppercase font-bold text-slate-500">${p.gy || 'Mersin'}</td><td class="p-3 text-center text-blue-700 font-bold font-mono text-[10px]">${p.tel || ''}</td></tr>`;
+            });
+            document.getElementById('all-personnel-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openBasvuruModal() {
+            els.basvuruTableBody.innerHTML = '';
+            let total = 0;
+            basvuruData.forEach(item => {
+                total += item.sayi;
+                els.basvuruTableBody.innerHTML += `
+                    <tr>
+                        <td class="p-3 text-left font-bold uppercase text-xs">${item.ilce}</td>
+                        <td class="p-3 text-center font-mono">${item.sayi.toLocaleString('tr-TR')}</td>
+                    </tr>`;
+            });
+            els.basvuruTotalCell.innerText = total.toLocaleString('tr-TR');
+            els.basvuruModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
         function refreshUI() {
             const km = directorateData.find(d => d.id === 'mersin_km');
             const nTotal = km.personnel.reduce((s,p)=>s+p.norm, 0);
@@ -401,29 +427,15 @@
                         <div class="bg-blue-600 rounded-xl py-2 shadow-lg text-white"><p class="text-[8px] font-bold uppercase opacity-70 leading-none mb-1">FARK</p><p class="text-xl font-black leading-none">${cTotal-nTotal>=0?'+':''}${cTotal-nTotal}</p></div>
                     </div>
                 </div>
-                <div onclick="openCentral()" class="xl:col-span-2 modern-card p-4 md:p-6 cursor-pointer group flex flex-col justify-between hover:bg-slate-50 transition-all">
+                <div id="btn-central-open-summary" class="xl:col-span-2 modern-card p-4 md:p-6 cursor-pointer group flex flex-col justify-between hover:bg-slate-50 transition-all">
                     <div class="flex justify-between items-center"><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">YÖNETİM</p><i class="fas fa-users-cog text-xl text-blue-200 group-hover:rotate-90 transition-transform"></i></div>
                     <div class="text-center py-2 md:py-4"><p class="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter">${allPersonnelMaster.length}</p><p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mt-1">Kayıtlı Personel</p></div>
                     <div class="text-center text-blue-600 text-[10px] font-black uppercase pt-3 border-t">Havuza Git →</div>
                 </div>`;
+            
+            document.getElementById('btn-central-open-summary').onclick = openCentral;
 
             renderAllCards();
-        }
-
-        function openBasvuruModal() {
-            els.basvuruTableBody.innerHTML = '';
-            let total = 0;
-            basvuruData.forEach(item => {
-                total += item.sayi;
-                els.basvuruTableBody.innerHTML += `
-                    <tr>
-                        <td class="p-3 text-left font-bold uppercase text-xs">${item.ilce}</td>
-                        <td class="p-3 text-center font-mono">${item.sayi.toLocaleString('tr-TR')}</td>
-                    </tr>`;
-            });
-            els.basvuruTotalCell.innerText = total.toLocaleString('tr-TR');
-            els.basvuruModal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
         }
 
         function renderAllCards() {
@@ -437,8 +449,8 @@
                     const dn = d.personnel.reduce((s,p)=>s+p.norm, 0), dc = d.personnel.reduce((s,p)=>s+p.current, 0), dr = dn>0?Math.round((dc/dn)*100):0;
                     card.innerHTML = `<h4 class="font-black text-slate-800 uppercase text-xs mb-4">${d.name}</h4><div class="w-full px-2"><div class="progress-bar-container"><div class="progress-bar ${dr>=100?'bg-emerald-500':'bg-amber-500'}" style="width:${dr}%"></div></div></div><div class="flex justify-between w-full px-4 mt-3 text-[9px] font-black text-slate-400 uppercase tracking-widest"><span>N: ${dn}</span><span>M: ${dc}</span></div>`;
                     grid.appendChild(card);
+                    card.onclick = () => showModal(d.id);
 
-                    // Erkek/Kadın İstatistik Kartları
                     const stats = [
                         { t: 'Erkek Personel', v: allPersonnelMaster.filter(p=>p.c==='E').length, i: 'fa-user-tie', c: 'text-blue-500', action: null },
                         { t: 'Kadın Personel', v: allPersonnelMaster.filter(p=>p.c==='K').length, i: 'fa-user-graduate', c: 'text-pink-500', action: null },
@@ -497,6 +509,7 @@
 
         function showModal(id) {
             const d = directorateData.find(x => x.id === id);
+            if (!d) return;
             els.modalTitle.innerText = d.name;
             const isKM = d.group === 'kadastro';
             els.persTableHead.innerHTML = isKM ? `<tr><th class="p-4">Kadro Unvanı</th><th class="p-4 text-center">Norm</th><th class="p-4 text-center">Mevcut</th><th class="p-4 text-center">Fark</th></tr>` : `<tr><th class="p-4">Kadro Unvanı</th><th class="p-4 text-center">Mevcut</th></tr>`;
@@ -521,17 +534,6 @@
             });
             switchTab('personnel');
             els.detailModal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function openCentral() {
-            if (!els.allPersTable) return;
-            els.allPersTable.innerHTML = '';
-            getHierarchicalSort([...allPersonnelMaster]).forEach(p => {
-                const icon = GENDER_ICONS[p.c];
-                els.allPersTable.innerHTML += `<tr class="hover:bg-blue-50 transition-colors text-xs border-b border-slate-50"><td class="p-3 font-black flex items-center text-slate-900 text-sm">${icon}<span class="ml-1">${p.n}</span></td><td class="p-3 text-center">${icon}</td><td class="p-3 text-[9px] font-black uppercase text-slate-600">${p.t}</td><td class="p-3 font-mono text-slate-400 text-[10px]">${p.s}</td><td class="p-3 text-[9px] font-black text-blue-600 uppercase italic">MERSİN KM</td><td class="p-3 text-[9px] uppercase font-bold text-slate-500">${p.gy || 'Mersin'}</td><td class="p-3 text-center text-blue-700 font-bold font-mono text-[10px]">${p.tel || ''}</td></tr>`;
-            });
-            allPersonnelModal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
 
@@ -571,7 +573,7 @@
 
         function setupEventListeners() {
             els.closeModalBtn.onclick = () => { els.detailModal.classList.add('hidden'); document.body.style.overflow = 'auto'; };
-            document.getElementById('close-all-personnel-modal-btn').onclick = () => { allPersonnelModal.classList.add('hidden'); document.body.style.overflow = 'auto'; };
+            document.getElementById('close-all-personnel-modal-btn').onclick = () => { document.getElementById('all-personnel-modal').classList.add('hidden'); document.body.style.overflow = 'auto'; };
             document.getElementById('close-basvuru-modal-btn').onclick = () => { els.basvuruModal.classList.add('hidden'); document.body.style.overflow = 'auto'; };
             els.modalTabs.onclick = e => { if (e.target.dataset.tab) switchTab(e.target.dataset.tab); };
             document.getElementById('central-modal-tabs').onclick = e => { if (e.target.dataset.tab) switchCentralTab(e.target.dataset.tab); };
