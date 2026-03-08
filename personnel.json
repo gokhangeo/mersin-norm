@@ -88,14 +88,6 @@
     "c": "E"
   },
   {
-    "n": "MEHMET NEJAT AY",
-    "t": "K.Mühendisi",
-    "s": 46005,
-    "gy": "Mersin",
-    "tel": "",
-    "c": "E"
-  },
-  {
     "n": "MEHTAP AKDOĞAN",
     "t": "K.Mühendisi",
     "s": 31404,
@@ -133,14 +125,6 @@
     "s": 39307,
     "gy": "Mersin",
     "tel": 3242802018,
-    "c": "E"
-  },
-  {
-    "n": "MEHMET AKGÜN KOLUKIRIK",
-    "t": "Mühendis",
-    "s": 33925,
-    "gy": "Tarsus",
-    "tel": 3242801185,
     "c": "E"
   },
   {
@@ -691,6 +675,7 @@
     "n": "SALİHA NAS",
     "t": "Sürekli İşçi",
     "s": 600904,
+    "gy": "Mersin",
     "tel": 3242801122,
     "c": "K"
   },
