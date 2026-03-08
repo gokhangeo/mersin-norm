@@ -51,10 +51,6 @@
         .table-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
         .fark-negatif { color: #dc2626; }
         .fark-pozitif { color: #16a34a; }
-
-        .distribution-table th { background-color: #1e3a8a; color: white; font-size: 0.7rem; padding: 10px; white-space: nowrap; }
-        .distribution-table td { font-size: 0.8rem; padding: 8px; border: 1px solid #e2e8f0; text-align: center; }
-        .distribution-table .unit-name { text-align: left; font-weight: bold; background-color: #f8fafc; position: sticky; left: 0; z-index: 1; }
     </style>
 </head>
 <body class="antialiased">
@@ -86,7 +82,7 @@
     </header>
 
     <main class="container mx-auto px-4 lg:px-12 py-6 space-y-10">
-        <!-- Genel Analiz Dashboard -->
+        <!-- Özet Dashboard -->
         <section>
             <div class="group-header">
                 <h2 class="text-base font-black text-slate-800 uppercase tracking-tight text-blue-900 italic">Genel Müdürlük Analizi</h2>
@@ -94,7 +90,7 @@
             <div id="summary-dashboard" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4"></div>
         </section>
         
-        <!-- Müdürlük Verileri -->
+        <!-- Müdürlük -->
         <section>
             <div class="group-header">
                 <h2 class="text-base font-black text-slate-800 uppercase tracking-tight text-blue-900 italic">Müdürlük Verileri</h2>
@@ -115,7 +111,7 @@
         <i class="fas fa-sync-alt fa-spin mr-2"></i> <span>Veriler Senkronize Ediliyor...</span>
     </div>
 
-    <!-- Detay Penceresi Modalı -->
+    <!-- Detay Modalı -->
     <div id="detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4 hidden modal-backdrop">
         <div class="bg-white shadow-2xl w-full max-w-6xl flex flex-col modal-content overflow-hidden border-2 border-slate-900">
             <div class="flex items-center justify-between p-4 bg-slate-900 text-white shadow-lg">
@@ -155,9 +151,9 @@
         </div>
     </div>
 
-    <!-- Merkezi Veri Havuzu Modalı -->
+    <!-- Merkezi Yönetim Modalı -->
     <div id="all-personnel-modal" class="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4 hidden modal-backdrop">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-7xl flex flex-col modal-content overflow-hidden border-2 border-slate-900">
+        <div class="bg-white rounded-xl shadow-2xl w-full h-full sm:h-auto max-w-7xl flex flex-col modal-content">
             <div class="p-4 md:p-6 bg-slate-950 text-white flex justify-between items-center shadow-xl">
                 <div>
                     <h3 class="text-base md:text-xl font-black uppercase tracking-tight italic leading-none">MERKEZİ VERİ YÖNETİMİ</h3>
@@ -170,8 +166,8 @@
                     <button data-tab="central-personnel-list" class="pb-2 border-b-4 border-transparent transition-all">Tüm Kayıtlar</button>
                     <button data-tab="central-title-distribution" class="pb-2 border-b-4 border-transparent transition-all">Dağılım Matrisi</button>
                 </div>
-                <div id="central-tab-content" class="flex-grow overflow-hidden">
-                    <div id="central-personnel-list-content" class="central-tab-pane h-full overflow-y-auto">
+                <div id="central-tab-content">
+                    <div id="central-personnel-list-content" class="central-tab-pane">
                         <input type="text" id="all-personnel-search-input" placeholder="Tüm personelde ara..." class="w-full p-3 bg-white border-2 border-slate-200 rounded-xl mb-4 outline-none focus:border-blue-500 font-black text-sm shadow-sm">
                         <div class="table-container rounded-xl border border-slate-100 shadow-sm bg-white">
                             <table class="w-full text-[11px]" style="min-width: 800px;">
@@ -182,10 +178,10 @@
                             </table>
                         </div>
                     </div>
-                    <div id="central-title-distribution-content" class="central-tab-pane hidden h-full overflow-y-auto">
+                    <div id="central-title-distribution-content" class="central-tab-pane hidden">
                         <div class="table-container rounded-xl border border-slate-200 shadow-xl bg-white text-xs">
-                            <table class="w-full distribution-table border-collapse" style="min-width: 1000px;">
-                                <thead id="title-distribution-thead"></thead>
+                            <table class="w-full border-collapse" style="min-width: 1000px;">
+                                <thead id="title-distribution-thead" class="bg-slate-900 text-white"></thead>
                                 <tbody id="title-distribution-tbody"></tbody>
                             </table>
                         </div>
@@ -383,13 +379,25 @@
                 if (d.group === 'kadastro') {
                     const dn = d.personnel.reduce((s,p)=>s+p.norm, 0), dc = d.personnel.reduce((s,p)=>s+p.current, 0), dr = dn>0?Math.round((dc/dn)*100):0;
                     card.innerHTML = `<h4 class="font-black text-slate-800 uppercase text-xs mb-4">${d.name}</h4><div class="w-full px-2"><div class="progress-bar-container"><div class="progress-bar ${dr>=100?'bg-emerald-500':'bg-amber-500'}" style="width:${dr}%"></div></div></div><div class="flex justify-between w-full px-4 mt-3 text-[9px] font-black text-slate-400 uppercase tracking-widest"><span>N: ${dn}</span><span>M: ${dc}</span></div>`;
+                    grid.appendChild(card);
+
+                    // Müdürüm, Erkek/Kadın İstatistik Kartları Burada
+                    const stats = [
+                        { t: 'Erkek Personel', v: allPersonnelMaster.filter(p=>p.c==='E').length, i: 'fa-user-tie', c: 'text-blue-500' },
+                        { t: 'Kadın Personel', v: allPersonnelMaster.filter(p=>p.c==='K').length, i: 'fa-user-graduate', c: 'text-pink-500' }
+                    ];
+                    stats.forEach(s => {
+                        const sc = document.createElement('div');
+                        sc.className = 'modern-card p-4 flex items-center justify-center gap-4 bg-white/50';
+                        sc.innerHTML = `<i class="fas ${s.i} ${s.c} text-2xl"></i><div><b class="text-xl">${s.v}</b><br><small class="text-gray-500 uppercase text-[8px] font-black">${s.t}</small></div>`;
+                        grid.appendChild(sc);
+                    });
                 } else {
                     const cnt = (d.personnelList || []).length;
                     let mCount = 0, tCount = 0;
                     (d.personnelList || []).forEach(p => {
                         const pt = normalizeKey(p.title);
                         if (pt.includes('muhendis')) mCount++;
-                        // Müdürüm, sadece Tekniker ve Teknisyen sayılıyor (Kontrol Memuru hariç)
                         else if (['tekniker','teknisyen'].some(s => pt.includes(normalizeKey(s)))) tCount++;
                     });
 
@@ -405,9 +413,9 @@
                                 </div>
                             </div>
                         </div>`;
+                    grid.appendChild(card);
                 }
                 card.onclick = () => showModal(d.id);
-                grid.appendChild(card);
             });
         }
 
@@ -418,7 +426,7 @@
                     if (nt === normalizeKey("Kadastro Müdürü")) return 0;
                     if (nt === normalizeKey("Kadastro Müdür Yrd.")) return 1;
                     if (nt.includes('muhendis')) return 2;
-                    if (nt.includes('teknik') || nt.includes('kontrol')) return 3;
+                    if (nt.includes('teknik') || nt.includes('teknis')) return 3;
                     let idx = CONFIG.titles.indexOf(t);
                     return idx === -1 ? 99 : idx + 4;
                 };
