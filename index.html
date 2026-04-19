@@ -27,7 +27,7 @@
             border-color: #3b82f6;
         }
 
-        .nav-active { color: #3b82f6 !important; border-bottom: 3px solid #3b82f6; font-weight: 800 !important; }
+        .nav-active { color: #2563eb !important; border-bottom-color: #2563eb !important; font-weight: 800 !important; }
         .group-header { border-left: 6px solid #1e3a8a; padding-left: 1rem; margin-bottom: 1.5rem; }
 
         .progress-bar-container { height: 10px; background-color: #f1f5f9; border-radius: 10px; overflow: hidden; border: 1px solid #e2e8f0; }
@@ -41,6 +41,7 @@
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
         .status-ok { background: #dcfce7; color: #166534; }
+        .status-error { background: #fee2e2; color: #991b1b; }
         .status-loading { background: #fef9c3; color: #854d0e; }
         .status-hidden { opacity: 0; transform: translateY(20px); pointer-events: none; }
 
@@ -51,6 +52,17 @@
         .table-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
         .fark-negatif { color: #dc2626; }
         .fark-pozitif { color: #16a34a; }
+
+        .distribution-table th { background-color: #1e3a8a; color: white; font-size: 0.7rem; padding: 10px; white-space: nowrap; }
+        .distribution-table td { font-size: 0.8rem; padding: 8px; border: 1px solid #e2e8f0; text-align: center; }
+        .distribution-table .unit-name { text-align: left; font-weight: bold; background-color: #f8fafc; position: sticky; left: 0; z-index: 1; }
+
+        /* Arama Çubuğu Efektleri */
+        .global-search-container { position: relative; display: flex; align-items: center; }
+        .global-search-input { width: 40px; height: 40px; padding: 0; border: none; border-radius: 9999px; background-color: #f1f5f9; color: transparent; cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+        .global-search-input:focus, .global-search-input:not(:placeholder-shown) { width: 250px; padding: 0 1rem 0 2.5rem; color: #1f2937; background-color: white; border: 1px solid #cbd5e1; cursor: text; outline: none; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .global-search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #64748b; transition: color 0.3s; }
+        .global-search-input:focus + .global-search-icon, .global-search-input:not(:placeholder-shown) + .global-search-icon { color: #2563eb; }
     </style>
 </head>
 <body class="antialiased">
@@ -65,8 +77,14 @@
                         <p class="text-[8px] md:text-[9px] font-extrabold text-blue-600 uppercase tracking-widest mt-1 italic">Mersin Kadastro Müdürlüğü</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <div class="hidden sm:flex flex-col items-end text-right mr-4">
+                <div class="flex items-center gap-2 md:gap-4">
+                    <!-- İnteraktif Arama Butonu -->
+                    <div class="global-search-container hidden sm:flex mr-2">
+                        <input type="text" id="main-global-search" class="global-search-input" placeholder="Personel ara (Enter'a bas)">
+                        <i class="fas fa-search global-search-icon"></i>
+                    </div>
+
+                    <div class="hidden sm:flex flex-col items-end text-right mr-2">
                         <span class="text-[10px] md:text-xs font-black text-slate-600 italic">© Gökhan ELGÜL tarafından tasarlanmıştır.</span>
                     </div>
                     <button onclick="downloadCurrentDataAsExcel()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-2.5 rounded-xl transition-all shadow-sm border border-slate-200" title="Veriyi İndir">
@@ -98,13 +116,13 @@
         </section>
     </main>
 
-    <div id="connection-status" class="status-loading"><i class="fas fa-sync-alt fa-spin mr-2"></i> <span>Bulut Bağlantısı...</span></div>
+    <div id="connection-status" class="status-loading"><i class="fas fa-sync-alt fa-spin mr-2"></i> <span>Bulut Bağlantısı Kuruluyor...</span></div>
 
-    <!-- Detay Modal -->
+    <!-- Detay Modalı -->
     <div id="detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4 hidden modal-backdrop">
         <div class="bg-white shadow-2xl w-full max-w-6xl flex flex-col modal-content overflow-hidden border-2 border-slate-900">
             <div class="flex items-center justify-between p-4 bg-slate-900 text-white shadow-lg">
-                <div class="flex items-center gap-3"><div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center text-white font-bold italic">TK</div><h3 id="modal-title" class="text-base md:text-lg font-black uppercase tracking-tight">Birim Bilgileri</h3></div>
+                <div class="flex items-center gap-3"><div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center text-white font-bold italic shadow-inner">TK</div><h3 id="modal-title" class="text-base md:text-lg font-black uppercase tracking-tight">Birim Bilgileri</h3></div>
                 <button id="close-modal-btn" class="w-8 h-8 rounded-full hover:bg-white/20 text-white transition flex items-center justify-center"><i class="fas fa-times fa-lg"></i></button>
             </div>
             <div class="flex-grow p-4 md:p-6 overflow-y-auto bg-slate-50">
@@ -122,11 +140,11 @@
                         </div>
                     </div>
                     <div id="personnel-list-content" class="tab-pane hidden space-y-4">
-                        <input type="text" id="personnel-search-input" placeholder="Listede ara..." class="w-full p-3 bg-white border-2 border-slate-200 rounded-xl outline-none focus:border-blue-500 font-black text-sm shadow-sm">
+                        <input type="text" id="personnel-search-input" placeholder="Listede isim, unvan veya sicil ara..." class="w-full p-3 bg-white border-2 border-slate-200 rounded-xl outline-none focus:border-blue-500 font-black text-sm shadow-sm transition-all">
                         <div class="table-container rounded-xl border border-slate-200 shadow-sm bg-white">
                             <table class="w-full text-left text-[11px]" style="min-width: 650px;">
                                 <thead class="bg-slate-100 text-slate-600 font-black uppercase text-[9px]">
-                                    <tr><th class="p-4">Adı Soyadı</th><th class="p-4">Unvan</th><th class="p-4 text-center">Sicil</th><th class="p-4">Birim</th><th class="p-4 text-center">IP Telefon</th></tr>
+                                    <tr><th class="p-4">Adı Soyadı</th><th class="p-4">Unvan</th><th class="p-4 text-center">Sicil</th><th class="p-4">Görev Yeri</th><th class="p-4 text-center">IP Telefon</th></tr>
                                 </thead>
                                 <tbody id="personnel-list-table-body" class="divide-y divide-slate-50 font-medium text-slate-700"></tbody>
                             </table>
@@ -147,7 +165,7 @@
 
     <!-- Yönetim Modalı -->
     <div id="all-personnel-modal" class="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4 hidden modal-backdrop">
-        <div class="bg-white rounded-xl shadow-2xl w-full h-full sm:h-auto max-w-7xl flex flex-col modal-content">
+        <div class="bg-white rounded-xl shadow-2xl w-full h-full sm:h-auto max-w-7xl flex flex-col modal-content overflow-hidden border-2 border-slate-900">
             <div class="p-4 md:p-6 bg-slate-950 text-white flex justify-between items-center shadow-xl">
                 <div><h3 id="central-modal-title" class="text-base md:text-xl font-black uppercase tracking-tight italic leading-none">MERKEZİ VERİ YÖNETİMİ</h3><p class="text-[8px] md:text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-2">Personel Konsolidasyon Paneli</p></div>
                 <button id="close-all-personnel-modal-btn" class="w-10 h-10 rounded-full hover:bg-white/10 text-white transition flex items-center justify-center"><i class="fas fa-times fa-lg"></i></button>
@@ -156,11 +174,11 @@
                 <div id="central-modal-tabs" class="flex gap-8 border-b-2 border-slate-200 mb-4 font-black uppercase text-[9px] tracking-widest text-slate-400"><button data-tab="central-personnel-list" class="pb-2 border-b-4 border-transparent transition-all">Tüm Kayıtlar</button><button data-tab="central-title-distribution" class="pb-2 border-b-4 border-transparent transition-all">Dağılım Matrisi</button></div>
                 <div id="central-tab-content" class="flex-grow overflow-hidden">
                     <div id="central-personnel-list-content" class="central-tab-pane h-full overflow-y-auto">
-                        <input type="text" id="all-personnel-search-input" placeholder="Tüm personelde ara..." class="w-full p-3 bg-white border-2 border-slate-200 rounded-xl mb-4 outline-none focus:border-blue-500 font-black text-sm shadow-sm">
-                        <div class="table-container rounded-xl border border-slate-100 shadow-sm bg-white"><table class="w-full text-[11px]" style="min-width: 800px;"><thead class="bg-slate-900 text-white sticky top-0 font-black uppercase text-[8px] z-10 border-b-2 border-blue-600"><tr><th class="p-4 text-left">Adı Soyadı</th><th class="p-4 text-center">Cinsiyet</th><th class="p-4 text-left">Unvan</th><th class="p-4 text-left">Sicil</th><th class="p-4 text-left">Birim</th><th class="p-4 text-center">IP Telefon</th></tr></thead><tbody id="all-personnel-table-body" class="divide-y divide-slate-100"></tbody></table></div>
+                        <input type="text" id="all-personnel-search-input" placeholder="Tüm personelde isim, unvan veya sicil ara..." class="w-full p-3 bg-white border-2 border-slate-200 rounded-xl mb-4 outline-none focus:border-blue-500 font-black text-sm shadow-sm transition-all">
+                        <div class="table-container rounded-xl border border-slate-100 shadow-sm bg-white"><table class="w-full text-[11px]" style="min-width: 800px;"><thead class="bg-slate-900 text-white sticky top-0 font-black uppercase text-[8px] z-10 border-b-2 border-blue-600"><tr><th class="p-4 text-left">Adı Soyadı</th><th class="p-4 text-center">Cinsiyet</th><th class="p-4 text-left">Unvan</th><th class="p-4 text-left">Sicil</th><th class="p-4 text-left">Kadro Birimi</th><th class="p-4 text-left">Görev Yeri</th><th class="p-4 text-center">IP Telefon</th></tr></thead><tbody id="all-personnel-table-body" class="divide-y divide-slate-100"></tbody></table></div>
                     </div>
                     <div id="central-title-distribution-content" class="central-tab-pane hidden h-full overflow-y-auto">
-                        <div class="table-container rounded-xl border border-slate-200 shadow-xl bg-white text-xs"><table class="w-full border-collapse" style="min-width: 1000px;"><thead id="title-distribution-thead" class="bg-slate-900 text-white"></thead><tbody id="title-distribution-tbody"></tbody></table></div>
+                        <div class="table-container rounded-xl border border-slate-200 shadow-xl bg-white text-xs"><table class="w-full distribution-table border-collapse" style="min-width: 1000px;"><thead id="title-distribution-thead" class="bg-slate-900 text-white"></thead><tbody id="title-distribution-tbody"></tbody></table></div>
                     </div>
                 </div>
             </div>
@@ -168,15 +186,53 @@
     </div>
 
     <script>
+        // Github Ayarları
         const _p1 = "ghp_jA0Y2j"; const _p2 = "qexcZgdcIu6F"; const _p3 = "glCOcaKo1us"; const _p4 = "0070QYf";
         const GITHUB_CONFIG = { owner: 'gokhangeo', repo: 'mersin-norm', branch: 'main', token: _p1 + _p2 + _p3 + _p4, files: { personnel: 'personnel.json', norm: 'norm.json', basvuru: 'basvuru.json' } };
         const CONFIG = { units: ['MERKEZ', 'ANAMUR', 'ERDEMLİ', 'MUT', 'SİLİFKE', 'TARSUS'], titles: ["Kadastro Müdürü", "Kadastro Müdür Yrd.", "Kadastro Üyesi", "Mühendis", "Teknisyen/Tekniker", "İşlem Yapan Personel", "Arşiv Görevlisi", "Destek Personeli", "Şoför", "Güvenlik Personeli"] };
+        
         let directorateData = [], allPersonnelMaster = [], globalNorms = [], basvuruData = [], els = {};
         const GENDER_ICONS = { E: `<span class="gender-box gender-male shadow-sm"><i class="fas fa-user-tie"></i></span>`, K: `<span class="gender-box gender-female shadow-sm"><i class="fas fa-user-graduate"></i></span>`, B: `<span class="gender-box gender-female shadow-sm"><i class="fas fa-user-graduate"></i></span>` };
 
-        function normalizeKey(s) { if (!s) return ''; return s.toString().trim().toLocaleLowerCase('tr-TR').replace(/İ/g, 'i').replace(/I/g, 'i').replace(/ı/g, 'i').replace(/Ğ/g, 'g').replace(/ğ/g, 'g').replace(/Ü/g, 'u').replace(/ü/g, 'u').replace(/Ş/g, 's').replace(/ş/g, 's').replace(/Ö/g, 'o').replace(/ö/g, 'o').replace(/Ç/g, 'c').replace(/ç/g, 'c').replace(/[^a-z0-9]/g, ''); }
-        async function fetchFromGithub(fileName) { const url = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/${fileName}?v=${Date.now()}`; try { const res = await fetch(url); if (res.ok) return await res.json(); } catch(e) {} return null; }
-        async function saveToGithub(fileName, data) { const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${fileName}`; let sha = ""; try { const getRes = await fetch(apiUrl, { headers: { 'Authorization': `token ${GITHUB_CONFIG.token}` } }); if (getRes.ok) { sha = (await getRes.json()).sha; } } catch(e) {} const body = { message: `Update ${fileName}`, content: btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2)))), branch: GITHUB_CONFIG.branch, sha: sha || undefined }; await fetch(apiUrl, { method: 'PUT', headers: { 'Authorization': `token ${GITHUB_CONFIG.token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); }
+        // String Normalize
+        function normalizeKey(s) { 
+            if (!s) return ''; 
+            return s.toString().trim().toLocaleLowerCase('tr-TR')
+                .replace(/İ/g, 'i').replace(/I/g, 'i').replace(/ı/g, 'i')
+                .replace(/Ğ/g, 'g').replace(/ğ/g, 'g')
+                .replace(/Ü/g, 'u').replace(/ü/g, 'u')
+                .replace(/Ş/g, 's').replace(/ş/g, 's')
+                .replace(/Ö/g, 'o').replace(/ö/g, 'o')
+                .replace(/Ç/g, 'c').replace(/ç/g, 'c')
+                .replace(/[^a-z0-9]/g, ''); 
+        }
+
+        // Önbellek (Cache) sorununu aşmak için Github API üzerinden direkt çekim yapıyoruz
+        async function fetchFromGithub(fileName) { 
+            const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${fileName}`;
+            try { 
+                const res = await fetch(url, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_CONFIG.token}`,
+                        'Accept': 'application/vnd.github.v3.raw'
+                    },
+                    cache: 'no-store' // Tarayıcı cache'ini engelle
+                }); 
+                if (res.ok) return await res.json(); 
+            } catch(e) { console.error("Fetch hatası:", e); } 
+            return null; 
+        }
+
+        async function saveToGithub(fileName, data) { 
+            const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${fileName}`; 
+            let sha = ""; 
+            try { 
+                const getRes = await fetch(apiUrl, { headers: { 'Authorization': `token ${GITHUB_CONFIG.token}` } }); 
+                if (getRes.ok) { sha = (await getRes.json()).sha; } 
+            } catch(e) {} 
+            const body = { message: `Update ${fileName}`, content: btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2)))), branch: GITHUB_CONFIG.branch, sha: sha || undefined }; 
+            await fetch(apiUrl, { method: 'PUT', headers: { 'Authorization': `token ${GITHUB_CONFIG.token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); 
+        }
 
         async function init() {
             els = {
@@ -190,6 +246,8 @@
                 persListTableBody: document.getElementById('personnel-list-table-body'),
                 allPersTable: document.getElementById('all-personnel-table-body'),
                 search: document.getElementById('personnel-search-input'),
+                allSearch: document.getElementById('all-personnel-search-input'),
+                mainSearch: document.getElementById('main-global-search'),
                 manualUpload: document.getElementById('manual-file-upload'),
                 status: document.getElementById('connection-status'),
                 closeModalBtn: document.getElementById('close-modal-btn'),
@@ -201,7 +259,11 @@
                 centralModalTitle: document.getElementById('central-modal-title')
             };
 
-            directorateData = [{ id: 'mersin_km', name: 'MERSİN KADASTRO MÜDÜRLÜĞÜ', group: 'kadastro', personnel: [], personnelList: [] }, ...CONFIG.units.map(u => ({ id: `${normalizeKey(u)}_kb`, name: `${u} KADASTRO BİRİMİ`, group: 'ilce', personnel: [], personnelList: [] }))];
+            directorateData = [
+                { id: 'mersin_km', name: 'MERSİN KADASTRO MÜDÜRLÜĞÜ', group: 'kadastro', personnel: [], personnelList: [] }, 
+                ...CONFIG.units.map(u => ({ id: `${normalizeKey(u)}_kb`, name: `${u} KADASTRO BİRİMİ`, group: 'ilce', personnel: [], personnelList: [] }))
+            ];
+            
             setupEventListeners();
             await loadAll();
         }
@@ -220,34 +282,40 @@
                 allPersonnelMaster = personnel; 
                 processPersonnelToUnits();
             }
+            
             basvuruData = basvurular || [ {ilce: "AKDENİZ", sayi: 1700}, {ilce: "ANAMUR", sayi: 1700}, {ilce: "AYDINCIK", sayi: 400}, {ilce: "BOZYAZI", sayi: 600}, {ilce: "ÇAMLIYAYLA", sayi: 550}, {ilce: "ERDEMLİ", sayi: 4700}, {ilce: "GÜLNAR", sayi: 1350}, {ilce: "MEZİTLİ", sayi: 2600}, {ilce: "MUT", sayi: 2000}, {ilce: "SİLİFKE", sayi: 5000}, {ilce: "TARSUS", sayi: 3500}, {ilce: "TOROSLAR", sayi: 3700}, {ilce: "YENİŞEHİR", sayi: 3000} ];
             
             refreshUI();
             updateStatus(!!(personnel && norms), "SİSTEM AKTİF");
         }
 
+        // AKILLI BİRİM DAĞITIM MOTORU (Harf/Boşluk Duyarsız)
         function processPersonnelToUnits() {
             directorateData.forEach(d => d.personnelList = []);
             const units = directorateData.filter(d => d.group === 'ilce');
-            
+            const merkez = directorateData.find(d => d.id === 'merkez_kb');
+
             allPersonnelMaster.forEach(r => {
-                const person = { name: r.n, title: r.t, sicil: r.s, gy: r.gy || 'Mersin', c: r.c, tel: r.tel || '' };
+                const person = { name: r.n, title: r.t, sicil: r.s, gy: r.gy || 'Merkez', c: r.c, tel: r.tel || '' };
                 const gy = normalizeKey(person.gy);
                 let target = null;
 
-                for(const u of units) {
-                    const unitNameShort = normalizeKey(u.name.split(' ')[0]);
-                    if (gy.includes(unitNameShort) || gy === unitNameShort) {
+                // Önce İlçe eşleşmesi arıyoruz (Merkez Hariç)
+                const ilceUnits = units.filter(d => d.id !== 'merkez_kb');
+                for(const u of ilceUnits) {
+                    const unitNameShort = normalizeKey(u.name.split(' ')[0]); // anamur, erdemli vb.
+                    if (gy.includes(unitNameShort) || unitNameShort.includes(gy)) {
                         target = u;
                         break;
                     }
                 }
 
-                if (!target || gy === '' || gy.includes('mersin') || gy.includes('merkez')) {
-                    target = directorateData.find(d => d.id === 'merkez_kb');
+                // İlçe bulunamadıysa (veya "Mersin"/"Merkez" yazıyorsa) otomatik Merkeze ata
+                if (!target) {
+                    target = merkez;
                 }
 
-                if (target) target.personnelList.push(person);
+                target.personnelList.push(person);
             });
             recalcNorms();
         }
@@ -262,14 +330,53 @@
             km.personnel.forEach(p => { if(p.fixedCurrent !== null && !isNaN(p.fixedCurrent)) p.current = p.fixedCurrent; });
         }
 
+        // HİYERARŞİK SIRALAMA MANTIĞI
+        function getHierarchicalSort(list) { 
+            return list.sort((a, b) => { 
+                const getPriority = (t) => { 
+                    const nt = normalizeKey(t); 
+                    if (nt.includes("kadastromuduru") && !nt.includes("yrd")) return 0; 
+                    if (nt.includes("kadastromuduryrd")) return 1; 
+                    if (nt.includes('muhendis')) return 2; 
+                    if (nt.includes('tekniker') || nt.includes('teknisyen')) return 3; 
+                    if (nt.includes('kontrolmemuru')) return 4; 
+                    let idx = CONFIG.titles.findIndex(title => normalizeKey(title) === nt);
+                    return idx === -1 ? 99 : idx + 5; 
+                }; 
+                let priA = getPriority(a.title || a.t || ''), priB = getPriority(b.title || b.t || ''); 
+                if (priA !== priB) return priA - priB; 
+                return (a.name || a.n || '').localeCompare((b.name || b.n || ''), 'tr'); 
+            }); 
+        }
+
+        // Tablo Satırlarını Oluşturma (Hızlı Render)
+        function renderPersonnelTableHTML(sortedList, isCentral = false) {
+            if (!sortedList.length) return `<tr><td colspan="${isCentral ? 7 : 5}" class="p-10 text-center text-gray-400 font-black tracking-widest uppercase">Kayıt Bulunamadı</td></tr>`;
+            return sortedList.map(p => {
+                const icon = GENDER_ICONS[p.c] || GENDER_ICONS.K;
+                if (isCentral) {
+                    return `<tr class="hover:bg-blue-50 transition-colors text-xs border-b border-slate-50"><td class="p-3 font-black flex items-center text-slate-900 text-sm">${icon}<span class="ml-1">${p.name}</span></td><td class="p-3 text-center font-bold text-[10px] uppercase">${p.c === 'E' ? 'Erkek' : 'Kadın'}</td><td class="p-3 text-[10px] font-black uppercase text-slate-600">${p.title}</td><td class="p-3 font-mono text-slate-400 text-[10px]">${p.sicil}</td><td class="p-3 text-[9px] font-black text-blue-600 uppercase italic">MERSİN KM</td><td class="p-3 text-[10px] uppercase font-bold text-slate-500">${p.gy}</td><td class="p-3 text-center text-blue-700 font-bold font-mono text-[10px]">${p.tel}</td></tr>`;
+                }
+                return `<tr class="hover:bg-slate-50 border-b border-slate-100 last:border-0"><td class="p-3 font-black text-slate-900 flex items-center text-sm">${icon}<span class="ml-1">${p.name}</span></td><td class="p-3 text-slate-500 font-bold uppercase text-[9px]">${p.title}</td><td class="p-3 text-center font-mono text-slate-400 text-[9px]">${p.sicil}</td><td class="p-3 text-slate-700 font-black text-[9px] uppercase bg-slate-50/50">${p.gy}</td><td class="p-3 text-center text-blue-700 font-bold font-mono text-[10px]">${p.tel}</td></tr>`;
+            }).join('');
+        }
+
         function openCentral(preFilter = null, customTitle = null) {
             if (!els.allPersTable) return;
-            els.allPersTable.innerHTML = ''; els.centralModalTitle.innerText = customTitle || "MERKEZİ VERİ YÖNETİMİ";
-            let list = [...allPersonnelMaster]; if (preFilter) list = list.filter(preFilter);
-            getHierarchicalSort(list.map(r => ({ ...r, name: r.n, title: r.t }))).forEach(p => {
-                const icon = GENDER_ICONS[p.c] || GENDER_ICONS.B;
-                els.allPersTable.innerHTML += `<tr class="hover:bg-blue-50 transition-colors text-xs border-b border-slate-50"><td class="p-3 font-black flex items-center text-slate-900 text-sm">${icon}<span class="ml-1">${p.name}</span></td><td class="p-3 text-center">${p.c === 'E' ? 'Erkek' : 'Kadın'}</td><td class="p-3 text-[9px] font-black uppercase text-slate-600">${p.title}</td><td class="p-3 font-mono text-slate-400 text-[10px]">${p.s}</td><td class="p-3 text-[9px] font-black text-blue-600 uppercase italic">MERSİN KM</td><td class="p-3 text-[9px] uppercase font-bold text-slate-500">${p.gy || 'Mersin'}</td><td class="p-3 text-center text-blue-700 font-bold font-mono text-[10px]">${p.tel || ''}</td></tr>`;
-            });
+            els.centralModalTitle.innerText = customTitle || "MERKEZİ VERİ YÖNETİMİ";
+            let list = [...allPersonnelMaster]; 
+            if (preFilter) list = list.filter(preFilter);
+            
+            const sortedList = getHierarchicalSort(list.map(r => ({ ...r, name: r.n, title: r.t })));
+            els.allPersTable.innerHTML = renderPersonnelTableHTML(sortedList, true);
+            
+            els.allSearch.value = '';
+            els.allSearch.oninput = (e) => {
+                const term = normalizeKey(e.target.value);
+                const filtered = sortedList.filter(p => normalizeKey(p.name).includes(term) || normalizeKey(p.title).includes(term) || normalizeKey(p.gy).includes(term) || normalizeKey(p.sicil).includes(term));
+                els.allPersTable.innerHTML = renderPersonnelTableHTML(filtered, true);
+            };
+
             document.getElementById('all-personnel-modal').classList.remove('hidden'); document.body.style.overflow = 'hidden';
         }
 
@@ -282,7 +389,9 @@
         function refreshUI() {
             const km = directorateData.find(d => d.id === 'mersin_km');
             const nTotal = km.personnel.reduce((s,p)=>s+p.norm, 0), cTotal = km.personnel.reduce((s,p)=>s+p.current, 0), rate = nTotal > 0 ? Math.round((cTotal/nTotal)*100) : 0;
+            
             els.summary.innerHTML = `<div class="xl:col-span-3 modern-card p-4 md:p-6 border-l-[10px] border-blue-900 flex flex-col justify-between bg-gradient-to-r from-blue-50/50 to-white"><div><p class="text-[9px] font-black text-blue-600 uppercase mb-1 tracking-widest leading-none">ANALİZ ÖZETİ</p><h3 class="text-sm md:text-xl font-black text-slate-900 uppercase italic leading-none">MERSİN KADASTRO MÜDÜRLÜĞÜ</h3><div class="mt-4"><div class="flex justify-between text-[9px] font-black uppercase text-slate-400 mb-1"><span>DOLULUK</span><b>${rate}%</b></div><div class="progress-bar-container"><div class="progress-bar bg-blue-600" style="width:${rate}%"></div></div></div></div><div class="grid grid-cols-3 gap-2 mt-6 pt-4 border-t border-slate-100 text-center"><div><p class="text-[8px] font-bold text-slate-400 uppercase">NORM</p><p class="text-xl font-black text-slate-900 leading-none">${nTotal}</p></div><div><p class="text-[8px] font-bold text-slate-400 uppercase">FİİLİ</p><p class="text-xl font-black text-slate-900 leading-none">${cTotal}</p></div><div class="bg-blue-600 rounded-xl py-2 shadow-lg text-white"><p class="text-[8px] font-bold uppercase opacity-70 leading-none mb-1">FARK</p><p class="text-xl font-black leading-none">${cTotal-nTotal>=0?'+':''}${cTotal-nTotal}</p></div></div></div><div id="btn-central-open-summary" class="xl:col-span-2 modern-card p-4 md:p-6 cursor-pointer group flex flex-col justify-between hover:bg-slate-50 transition-all"><div class="flex justify-between items-center"><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">YÖNETİM</p><i class="fas fa-users-cog text-xl text-blue-200 group-hover:rotate-90 transition-transform"></i></div><div class="text-center py-2 md:py-4"><p class="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter">${allPersonnelMaster.length}</p><p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mt-1">Kayıtlı Personel</p></div><div class="text-center text-blue-600 text-[10px] font-black uppercase pt-3 border-t">Havuza Git →</div></div>`;
+            
             document.getElementById('btn-central-open-summary').onclick = () => openCentral();
             renderAllCards();
         }
@@ -293,37 +402,96 @@
                 const grid = document.getElementById(`${d.group}-grid`);
                 const card = document.createElement('div');
                 card.className = (d.group==='kadastro'?'xl:col-span-2':'') + ' modern-card p-4 md:p-5 cursor-pointer group flex flex-col items-center justify-center';
+                
                 if (d.group === 'kadastro') {
                     const dn = d.personnel.reduce((s,p)=>s+p.norm, 0), dc = d.personnel.reduce((s,p)=>s+p.current, 0), dr = dn>0 ? Math.round((dc/dn)*100) : 0;
                     card.innerHTML = `<h4 class="font-black text-slate-800 uppercase text-xs mb-4">${d.name}</h4><div class="w-full px-2"><div class="progress-bar-container"><div class="progress-bar ${dr>=100?'bg-emerald-500':'bg-amber-500'}" style="width:${dr}%"></div></div></div><div class="flex justify-between w-full px-4 mt-3 text-[9px] font-black text-slate-400 uppercase tracking-widest"><span>N: ${dn}</span><span>M: ${dc}</span></div>`;
                     grid.appendChild(card); card.onclick = () => showModal(d.id);
                     
-                    const stats = [{ t: 'Erkek Personel', v: allPersonnelMaster.filter(p=>p.c==='E').length, i: 'fa-user-tie', c: 'text-blue-500', action: () => openCentral(p => p.c === 'E', "Erkek Personel Listesi") }, { t: 'Kadın Personel', v: allPersonnelMaster.filter(p=>p.c==='K'||p.c==='B').length, i: 'fa-user-graduate', c: 'text-pink-500', action: () => openCentral(p => p.c === 'K'||p.c==='B', "Kadın Personel Listesi") }, { t: 'Başvuru Sayıları', v: basvuruData.reduce((s,i)=>s+i.sayi,0).toLocaleString('tr-TR'), i: 'fa-file-invoice', c: 'text-emerald-500', action: openBasvuruModal }];
-                    stats.forEach(s => { const sc = document.createElement('div'); sc.className = 'modern-card p-4 flex items-center justify-center gap-4 bg-white/50 cursor-pointer'; sc.innerHTML = `<i class="fas ${s.i} ${s.c} text-2xl"></i><div><b class="text-xl">${s.v}</b><br><small class="text-gray-500 uppercase text-[8px] font-black">${s.t}</small></div>`; if(s.action) sc.onclick = (e) => { e.stopPropagation(); s.action(); }; grid.appendChild(sc); });
+                    const stats = [
+                        { t: 'Erkek Personel', v: allPersonnelMaster.filter(p=>p.c==='E').length, i: 'fa-user-tie', c: 'text-blue-500', action: () => openCentral(p => p.c === 'E', "Erkek Personel Listesi") }, 
+                        { t: 'Kadın Personel', v: allPersonnelMaster.filter(p=>p.c==='K'||p.c==='B').length, i: 'fa-user-graduate', c: 'text-pink-500', action: () => openCentral(p => p.c === 'K'||p.c==='B', "Kadın Personel Listesi") }, 
+                        { t: 'Başvuru Sayıları', v: basvuruData.reduce((s,i)=>s+i.sayi,0).toLocaleString('tr-TR'), i: 'fa-file-invoice', c: 'text-emerald-500', action: openBasvuruModal }
+                    ];
+                    stats.forEach(s => { 
+                        const sc = document.createElement('div'); sc.className = 'modern-card p-4 flex items-center justify-center gap-4 bg-white/50 cursor-pointer'; 
+                        sc.innerHTML = `<i class="fas ${s.i} ${s.c} text-2xl"></i><div><b class="text-xl">${s.v}</b><br><small class="text-gray-500 uppercase text-[8px] font-black">${s.t}</small></div>`; 
+                        if(s.action) sc.onclick = (e) => { e.stopPropagation(); s.action(); }; grid.appendChild(sc); 
+                    });
                 } else {
                     const cnt = (d.personnelList || []).length;
-                    let mCount = 0, tCount = 0; (d.personnelList || []).forEach(p => { const pt = normalizeKey(p.title); if (pt.includes('muhendis')) mCount++; else if (['tekniker','teknisyen'].some(s => pt.includes(normalizeKey(s)))) tCount++; });
+                    let mCount = 0, tCount = 0; 
+                    (d.personnelList || []).forEach(p => { 
+                        const pt = normalizeKey(p.title); 
+                        if (pt.includes('muhendis')) mCount++; 
+                        else if (pt.includes('tekniker') || pt.includes('teknisyen')) tCount++; 
+                    });
+                    
                     card.innerHTML = `<h4 class="font-black text-slate-700 text-[10px] mb-3 uppercase tracking-tighter text-center leading-tight h-8 flex items-center">${d.name}</h4><div class="flex items-center gap-3"><div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-blue-600 transition-all"><i class="fas fa-users-rectangle text-sm"></i></div><div class="flex flex-col items-start"><span class="text-2xl font-black text-slate-900 tracking-tighter">${cnt}</span><div class="flex gap-2 text-[9px] font-bold text-gray-500 mt-[-2px]"><span>M:${mCount}</span><span>T:${tCount}</span></div></div></div>`;
                     grid.appendChild(card); card.onclick = () => showModal(d.id);
                 }
             });
         }
 
-        function getHierarchicalSort(list) { return list.sort((a, b) => { const getPriority = (t) => { const nt = normalizeKey(t); if (nt === normalizeKey("Kadastro Müdürü")) return 0; if (nt === normalizeKey("Kadastro Müdür Yrd.")) return 1; if (nt.includes('muhendis')) return 2; if (nt.includes('tekniker') || nt.includes('teknisyen')) return 3; if (nt.includes('kontrol memuru')) return 4; return CONFIG.titles.indexOf(t) === -1 ? 99 : CONFIG.titles.indexOf(t) + 5; }; let priA = getPriority(a.title || a.t || ''), priB = getPriority(b.title || b.t || ''); if (priA !== priB) return priA - priB; return (a.name || a.n || '').localeCompare((b.name || b.n || ''), 'tr'); }); }
-
         function showModal(id) {
             const d = directorateData.find(x => x.id === id); if (!d) return;
             els.modalTitle.innerText = d.name; const isKM = d.group === 'kadastro';
+            
+            // Tablo Başlıkları (İlçelerde Norm Yok)
             els.persTableHead.innerHTML = isKM ? `<tr><th class="p-4">Kadro Unvanı</th><th class="p-4 text-center">Norm</th><th class="p-4 text-center">Mevcut</th><th class="p-4 text-center">Fark</th></tr>` : `<tr><th class="p-4">Kadro Unvanı</th><th class="p-4 text-center">Mevcut</th></tr>`;
             els.persTableBody.innerHTML = '';
-            if (isKM) { getHierarchicalSort([...d.personnel]).forEach(p => { const dif = p.current - p.norm; els.persTableBody.innerHTML += `<tr><td class="p-4 font-black text-slate-700">${p.title}</td><td class="p-4 text-center font-bold text-slate-300 italic">${p.norm}</td><td class="p-4 text-center font-black text-slate-800">${p.current}</td><td class="p-4 text-center font-black ${dif<0?'fark-negatif':'fark-pozitif'}">${dif>=0?'+':''}${dif}</td></tr>`; }); }
-            else { const summary = {}; d.personnelList.forEach(p => summary[p.title] = (summary[p.title] || 0) + 1); Object.keys(summary).sort((a,b) => (CONFIG.titles.indexOf(a) === -1 ? 99 : CONFIG.titles.indexOf(a)) - (CONFIG.titles.indexOf(b) === -1 ? 99 : CONFIG.titles.indexOf(b))).forEach(t => { els.persTableBody.innerHTML += `<tr><td class="p-4 font-black text-slate-700">${t}</td><td class="p-4 text-center font-black text-slate-800">${summary[t]}</td></tr>`; }); }
             
-            const sortedList = getHierarchicalSort([...d.personnelList]); 
-            els.persListTableBody.innerHTML = sortedList.length ? '' : '<tr><td colspan="5" class="p-10 text-center text-gray-400">Kayıt Bulunamadı</td></tr>';
-            sortedList.forEach(p => { const icon = GENDER_ICONS[p.c] || GENDER_ICONS.B; els.persListTableBody.innerHTML += `<tr class="hover:bg-slate-50 border-b border-slate-100 last:border-0"><td class="p-3 font-black text-slate-900 flex items-center text-sm">${icon}<span class="ml-1">${p.name}</span></td><td class="p-3 text-slate-500 font-bold uppercase text-[9px]">${p.title}</td><td class="p-3 text-center font-mono text-slate-400 text-[9px]">${p.sicil}</td><td class="p-3 text-slate-700 font-black text-[9px] uppercase bg-slate-50/50">${p.gy}</td><td class="p-3 text-center text-blue-700 font-bold font-mono text-[10px]">${p.tel || ''}</td></tr>`; });
+            if (isKM) { 
+                getHierarchicalSort([...d.personnel]).forEach(p => { 
+                    const dif = p.current - p.norm; 
+                    els.persTableBody.innerHTML += `<tr><td class="p-4 font-black text-slate-700">${p.title}</td><td class="p-4 text-center font-bold text-slate-300 italic">${p.norm}</td><td class="p-4 text-center font-black text-slate-800">${p.current}</td><td class="p-4 text-center font-black ${dif<0?'fark-negatif':'fark-pozitif'}">${dif>=0?'+':''}${dif}</td></tr>`; 
+                }); 
+            } else { 
+                const summary = {}; d.personnelList.forEach(p => summary[p.title] = (summary[p.title] || 0) + 1); 
+                Object.keys(summary).sort((a,b) => (CONFIG.titles.indexOf(a) === -1 ? 99 : CONFIG.titles.indexOf(a)) - (CONFIG.titles.indexOf(b) === -1 ? 99 : CONFIG.titles.indexOf(b))).forEach(t => { 
+                    els.persTableBody.innerHTML += `<tr><td class="p-4 font-black text-slate-700">${t}</td><td class="p-4 text-center font-black text-slate-800">${summary[t]}</td></tr>`; 
+                }); 
+            }
             
-            switchTab('personnel'); els.detailModal.classList.remove('hidden'); document.body.style.overflow = 'hidden';
+            let list = isKM ? allPersonnelMaster.map(r => ({ name: r.n, title: r.t, sicil: r.s, gy: r.gy || 'Mersin', c: r.c, tel: r.tel || '' })) : [...d.personnelList];
+            const sortedList = getHierarchicalSort(list);
+            
+            els.persListTableBody.innerHTML = renderPersonnelTableHTML(sortedList, false);
+            
+            // Arama Kutusu Bağlantısı
+            els.search.value = '';
+            els.search.oninput = (e) => {
+                const term = normalizeKey(e.target.value);
+                const filtered = sortedList.filter(p => normalizeKey(p.name).includes(term) || normalizeKey(p.title).includes(term) || normalizeKey(p.gy).includes(term) || normalizeKey(p.sicil).includes(term));
+                els.persListTableBody.innerHTML = renderPersonnelTableHTML(filtered, false);
+            };
+
+            // Sekmeleri Ayarla (Her durumda iki sekmeyi de gösteriyoruz)
+            const tabs = document.querySelectorAll('#modal-tabs button');
+            tabs.forEach(b => b.style.display = 'inline-flex');
+            
+            switchTab(isKM ? 'personnel' : 'personnel-list'); 
+            els.detailModal.classList.remove('hidden'); document.body.style.overflow = 'hidden';
+        }
+
+        function populateTitleDistribution() {
+            const thead = document.getElementById('title-distribution-thead'), tbody = document.getElementById('title-distribution-tbody');
+            const titles = CONFIG.titles, units = directorateData.filter(d => d.id !== 'mersin_km');
+            thead.innerHTML = `<tr><th class="px-4 py-3 text-left sticky-col">Birim Adı</th>${titles.map(t => `<th class="px-2 py-3 text-center font-bold">${t}</th>`).join('')}<th>TOPLAM</th></tr>`;
+            tbody.innerHTML = '';
+            units.forEach(u => {
+                let row = `<td class="px-4 py-3 font-bold sticky-col bg-slate-50 text-[11px]">${u.name}</td>`, tc = 0;
+                titles.forEach(title => { 
+                    const c = u.personnelList.filter(p => { 
+                        const pt = normalizeKey(p.title); 
+                        if (title === "Teknisyen/Tekniker") return pt.includes('tekniker') || pt.includes('teknisyen'); 
+                        if (title === "Mühendis") return pt.includes('muhendis'); 
+                        return normalizeKey(title) === pt; 
+                    }).length; 
+                    tc += c; row += `<td class="p-2 border ${c > 0 ? 'font-bold text-blue-600' : 'text-slate-300'}">${c}</td>`; 
+                });
+                tbody.innerHTML += `<tr>${row}<td class="font-black bg-blue-50">${tc}</td></tr>`;
+            });
         }
 
         window.downloadCurrentDataAsExcel = function() {
@@ -332,21 +500,24 @@
             const wsPers = XLSX.utils.json_to_sheet(allPersonnelMaster.map(p => ({ "Adı Soyadı": p.n, "Unvanı": p.t, "Sicil": p.s, "Birim": p.gy || "Mersin KM", "İp Telefon": p.tel || "", "Cinsiyet": p.c }))); XLSX.utils.book_append_sheet(wb, wsPers, "PERSONEL");
             const wsNorm = XLSX.utils.json_to_sheet(globalNorms.map(n => ({ "Unvan": n.t, "Norm Sayisi": n.n, "Mevcut Sayisi": n.v }))); XLSX.utils.book_append_sheet(wb, wsNorm, "NORM");
             const wsBasvuru = XLSX.utils.json_to_sheet(basvuruData.map(i => ({ "İlçe": i.ilce, "2025 Başvuru Sayısı": i.sayi }))); XLSX.utils.book_append_sheet(wb, wsBasvuru, "BASVURU");
-            XLSX.writeFile(wb, `Mersin_Birim_Veri.xlsx`);
+            XLSX.writeFile(wb, `Mersin_Birim_Veri_Guncel.xlsx`);
         };
 
-        function switchTab(tid) { document.querySelectorAll('#modal-tabs button').forEach(b => b.classList.toggle('nav-active', b.dataset.tab === tid)); document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('hidden', p.id !== `${tid}-content`)); }
-        function switchCentralTab(tid) { document.querySelectorAll('#central-modal-tabs button').forEach(b => b.classList.toggle('nav-active', b.dataset.tab === tid)); document.querySelectorAll('.central-tab-pane').forEach(p => p.classList.toggle('hidden', p.id !== `${tid}-content`)); if(tid === 'central-title-distribution') {
-            const thead = document.getElementById('title-distribution-thead'), tbody = document.getElementById('title-distribution-tbody');
-            const titles = CONFIG.titles, units = directorateData.filter(d => d.id !== 'mersin_km');
-            thead.innerHTML = `<tr><th class="px-4 py-3 text-left">Birim Adı</th>${titles.map(t => `<th class="px-2 py-3 text-center font-bold">${t}</th>`).join('')}<th>TOPLAM</th></tr>`;
-            tbody.innerHTML = '';
-            units.forEach(u => {
-                let row = `<td class="px-4 py-3 font-bold bg-slate-50 text-[11px]">${u.name}</td>`, tc = 0;
-                titles.forEach(title => { const c = u.personnelList.filter(p => { const pt = normalizeKey(p.title); if (title === "Teknisyen/Tekniker") return pt.includes('tekniker') || pt.includes('teknisyen'); if (title === "Mühendis") return pt.includes('muhendis'); return normalizeKey(title) === pt; }).length; tc += c; row += `<td class="p-2 border ${c > 0 ? 'font-bold text-blue-600' : 'text-slate-300'}">${c}</td>`; });
-                tbody.innerHTML += `<tr>${row}<td class="font-black bg-blue-50">${tc}</td></tr>`;
-            });
-        }}
+        function switchTab(tid) { 
+            document.querySelectorAll('#modal-tabs button').forEach(b => {
+                if(b.dataset.tab === tid) { b.classList.add('nav-active'); } else { b.classList.remove('nav-active'); }
+            }); 
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('hidden', p.id !== `${tid}-content`)); 
+        }
+
+        function switchCentralTab(tid) { 
+            document.querySelectorAll('#central-modal-tabs button').forEach(b => {
+                if(b.dataset.tab === tid) { b.classList.add('nav-active'); } else { b.classList.remove('nav-active'); }
+            }); 
+            document.querySelectorAll('.central-tab-pane').forEach(p => p.classList.toggle('hidden', p.id !== `${tid}-content`)); 
+            if(tid === 'central-title-distribution') populateTitleDistribution(); 
+        }
+
         function updateStatus(isOk, msg) { if(!els.status) return; els.status.className = isOk ? 'status-ok' : 'status-error'; els.status.innerHTML = `<i class="fas ${isOk ? 'fa-check-circle' : 'fa-exclamation-triangle'} mr-2"></i><span>${msg}</span>`; if(isOk) setTimeout(() => els.status.classList.add('status-hidden'), 4000); }
 
         function setupEventListeners() {
@@ -356,9 +527,25 @@
             els.modalTabs.onclick = e => { if (e.target.dataset.tab) switchTab(e.target.dataset.tab); };
             document.getElementById('central-modal-tabs').onclick = e => { if (e.target.dataset.tab) switchCentralTab(e.target.dataset.tab); };
             
+            // Ana Arama Çubuğu
+            if (els.mainSearch) {
+                els.mainSearch.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        const term = this.value.trim();
+                        if (term) {
+                            openCentral(null, "ARAMA SONUÇLARI");
+                            els.allSearch.value = term;
+                            els.allSearch.dispatchEvent(new Event('input')); // Arama fonksiyonunu tetikle
+                            this.value = ''; 
+                            this.blur();     
+                        }
+                    }
+                });
+            }
+
             els.manualUpload.onchange = async (e) => {
                 const files = e.target.files; if(!files.length) return;
-                updateStatus(false, "YÜKLENİYOR...");
+                updateStatus(false, "BULUTA YÜKLENİYOR...");
                 for (let file of files) {
                     const reader = new FileReader();
                     const promise = new Promise(resolve => {
@@ -367,9 +554,9 @@
                             for (const sheetName of wb.SheetNames) {
                                 const data = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
                                 if (!data || data.length === 0) continue;
-                                const firstRow = data[0];
                                 const gv = (r, k) => { const nk = k.map(x => normalizeKey(x)); for(let key in r) { if(nk.includes(normalizeKey(key))) return r[key]; } return undefined; };
                                 
+                                const firstRow = data[0];
                                 const hasUnvan = gv(firstRow, ['Unvan', 'Ünvan', 'Kadro Unvanı']) !== undefined;
                                 const hasMevcut = gv(firstRow, ['Mevcut Sayisi', 'Mevcut_Sayisi', 'Fiili']) !== undefined;
                                 const hasAdSoyad = gv(firstRow, ['Adi Soyadi', 'Adı Soyadı', 'Name', 'Ad Soyad']) !== undefined;
@@ -377,13 +564,23 @@
                                 const hasBasvuru = gv(firstRow, ['Sayi', 'Başvuru Sayısı', 'Basvuru Sayisi']) !== undefined;
 
                                 if (hasUnvan && hasMevcut && !hasAdSoyad) {
-                                    const normData = data.map(r => ({ t: gv(r, ['Unvan', 'Ünvan', 'Kadro Unvanı']), n: parseInt(gv(r, ['Norm Sayisi', 'Norm_Sayisi', 'Norm'])) || 0, v: parseInt(gv(r, ['Mevcut Sayisi', 'Mevcut_Sayisi', 'Fiili'])) || 0 }));
+                                    const normData = data.map(r => ({ t: gv(r, ['Unvan', 'Ünvan', 'Kadro Unvanı']), n: parseInt(gv(r, ['Norm Sayisi', 'Norm_Sayisi', 'Norm'])) || 0, v: parseInt(gv(r, ['Mevcut Sayisi', 'Mevcut_Sayisi', 'Fiili'])) || 0 })).filter(p => p.t);
                                     await saveToGithub(GITHUB_CONFIG.files.norm, normData);
                                 } else if (hasAdSoyad && hasSicil) {
-                                    const persData = data.map(r => ({ n: gv(r, ['Adi Soyadi', 'Adı Soyadı', 'Name', 'Ad Soyad']), t: gv(r, ['Unvani', 'Unvanı', 'Unvan']), s: gv(r, ['Sicil', 'ID', 'No']), gy: gv(r, ['Birim', 'Görev Yeri', 'Birim Adı', 'Görevli Olduğu Birim']), tel: gv(r, ['İp Telefon', 'Ip Telefon', 'Telefon', 'Tel']), c: String(gv(r, ['Cinsiyet', 'Gender']) || '').toUpperCase().startsWith('E') ? 'E' : 'K' }));
+                                    const persData = data.map(r => {
+                                        const rawGy = gv(r, ['Birim', 'Görev Yeri', 'Birim Adı']);
+                                        return { 
+                                            n: String(gv(r, ['Adi Soyadi', 'Adı Soyadı', 'Name', 'Ad Soyad']) || '').trim(), 
+                                            t: String(gv(r, ['Unvani', 'Unvanı', 'Unvan']) || '').trim(), 
+                                            s: String(gv(r, ['Sicil', 'ID', 'No']) || '').trim(), 
+                                            gy: rawGy ? String(rawGy).trim() : 'Merkez', 
+                                            tel: String(gv(r, ['İp Telefon', 'Ip Telefon', 'Telefon', 'Tel']) || '').trim(), 
+                                            c: String(gv(r, ['Cinsiyet', 'Gender']) || '').toUpperCase().startsWith('E') ? 'E' : 'K' 
+                                        };
+                                    }).filter(p => p.n && p.t && p.n !== 'undefined');
                                     await saveToGithub(GITHUB_CONFIG.files.personnel, persData);
                                 } else if (hasBasvuru) {
-                                    const bData = data.map(r => ({ ilce: gv(r, ['İlçe', 'Ilce', 'Birim']), sayi: parseInt(gv(r, ['Sayi', 'Başvuru Sayısı', 'Basvuru Sayisi'])) || 0 }));
+                                    const bData = data.map(r => ({ ilce: gv(r, ['İlçe', 'Ilce', 'Birim']), sayi: parseInt(gv(r, ['Sayi', 'Başvuru Sayısı', 'Basvuru Sayisi'])) || 0 })).filter(p => p.ilce);
                                     await saveToGithub(GITHUB_CONFIG.files.basvuru, bData);
                                 }
                             }
