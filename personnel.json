@@ -2,737 +2,753 @@
   {
     "n": "GÖKHAN ELGÜL",
     "t": "Kadastro Müdürü",
-    "s": 44142,
+    "s": "44142",
     "gy": "MERSİN KM",
-    "tel": 3242801113,
+    "tel": "3242801113",
     "c": "E"
   },
   {
     "n": "ALİ ŞENYURT",
     "t": "Kadastro Müdür Yrd.",
-    "s": 41452,
+    "s": "41452",
     "gy": "MERSİN KM",
-    "tel": 3242802020,
+    "tel": "3242802020",
     "c": "E"
   },
   {
     "n": "İSMAİL PEHLİVAN",
     "t": "Kadastro Müdür Yrd.",
-    "s": 30627,
+    "s": "30627",
     "gy": "MERSİN KM",
-    "tel": 3242801121,
+    "tel": "3242801121",
     "c": "E"
   },
   {
     "n": "EMİNE ALANLI KIRCILI",
     "t": "K.Mühendisi",
-    "s": 41146,
+    "s": "41146",
     "gy": "Erdemli",
-    "tel": 3242801082,
+    "tel": "3242801082",
     "c": "K"
   },
   {
     "n": "ESMEN TOKALI",
     "t": "K.Mühendisi",
-    "s": 32659,
+    "s": "32659",
     "gy": "Tarsus",
-    "tel": 3242801200,
+    "tel": "3242801200",
     "c": "E"
   },
   {
     "n": "HAVVA NİLGÜN KIYMAÇ",
     "t": "K.Mühendisi",
-    "s": 35027,
+    "s": "35027",
     "gy": "MERSİN KM",
-    "tel": 3242801115,
+    "tel": "3242801115",
     "c": "K"
   },
   {
     "n": "HİKMET GÜLCAN",
     "t": "K.Mühendisi",
-    "s": 42642,
+    "s": "42642",
     "gy": "Anamur",
-    "tel": 3242801360,
+    "tel": "3242801360",
     "c": "E"
   },
   {
     "n": "HİLMİ MÜFTÜOĞLU",
     "t": "K.Mühendisi",
-    "s": 38638,
+    "s": "38638",
     "gy": "Anamur",
-    "tel": 3242801362,
+    "tel": "3242801362",
     "c": "E"
   },
   {
     "n": "HÜSEYİN KURT",
     "t": "K.Mühendisi",
-    "s": 44582,
+    "s": "44582",
     "gy": "MERSİN KM",
+    "tel": "",
     "c": "E"
   },
   {
     "n": "KEMAL KORKMAZ",
     "t": "K.Mühendisi",
-    "s": 37472,
+    "s": "37472",
     "gy": "MERSİN KM",
-    "tel": 3242801114,
+    "tel": "3242801114",
     "c": "E"
   },
   {
     "n": "LOKMAN ALKAN",
     "t": "K.Mühendisi",
-    "s": 29517,
+    "s": "29517",
     "gy": "MERSİN KM",
+    "tel": "",
     "c": "E"
   },
   {
     "n": "MEHTAP AKDOĞAN",
     "t": "K.Mühendisi",
-    "s": 31404,
+    "s": "31404",
     "gy": "Silifke",
-    "tel": 3242801532,
+    "tel": "3242801532",
     "c": "K"
   },
   {
     "n": "SARİYE KUŞÇU",
     "t": "K.Mühendisi",
-    "s": 45713,
+    "s": "45713",
     "gy": "MERSİN KM",
-    "tel": 3242802024,
+    "tel": "3242802024",
     "c": "K"
   },
   {
     "n": "SERVET ATA",
     "t": "K.Mühendisi",
-    "s": 30948,
+    "s": "30948",
     "gy": "MERSİN KM",
+    "tel": "",
     "c": "E"
   },
   {
     "n": "TAHA GÜRKAN",
     "t": "K.Mühendisi",
-    "s": 45725,
+    "s": "45725",
     "gy": "Tarsus",
-    "tel": 3242801193,
+    "tel": "3242801193",
     "c": "E"
   },
   {
     "n": "CİHAN KARA",
     "t": "Mühendis",
-    "s": 39307,
+    "s": "39307",
     "gy": "MERSİN KM",
-    "tel": 3242802018,
+    "tel": "3242802018",
     "c": "E"
   },
   {
     "n": "ÖZKAN AKBAŞ",
     "t": "Mühendis",
-    "s": 44383,
+    "s": "44383",
     "gy": "Erdemli",
-    "tel": 3242801071,
+    "tel": "3242801071",
     "c": "E"
   },
   {
     "n": "SETENAY AKSU",
     "t": "Mühendis(Çevre)",
-    "s": 41006,
+    "s": "41006",
     "gy": "Tarsus",
-    "tel": 3242801201,
+    "tel": "3242801201",
     "c": "K"
   },
   {
     "n": "TEVFİK YILDIZ",
     "t": "Mühendis",
-    "s": 41007,
+    "s": "41007",
     "gy": "MERSİN KM",
+    "tel": "",
     "c": "E"
   },
   {
     "n": "VOLKAN İZCİ",
     "t": "Mühendis",
-    "s": 43446,
+    "s": "43446",
     "gy": "Silifke",
+    "tel": "",
+    "c": "E"
+  },
+  {
+    "n": "KENAN ZENGİN",
+    "t": "Mühendis",
+    "s": "43461",
+    "gy": "Silifke",
+    "tel": "",
     "c": "E"
   },
   {
     "n": "BURAK AKBAŞ",
     "t": "S. Mühendis",
-    "s": 454746,
+    "s": "454746",
     "gy": "Silifke",
-    "tel": 3242801163,
+    "tel": "3242801163",
     "c": "E"
   },
   {
     "n": "GÜLİZAR YILDIZ",
     "t": "S. Mühendis",
-    "s": 454516,
+    "s": "454516",
     "gy": "MERSİN KM",
-    "tel": 3242801125,
+    "tel": "3242801125",
     "c": "K"
   },
   {
     "n": "MUSTAFA DIKI",
     "t": "S. Mühendis",
-    "s": 454710,
+    "s": "454710",
     "gy": "MERSİN KM",
-    "tel": 3242802018,
+    "tel": "3242802018",
     "c": "E"
   },
   {
     "n": "ALİ BAŞKURT",
     "t": "Kontrol Memuru(Tas.)",
-    "s": 31039,
+    "s": "31039",
     "gy": "Erdemli",
-    "tel": 3242801084,
+    "tel": "3242801084",
     "c": "E"
   },
   {
     "n": "ENDER NUSRET ÖNAL GÜLSOY",
     "t": "Kontrol Memuru(Tas.)",
-    "s": 31164,
+    "s": "31164",
     "gy": "Erdemli",
-    "tel": 3242801073,
+    "tel": "3242801073",
     "c": "E"
   },
   {
     "n": "İSMAİL AKLAN",
     "t": "Kontrol Memuru(Fen)",
-    "s": 27048,
+    "s": "27048",
     "gy": "MERSİN KM",
-    "tel": 3242801120,
+    "tel": "3242801120",
     "c": "E"
   },
   {
     "n": "MAHMUT GÖK",
     "t": "Kontrol Memuru(Fen)",
-    "s": 23502,
+    "s": "23502",
     "gy": "Anamur",
-    "tel": 3242801365,
+    "tel": "3242801365",
     "c": "E"
   },
   {
     "n": "MEHMET AKDENİZ",
     "t": "Kontrol Memuru(Fen)",
-    "s": 32414,
+    "s": "32414",
     "gy": "Silifke",
-    "tel": 3242801538,
+    "tel": "3242801538",
     "c": "E"
   },
   {
     "n": "MUSTAFA BICAK",
     "t": "Kontrol Memuru(Fen)",
-    "s": 31048,
+    "s": "31048",
     "gy": "Silifke",
-    "tel": 3242801537,
+    "tel": "3242801537",
     "c": "E"
   },
   {
     "n": "MÜMİN AKDOĞAN",
     "t": "Kontrol Memuru(Tas.)",
-    "s": 29172,
+    "s": "29172",
     "gy": "Silifke",
-    "tel": 3242801535,
+    "tel": "3242801535",
     "c": "E"
   },
   {
     "n": "TEMUR ARSLAN",
     "t": "Kontrol Memuru(Tas.)",
-    "s": 26807,
+    "s": "26807",
     "gy": "Tarsus",
-    "tel": 3242801197,
+    "tel": "3242801197",
     "c": "E"
   },
   {
     "n": "ABDULKADİR BOBUŞ",
     "t": "K.Teknisyeni",
-    "s": 32400,
+    "s": "32400",
     "gy": "Silifke",
-    "tel": 3242801546,
+    "tel": "3242801546",
     "c": "E"
   },
   {
     "n": "AHMET TÜRKOĞLU",
     "t": "K.Teknisyeni",
-    "s": 28763,
+    "s": "28763",
     "gy": "Mut",
-    "tel": 3242801167,
+    "tel": "3242801167",
     "c": "E"
   },
   {
     "n": "CANER OKAY",
     "t": "K.Teknisyeni",
-    "s": 41762,
+    "s": "41762",
     "gy": "Silifke",
-    "tel": 3242801543,
+    "tel": "3242801543",
     "c": "E"
   },
   {
     "n": "CEMAL TİMUROĞLU",
     "t": "K.Teknisyeni",
-    "s": 28287,
+    "s": "28287",
     "gy": "Erdemli",
-    "tel": 3242801086,
+    "tel": "3242801086",
     "c": "E"
   },
   {
     "n": "HALİL ÇETİNKAYA",
     "t": "K.Teknisyeni",
-    "s": 25436,
+    "s": "25436",
     "gy": "Anamur",
-    "tel": 3242801369,
+    "tel": "3242801369",
     "c": "E"
   },
   {
     "n": "HÜSEYİN POYRAZ",
     "t": "K.Teknisyeni",
-    "s": 41033,
+    "s": "41033",
     "gy": "MERSİN KM",
-    "tel": 3242801131,
+    "tel": "3242801131",
     "c": "E"
   },
   {
     "n": "KAYHAN KARTPAK",
     "t": "K.Teknisyeni",
-    "s": 29481,
+    "s": "29481",
     "gy": "Silifke",
-    "tel": 3242801541,
+    "tel": "3242801541",
     "c": "E"
   },
   {
     "n": "KENAN BAYDEMİR",
     "t": "K.Teknisyeni",
-    "s": 28330,
+    "s": "28330",
     "gy": "MERSİN KM",
-    "tel": 3242802026,
+    "tel": "3242802026",
     "c": "E"
   },
   {
     "n": "MURAT AKAYDIN",
     "t": "K.Teknisyeni",
-    "s": 27625,
+    "s": "27625",
     "gy": "Anamur",
-    "tel": 3242801373,
+    "tel": "3242801373",
     "c": "E"
   },
   {
     "n": "MUSTAFA GÜRBÜZ",
     "t": "K.Teknisyeni",
-    "s": 41717,
+    "s": "41717",
     "gy": "MERSİN KM",
-    "tel": 3242802027,
+    "tel": "3242802027",
     "c": "E"
   },
   {
     "n": "NEJDET TULUKÇU",
     "t": "K.Teknisyeni",
-    "s": 26939,
+    "s": "26939",
     "gy": "Tarsus",
-    "tel": 3242801192,
+    "tel": "3242801192",
     "c": "E"
   },
   {
     "n": "ŞEHMUS ÖZTÜRK",
     "t": "K.Teknisyeni",
-    "s": 41520,
+    "s": "41520",
     "gy": "MERSİN KM",
-    "tel": 3242801134,
+    "tel": "3242801134",
     "c": "E"
   },
   {
     "n": "YALÇIN SEÇKİN",
     "t": "K.Teknisyeni",
-    "s": 26938,
+    "s": "26938",
     "gy": "Mut",
-    "tel": 3242801168,
+    "tel": "3242801168",
     "c": "E"
   },
   {
     "n": "ENGİN UĞURLU",
     "t": "Tekniker",
-    "s": 31344,
+    "s": "31344",
     "gy": "MERSİN KM",
-    "tel": 3242802023,
+    "tel": "3242802023",
     "c": "E"
   },
   {
     "n": "AHMET ÇELİK",
     "t": "Tekniker",
-    "s": 41755,
+    "s": "41755",
     "gy": "MERSİN KM",
-    "tel": 3242801135,
+    "tel": "3242801135",
     "c": "E"
   },
   {
     "n": "AYŞE ÇAKICI PEKÇETİN",
     "t": "Tekniker",
-    "s": 46300,
+    "s": "46300",
     "gy": "MERSİN KM",
+    "tel": "",
     "c": "K"
   },
   {
     "n": "BARIŞ YAYLAGÜL",
     "t": "Tekniker",
-    "s": 46390,
+    "s": "46390",
     "gy": "Tarsus",
-    "tel": 3242801190,
+    "tel": "3242801190",
     "c": "E"
   },
   {
     "n": "DUDU POYRAZ",
     "t": "Tekniker",
-    "s": 35445,
+    "s": "35445",
     "gy": "MERSİN KM",
-    "tel": 3242801129,
+    "tel": "3242801129",
     "c": "K"
   },
   {
     "n": "EBRU ŞİMŞEK",
     "t": "Tekniker",
-    "s": 46220,
+    "s": "46220",
     "gy": "Erdemli",
-    "tel": 3242801087,
+    "tel": "3242801087",
     "c": "K"
   },
   {
     "n": "HASAN İN",
     "t": "Tekniker",
-    "s": 44950,
+    "s": "44950",
     "gy": "MERSİN KM",
-    "tel": 3242801133,
+    "tel": "3242801133",
     "c": "E"
   },
   {
     "n": "HÜSEYİN BÜYÜK",
     "t": "Tekniker",
-    "s": 40368,
+    "s": "40368",
     "gy": "Anamur",
-    "tel": 3242801371,
+    "tel": "3242801371",
     "c": "E"
   },
   {
     "n": "MAHMUT MELEMEN",
     "t": "Tekniker",
-    "s": 32444,
+    "s": "32444",
     "gy": "Tarsus",
-    "tel": 3242801189,
+    "tel": "3242801189",
     "c": "E"
   },
   {
     "n": "MEHMET CEYLAN",
     "t": "Tekniker",
-    "s": 41037,
+    "s": "41037",
     "gy": "MERSİN KM",
-    "tel": 3242801187,
+    "tel": "3242801187",
     "c": "E"
   },
   {
     "n": "MURAT SARI",
     "t": "Tekniker",
-    "s": 41339,
+    "s": "41339",
     "gy": "Silifke",
-    "tel": 3242801549,
+    "tel": "3242801549",
     "c": "E"
   },
   {
     "n": "MUSTAFA BAYSAL",
     "t": "Tekniker",
-    "s": 31043,
+    "s": "31043",
     "gy": "MERSİN KM",
-    "tel": 3242801123,
+    "tel": "3242801123",
     "c": "E"
   },
   {
     "n": "MÜJDE TÜRKMEN",
     "t": "Tekniker",
-    "s": 42777,
+    "s": "42777",
     "gy": "MERSİN KM",
-    "tel": 3242801136,
+    "tel": "3242801136",
     "c": "K"
   },
   {
     "n": "NAZLI ÇELİK",
     "t": "Tekniker",
-    "s": 45449,
+    "s": "45449",
     "gy": "Tarsus",
-    "tel": 3242801191,
+    "tel": "3242801191",
     "c": "K"
   },
   {
     "n": "NEZİHE GÜLMEZ",
     "t": "Tekniker",
-    "s": 33999,
+    "s": "33999",
     "gy": "Silifke",
-    "tel": 3242801540,
+    "tel": "3242801540",
     "c": "K"
   },
   {
     "n": "NURHAN ARSLAN",
     "t": "Tekniker",
-    "s": 41090,
+    "s": "41090",
     "gy": "MERSİN KM",
-    "tel": 3242802022,
+    "tel": "3242802022",
     "c": "K"
   },
   {
     "n": "ÖMER ÇEVİK",
     "t": "Tekniker",
-    "s": 31085,
+    "s": "31085",
     "gy": "Mut",
-    "tel": 3242801169,
+    "tel": "3242801169",
     "c": "E"
   },
   {
     "n": "ÖZLEM AYDINLI",
     "t": "Tekniker",
-    "s": 32281,
+    "s": "32281",
     "gy": "MERSİN KM",
-    "tel": 3242801132,
+    "tel": "3242801132",
     "c": "K"
   },
   {
     "n": "RÜYA USLU",
     "t": "Tekniker",
-    "s": 39331,
+    "s": "39331",
     "gy": "Tarsus",
-    "tel": 3242801188,
+    "tel": "3242801188",
     "c": "K"
   },
   {
     "n": "SABAHATTİN YAMAN",
     "t": "Tekniker",
-    "s": 27723,
+    "s": "27723",
     "gy": "Anamur",
-    "tel": 3242801375,
+    "tel": "3242801375",
     "c": "E"
   },
   {
     "n": "SERDAR ARSLAN",
     "t": "Tekniker",
-    "s": 32337,
+    "s": "32337",
     "gy": "Erdemli",
-    "tel": 3242801077,
+    "tel": "3242801077",
     "c": "E"
   },
   {
     "n": "SERDAR ŞAHİN",
     "t": "Tekniker",
-    "s": 31312,
+    "s": "31312",
     "gy": "Silifke",
-    "tel": 3242801544,
+    "tel": "3242801544",
     "c": "E"
   },
   {
     "n": "SERHAT DEMİR",
     "t": "Tekniker",
-    "s": 35434,
+    "s": "35434",
     "gy": "Tarsus",
-    "tel": 3242801186,
+    "tel": "3242801186",
     "c": "E"
   },
   {
     "n": "SEVAL ÇELİK",
     "t": "Tekniker",
-    "s": 41821,
+    "s": "41821",
     "gy": "MERSİN KM",
-    "tel": 3242801126,
+    "tel": "3242801126",
     "c": "K"
   },
   {
     "n": "SEVİL SARAÇER",
     "t": "Tekniker",
-    "s": 41348,
+    "s": "41348",
     "gy": "Erdemli",
-    "tel": 3242801074,
+    "tel": "3242801074",
     "c": "K"
   },
   {
     "n": "SITKI KIZILOLUK",
     "t": "Tekniker",
-    "s": 31223,
+    "s": "31223",
     "gy": "Silifke",
-    "tel": 3242801547,
+    "tel": "3242801547",
     "c": "E"
   },
   {
     "n": "SÜLEYMAN YILMAZ",
     "t": "Tekniker",
-    "s": 40845,
+    "s": "40845",
     "gy": "Anamur",
-    "tel": 3242801376,
+    "tel": "3242801376",
     "c": "E"
   },
   {
     "n": "ŞEKİP KORKMAZ",
     "t": "Tekniker",
-    "s": 33457,
+    "s": "33457",
     "gy": "MERSİN KM",
-    "tel": 3242802017,
+    "tel": "3242802017",
     "c": "E"
   },
   {
     "n": "ZEYNEP EKİCİ",
     "t": "Bilgisayar İşletmeni",
-    "s": 35780,
+    "s": "35780",
     "gy": "Tarsus",
-    "tel": 3242801200,
+    "tel": "3242801200",
     "c": "K"
   },
   {
     "n": "NURETTİN KELEŞ",
     "t": "Memur",
-    "s": 48643,
+    "s": "48643",
     "gy": "MERSİN KM",
-    "tel": 3242802019,
+    "tel": "3242802019",
     "c": "E"
   },
   {
     "n": "AHMET TAŞ",
     "t": "Daimi İşçi",
-    "s": 807767,
+    "s": "807767",
     "gy": "Silifke",
-    "tel": 3242801548,
+    "tel": "3242801548",
     "c": "E"
   },
   {
     "n": "ALİ KILIN",
     "t": "Sürekli İşçi",
-    "s": 600872,
+    "s": "600872",
     "gy": "Erdemli",
-    "tel": 3242801076,
+    "tel": "3242801076",
     "c": "E"
   },
   {
     "n": "BEKİR BONCUK",
     "t": "Daimi İşçi",
-    "s": 807778,
+    "s": "807778",
     "gy": "Silifke",
-    "tel": 3242801536,
+    "tel": "3242801536",
     "c": "E"
   },
   {
     "n": "FATİH KOÇAK",
     "t": "Sürekli İşçi",
-    "s": 601163,
+    "s": "601163",
     "gy": "MERSİN KM",
-    "tel": 3242802026,
+    "tel": "3242802026",
     "c": "E"
   },
   {
     "n": "FIRAT TEMÜR",
     "t": "Sürekli İşçi",
-    "s": 600880,
+    "s": "600880",
     "gy": "Tarsus",
+    "tel": "",
     "c": "E"
   },
   {
     "n": "HÜSEYİN TAŞLIALAN",
     "t": "Daimi İşçi",
-    "s": 807765,
+    "s": "807765",
     "gy": "Erdemli",
-    "tel": 3242801085,
+    "tel": "3242801085",
     "c": "E"
   },
   {
     "n": "HÜSEYİN AVNİ İNCE",
     "t": "Daimi İşçi",
-    "s": 807780,
+    "s": "807780",
     "gy": "Mut",
-    "tel": 3242801176,
+    "tel": "3242801176",
     "c": "E"
   },
   {
     "n": "MEHMET EMİNOĞLU",
     "t": "Daimi İşçi",
-    "s": 807702,
+    "s": "807702",
     "gy": "MERSİN KM",
-    "tel": 3242802029,
+    "tel": "3242802029",
     "c": "E"
   },
   {
     "n": "NİHAT YALÇINKAYA",
     "t": "Daimi İşçi",
-    "s": 807770,
+    "s": "807770",
     "gy": "Silifke",
-    "tel": 3242801539,
+    "tel": "3242801539",
     "c": "E"
   },
   {
     "n": "SALİHA NAS",
     "t": "Sürekli İşçi",
-    "s": 600904,
+    "s": "600904",
     "gy": "MERSİN KM",
-    "tel": 3242801122,
+    "tel": "3242801122",
     "c": "K"
   },
   {
     "n": "TEKİN ER",
     "t": "Sürekli İşçi",
-    "s": 600909,
+    "s": "600909",
     "gy": "Erdemli",
+    "tel": "",
     "c": "E"
   },
   {
     "n": "HALİL BİLGEN",
     "t": "Daimi İşçi",
-    "s": 905120,
+    "s": "905120",
     "gy": "Erdemli",
-    "tel": 3242801076,
+    "tel": "3242801076",
     "c": "E"
   },
   {
     "n": "ALİ ÜNEL",
     "t": "SÜREKLİ İŞÇİ (GÜVENLİK GÖREVLİSİ)",
-    "s": 600840,
+    "s": "600840",
     "gy": "MERSİN KM",
-    "tel": 3242802028,
+    "tel": "3242802028",
     "c": "E"
   },
   {
     "n": "ARZU ÜLKÜ",
     "t": "SÜREKLİ İŞÇİ (GÜVENLİK GÖREVLİSİ)",
-    "s": 600841,
+    "s": "600841",
     "gy": "MERSİN KM",
-    "tel": 3242802028,
+    "tel": "3242802028",
     "c": "K"
   },
   {
     "n": "HASAN AKŞEKER",
     "t": "SÜREKLİ İŞÇİ (GÜVENLİK GÖREVLİSİ)",
-    "s": 600850,
+    "s": "600850",
     "gy": "MERSİN KM",
-    "tel": 3242802028,
+    "tel": "3242802028",
     "c": "E"
   },
   {
     "n": "MEHMET SARI",
     "t": "SÜREKLİ İŞÇİ (GÜVENLİK GÖREVLİSİ)",
-    "s": 600857,
+    "s": "600857",
     "gy": "MERSİN KM",
-    "tel": 3242802028,
+    "tel": "3242802028",
     "c": "E"
   },
   {
     "n": "MEHMET ZÜLFÜ DEMİRAĞ",
     "t": "SÜREKLİ İŞÇİ (GÜVENLİK GÖREVLİSİ)",
-    "s": 600859,
+    "s": "600859",
     "gy": "MERSİN KM",
-    "tel": 3242802028,
+    "tel": "3242802028",
     "c": "E"
   },
   {
     "n": "MUSTAFA ŞAHİN",
     "t": "SÜREKLİ İŞÇİ (GÜVENLİK GÖREVLİSİ)",
-    "s": 600862,
+    "s": "600862",
     "gy": "MERSİN KM",
-    "tel": 3242802028,
+    "tel": "3242802028",
     "c": "E"
   },
   {
     "n": "SİDAR SEYFİOĞLU",
     "t": "SÜREKLİ İŞÇİ (GÜVENLİK GÖREVLİSİ)",
-    "s": 600868,
+    "s": "600868",
     "gy": "MERSİN KM",
-    "tel": 3242802028,
+    "tel": "3242802028",
     "c": "E"
   }
 ]
