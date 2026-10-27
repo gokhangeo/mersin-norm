@@ -66,6 +66,11 @@
     </style>
 </head>
 <body class="antialiased">
+<!-- Şifreli giriş -->
+<style>#pinGate{position:fixed;inset:0;z-index:2147483647;background:linear-gradient(135deg,#0f172a,#1e3a8a);display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif}#pinGate form{background:#fff;padding:32px;border-radius:24px;width:280px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.4)}#pinGate input{width:100%;padding:14px;font-size:22px;text-align:center;letter-spacing:8px;border:1px solid #cbd5e1;border-radius:12px;margin:16px 0;box-sizing:border-box}#pinGate button{width:100%;padding:14px;border:0;border-radius:12px;background:#1e3a8a;color:#fff;font-weight:700;font-size:15px}#pinGate .err{color:#dc2626;font-size:13px;min-height:18px}</style>
+<div id="pinGate"><form onsubmit="return pinCheck(event)"><div style="font-size:18px;font-weight:700;color:#0f172a">Giriş</div><input id="pinInput" type="password" inputmode="numeric" autocomplete="off" placeholder="••••" autofocus><div class="err" id="pinErr"></div><button type="submit">Giriş Yap</button></form></div>
+<script>(function(){var H="8118ace068f81646b3c4a6f76d1b041c725314fcbb4d76b8bd2d94312b771f32";if(sessionStorage.getItem("pinOk")===H){document.getElementById("pinGate").remove();return;}document.documentElement.style.overflow="hidden";window.pinCheck=async function(e){e.preventDefault();var v=document.getElementById("pinInput").value;var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(v));var h=Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join("");if(h===H){sessionStorage.setItem("pinOk",H);document.documentElement.style.overflow="";document.getElementById("pinGate").remove();}else{document.getElementById("pinErr").textContent="Hatalı şifre";document.getElementById("pinInput").value="";}return false;};})();</script>
+
 
     <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
         <div class="container mx-auto px-4 lg:px-12">
